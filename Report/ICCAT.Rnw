@@ -1,0 +1,91 @@
+\documentclass[a4paper]{article}
+
+
+\usepackage{graphicx}
+\usepackage{graphics}
+
+\usepackage[english]{babel}
+\usepackage[figuresright]{rotating}
+\usepackage{bm}
+
+\usepackage{enumerate}
+\usepackage{float}
+\usepackage{dsfont}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+%\usepackage{natbib}
+\usepackage{authblk}
+
+\usepackage{color}
+%%%%%%%%%%%%%%%%%%  Author newcommand begin
+\newtheorem{defi}{Definition}
+
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\R}{\mathbb{R}}
+\renewcommand{\P}{\mathbb{P}}
+\newcommand{\Var}{\mathbb{V}ar}
+\newcommand{\Cov}{\mathbb{C}ov}
+\newcommand{\Comb}[2]{\left(\begin{array}{c}#1 \cr #2\end{array}\right) }
+%%%%%%%%%%%%%%%%%  Author newcommend end
+
+\usepackage[sc]{mathpazo}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{2}
+\usepackage{url}
+\usepackage[unicode=true,pdfusetitle,
+ bookmarks=true,bookmarksnumbered=true,bookmarksopen=true,bookmarksopenlevel=2,
+ breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=false]
+ {hyperref}
+\hypersetup{
+ pdfstartview={XYZ null null 1}}
+\usepackage{breakurl}
+
+
+\begin{document}
+
+<<setup, include=FALSE, cache=FALSE>>=
+library(knitr)
+# set global chunk options
+opts_chunk$set(fig.path='figure/minimal-', fig.align='center', fig.show='hold')
+options(replace.assign=TRUE,width=90)
+@
+
+
+
+\title{Report for ICCAT-GBYP 04/2013}
+\author[1]{Marie-Pierre Etienne\thanks{marie.etienne@agroparistech.fr}}
+\author[2]{Tom Carruthers }
+\author[2]{Murdoch McAlllister}
+\affil[1]{AgroParisTech}
+\affil[2]{UBC}
+
+\maketitle
+\section{Introduction}
+\section{Fitting iSCAM on Bluefin Tuna }
+<<boring-random>>=
+set.seed(1121)
+(x=rnorm(20))
+mean(x);var(x)
+@
+
+The first element of \texttt{x} is \Sexpr{x[1]}. Boring boxplots
+and histograms recorded by the PDF device:
+
+<<boring-plots, fig.width=4, fig.height=4, out.width='.4\\linewidth'>>=
+## two plots side by side (option fig.show='hold')
+par(mar=c(4,4,.1,.1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3,las=1)
+boxplot(x)
+hist(x,main='')
+@
+
+\section{Simulation tests}
+\section{Stock assesment methodology}
+%\bibliographystyle{apalike}
+%\bibliography{biblio}
+
+\end{document} 

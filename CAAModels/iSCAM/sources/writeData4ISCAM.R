@@ -33,23 +33,25 @@ outf[count <- count+1] <- paste('\t', ngear,'\t\t# -number of gears\t\t\t(ngear)
 #############################################################
 ##  Allocation for each gear section                       ##
 #############################################################
-outf[(count+1):(count<- count+5)] <- c('##',
+outf[(count+1):(count<- count+4)] <- c('##',
                 '## ------------------------------------------------------------------------- ##',
                 '## Allocation for each gear in (ngear), use 0 for survey gears.              ##',
-                '## ------------------------------------------------------------------------- ##',
-                '\t1')
+                '## ------------------------------------------------------------------------- ##')
+outf[count <- count + 1 ] <- paste('\t1\t', paste(rep(0, ngear-1), collapse='\t'), sep='')
+                                       
 #############################################################
 ## Type of catch section                                   ##
 #############################################################
-outf[(count+1):(count<- count+7)] <- 
+outf[(count+1):(count<- count+6)] <- 
   c('##',
     '## Type of catch: an ivector based on legend below                           ##',
     '##               1 = catch in weight                                         ##',
     '##               2 = catch in numbers                                        ##',
     '##               3 = catch in spawn (roe)                                    ##',
-    '## ------------------------------------------------------------------------- ##',
-    '\t1'
+    '## ------------------------------------------------------------------------- ##'
     )
+outf[count <- count + 1] <- paste('\t1\t', paste(rep(1, ngear-1), collapse='\t'), sep='')
+  
 
 
 ###############################################################################
@@ -86,7 +88,7 @@ outf[count <- count+1] <- paste('##  Year\t' , paste('Gear', 1:ngear, sep=' ', c
 ns <- grep('# NOW ENTER THE CATCH-AT-AGE DATA. ROW=YEAR, COLUMN=AGE', vpaData)+2
 compositionCatch <- matrix(NA, ncol=2+nage, nrow=nyr-syr+1)
 for( ind in (ns+1):(ns+(nyr-syr+1)) ){
-  substring <- strtoi(unlist(strsplit(vpaData[ind], '\t')))
+  substring <- as.numeric(unlist(strsplit(vpaData[ind], '\t')))
   outf[count<- count+1] <- paste0('\t', substring[1], '\t', sum(substring[2:length(substring)]), '\t', paste(rep(0, ngear-1), collapse='\t'))
   compositionCatch[ind-ns, 1] = syr + ind -ns 
   compositionCatch[ind-ns, 2] = 1
@@ -138,7 +140,7 @@ outf[(count+1):(count<- count+6)] <- c(
   '##		iyr	it		  gear		wt		survey_timing')
 
 iSCAMsurvey <- data.frame(iyr=relIndices[,2], it=relIndices[,3], gear=relIndices[,1]+1, wt=rep(1, nrow(relIndices)))
-surveyTime <- 0.5*(surveySpecification[,5]=='-1')+ strtoi(surveySpecification[,5])*(strtoi(surveySpecification[,5])>0)/12
+surveyTime <- 0.5*(surveySpecification[,5]=='-1')+ as.numeric(surveySpecification[,5])*(as.numeric(surveySpecification[,5])>0)/12
 iSCAMsurvey$timing=surveyTime[iSCAMsurvey$gear-1]
 for( ind in 1:nrow(iSCAMsurvey))
 {
@@ -150,6 +152,15 @@ for( ind in 1:nrow(iSCAMsurvey))
 #####################################################################################
 ## AGE COMPOSITION DATA SECTION                                                    ##
 #####################################################################################
+ns<- grep('# NOW ENTER IN THE VULNERABILITIES', vpaData)+3
+nf <- eosIndices[eosIndices>ns][1]-1
+partial_catch <- matrix(as.numeric(unlist(strsplit(vpaData[ns:nf], '\t'))), ncol=nage-sage+3, byrow=T)
+sur <- partial_catch[,1]  + 1 #switching columns for year and survey
+partial_catch[,1] <- partial_catch[,2]
+partial_catch[,2] <- sur
+tot_catch <- rbind(compositionCatch, partial_catch)
+na_obs <- nOccurrences(tot_catch[,2])
+na_gear <- length(na_obs)
 
 outf[(count+1):(count<- count+4)]<- 
   c('##',
@@ -157,28 +168,20 @@ outf[(count+1):(count<- count+4)]<-
     '## AGE COMPOSITION DATA (ROW YEAR, COL=AGE) Ragged object                    ##',
     '## ------------------------------------------------------------------------- ##')
 
-outf[count<- count+1] <- paste('\t', ngear, '\t\t# Number of gears with age-comps int(na_gears)', sep='')
-outf[count<- count+1] <- paste('\t', nyr-syr+1, '\t\t# Number of rows in the matrix   ivector(na_nobs)', sep='')
-outf[count<- count+1] <- paste('\t', sage, '\t\t# Youngest age column\t ivector(a_sage)', sep='')
-outf[count<- count+1] <- paste('\t', nage, '\t\t# Oldest age column +group\t ivector(a_nage)', sep='')
+outf[count<- count+1] <- paste('\t', na_gear, '\t\t# Number of gears with age-comps int(na_gears)', sep='')
+outf[count<- count+1] <- paste('\t', paste(na_obs, collapse='\t'), '\t\t# Number of rows in the matrix   ivector(na_nobs)', sep='')
+outf[count<- count+1] <- paste('\t', paste(rep(sage, na_gear), collapse='\t'), '\t\t# Youngest age column\t ivector(a_sage)', sep='')
+outf[count<- count+1] <- paste('\t', paste(rep(nage, na_gear), collapse='\t'), '\t\t# Oldest age column +group\t ivector(a_nage)', sep='')
 outf[(count+1):(count<- count+2)]<- 
   c('## year gear age colums (numbers or proportions)',
     '## Commercial Age Comps')
-
-for( ind in 1:(nyr-syr+1) ){
-  outf[(count<- count+1)]<- paste(round(compositionCatch[ind,],5), collapse='\t')
+for( ind in 1:sum(na_obs))
+{
+  tot_catch[ind,3:(nage-sage+3)]<- tot_catch[ind,3:(nage-sage+3)]/sum(tot_catch[ind,3:(nage-sage+3)])
+  outf[count<- count+1] <- paste('\t', paste(round(tot_catch[ind,],4), collapse='\t'), sep='')
+  if(ind== na_obs[1])
+    outf[count<- count+1] <- c('## Survey Age comps')
 }
-
-outf[count <- count+1] <- c(    '## Survey Age Comps')
-
-ns <- grep('# NOW ENTER IN THE VULNERABILITIES OR PARTIAL CATCHES FOR THE INDICES OF ABUNDANCE', vpaData)+3
-nf <- eosIndices[eosIndices>ns][1] -1
-for( ind in (ns):(nf) ){
-  substring <- strtoi(unlist(strsplit(vpaData[ind], '\t')))
-  outf[count<- count+1] <- paste(substring[2], '\t',substring[1]+1,'\t', 
-                                 paste(round(substring[3:length(substring)]/sum(substring[3:length(substring)]),4), collapse='\t'), sep='')
-}
-
 
 #####################################################################################
 ##   Weight at age  section                                                        ##
@@ -190,9 +193,11 @@ waa <- as.data.frame(matrix(as.numeric(unlist(strsplit(vpaData[ns:nf],'\t'))), n
 names(waa)<- c("Survey", "Year", paste0("Age", seq(sage:nage) ))
 waa$Survey <- waa$Survey+1
 waa$YearSurvey=paste(waa$Year, waa$Survey, sep="_")
+waa <- waa[order(waa$Year),]
 test = reshape(waa, idvar = "YearSurvey", varying = list(3:12),
                v.names = "empWeight", direction = "long", timevar="Age")
 waa <- matrix(NA, ncol=nage-sage+2, nrow=length(unique(test$Year)))
+
 waa[,1] <- unique(test$Year)
 waa[, 2:(nage-sage+2)] <- matrix(as.numeric(by(test$empWeight, INDICES=list(test$Age, test$Year), mean)), 
               ncol=nage-sage+1, byrow=T)

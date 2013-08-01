@@ -9,9 +9,10 @@
 ##                                                                                ##
 ####################################################################################
 rm(list=ls())
+setwd('/home/metienne/ICCAT/ICCAT-BFT/CAAModels/iSCAM/sources')
 main.dir <- '/home/metienne/ICCAT/ICCAT-BFT' 
 #data file, in vpa format, path relative to main directory
-f.in <- 'Inputs/bfte/2012/vpa/inflated/high/bfte2012.d1'
+f.in <- 'Inputs/bfte/2012/vpa/inflated/low/bfte2012.d1'
 
 #directory where data and ctl files have to written, path relative to main directory
 wd <- 'CAAModels/iSCAM'
@@ -37,7 +38,7 @@ std50 <- 0.1*m50  #std at 50% maturity
 ##################################################################################
 ##                              CTL iSCAM Parameters
 ###################################################################################
-VERB  <- 1    #1  -verbose ADMB output (0=off, 1=on)')
+VERB  <- 0    #1  -verbose ADMB output (0=off, 1=on)')
 REC   <- 1    #2 -recruitment model (1=beverton-holt, 2=ricker)')
 
 #****************************************
@@ -92,10 +93,10 @@ source('writeData4ISCAM.R')
 source('writeCTL4iSCAM.R')
 
 outf<- character(0)
-outf[1] <- paste0(out,'.dat', '\t# Data File Name' )
-outf[2] <- paste0(out,'.ctl', '\t# Control File Name' )
-outf[3] <- paste0(out,'.pfc', '\t# Projection File Name' )
+outf[1] <- paste0(file.path(main.dir, out,'ICCAT.dat'), '\t# Data File Name' )
+outf[2] <- paste0(file.path(main.dir, out,'ICCAT.ctl'), '\t# Control File Name' )
+outf[3] <- paste0(file.path(main.dir, out,'ICCAT.pfc'), '\t# Projection File Name' )
 
-con.out = file(description=file.path(main.dir, wd,'iscam.dat'), open="w")
+con.out = file(description=file.path(main.dir, wd,'RUN.dat'), open="w")
 writeLines(outf, con=con.out,  sep='\n' ) 
 close.connection(con.out)

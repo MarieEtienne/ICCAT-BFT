@@ -41,19 +41,25 @@
 ##      sig=0.05 0.10 0.15 0.20 0.30 0.40 0.50                               ##
 ##      wt =200. 50.0 22.2 12.5 5.56 3.12 2.00                               ##
 ## ------------------------------------------------------------------------- ##
-5	5	5	1	5	5	5	5 	# 1  -selectivity type ivector(isel_type) for gear
+5	5	5	6	5	5	5	5 	# 1  -selectivity type ivector(isel_type) for gear
 3.5	3.5	3.5	3.5	3.5	3.5	3.5	3.5 	# 2  -Age/length at 50% selectivity (logistic)
 1	1	1	1	1	1	1	1 	# 3  -STD at 50% selectivity (logistic)
 5	5	5	5	5	5	5	5 	# 4  -No. of age nodes for each gear (0=ignore)
 20	14	13	0	14	4	15	2 	# 5  -No. of year nodes for 2d spline(0=ignore)
-62	43	41	1	43	12	45	6 	# 6  -Phase of estimation (-1 for fixed)
+2	2	2	-1	2	2	2	2 	# 6  -Phase of estimation (-1 for fixed)
 15	15	15	15	15	15	15	15 	# 7  -Penalty wt for 2nd differences w=1/(2*sig^2)
 50	50	50	50	50	50	50	50 	# 8  -Penalty wt for dome-shaped w=1/(2*sig^2)
 1	1	1	1	1	1	1	1 	# 9  -Penalty wt for time-varying selectivity
 1	1	1	1	1	1	1	1 	# 10 -n_sel_blocks (number of selex blocks)
 ## ------------------------------------------------------------------------- ##
-	1977
-	1977
+1977
+1977
+1977
+1977
+1977
+1977
+1977
+1977
 ##
 ##
 ##
@@ -74,15 +80,15 @@
 ## OTHER MISCELANEOUS CONTROLS                     ##
 ##
 ## ------------------------------------------------------------------------- ##
-1 	# 1  -verbose ADMB output (0=off, 1=on)
-1 	# 2  -recruitment model (1=beverton-holt, 2=ricker)
-	0.100# 3  -std in observed catches in first phase.
-	0.0707# 4  -std in observed catches in last phase.
-	0# 5  -Assume unfished in first year (0=FALSE, 1=TRUE)
-	0.00# 6  -Minimum proportion to consider in age-proportions for dmvlogistic
-	0.20# 7  -Mean fishing mortality for regularizing the estimates of Ft
-	0.01# 8  -std in mean fishing mortality in first phase
-	2.00# 9  -std in mean fishing mortality in last phase
+	 0 	# 1  -verbose ADMB output (0=off, 1=on)
+	 1 	# 2  -recruitment model (1=beverton-holt, 2=ricker)
+	0.100	# 3  -std in observed catches in first phase.
+	0.0707	# 4  -std in observed catches in last phase.
+	0	# 5  -Assume unfished in first year (0=FALSE, 1=TRUE)
+	0.00	# 6  -Minimum proportion to consider in age-proportions for dmvlogistic
+	0.20	# 7  -Mean fishing mortality for regularizing the estimates of Ft
+	0.01	# 8  -std in mean fishing mortality in first phase
+	2.00	# 9  -std in mean fishing mortality in last phase
 	-3	# 10 -phase for estimating m_deviations (use -1 to turn off mdevs)
 	0.1	# 11 -std in deviations for natural mortality
 	12	# 12 -number of estimated nodes for deviations in natural mortality
