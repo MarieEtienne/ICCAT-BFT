@@ -4,7 +4,7 @@
 ##   convert vpa data *.d1 into iSCAM data                                        ##
 ##   Authors: Marie-Pierre Etienne marie.etienne@agroparistech.fr                 ##
 ##   Date: Jul. 25,  2013                                                         ##
-##   Date: Aug. 28,  2012                                                         ##
+##   Date: Aug. 1st, 2013                                                         ##
 ##                                                                                ##
 ##                                                                                ##
 ####################################################################################

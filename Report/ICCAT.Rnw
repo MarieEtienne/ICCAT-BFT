@@ -46,6 +46,11 @@
 \usepackage{breakurl}
 
 
+%% Newcommand for tuna report
+\newcommand{\iscam}{\verb+iSCAM+}
+\newcommand{\admb}{\verb+admb+}
+\newcommand{\com}[1]{\textcolor{orange}{#1}}
+
 \begin{document}
 
 <<setup, include=FALSE, cache=FALSE>>=
@@ -66,7 +71,15 @@ options(replace.assign=TRUE,width=90)
 
 \maketitle
 \section{Introduction}
+
+\verb+admb+ and \verb+iSCAM+ are assumed to be installed, a \verb+PATH+ variable \verb+ADMB_HOME+ exists and contains the path to \verb+admb+ directory. In addition a \verb+PATH+ variable, called \verb+ISCAM+ contains the path to \verb+iscam+ executable.   
+\section{R codes produced and how to use them}
+
 \section{Fitting iSCAM on Bluefin Tuna }
+\subsection{Assumption on vulnerability parameters}
+When catch at age data are available, a vunlnerability curve using cubic Bsplines is fitted and currently it is assumed to be constant over time. (\com{Option 3 in selectivity option for \iscam})
+It is currently not possible with \iscam to specify 0 for vulnerability, since it is expressed in log scale and because \admb behaves better with differentiable functions.
+
 <<boring-random>>=
 set.seed(1121)
 (x=rnorm(20))
@@ -85,7 +98,7 @@ hist(x,main='')
 
 \section{Simulation tests}
 \section{Stock assesment methodology}
-%\bibliographystyle{apalike}
-%\bibliography{biblio}
+\bibliographystyle{apalike}
+\bibliography{biblio}
 
 \end{document} 

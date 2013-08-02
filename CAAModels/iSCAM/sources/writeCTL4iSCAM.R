@@ -4,7 +4,7 @@
 ##   convert vpa data *.d1 into iSCAM control file                                ##
 ##   Authors: Marie-Pierre Etienne marie.etienne@agroparistech.fr                 ##
 ##   Date: Jul. 25,  2013                                                         ##
-##   Date: Aug. 28,  2012                                                         ##
+##   Date: Aug,  1st 2013                                                         ##
 ##                                                                                ##
 ##                                                                                ##
 ####################################################################################
@@ -67,11 +67,11 @@ caasurvey <- as.numeric(caasurvey[seq(1,length(caasurvey), 1+nage-sage+2)])+1
 caaData <- c(rep(1, nyr-syr), caasurvey)
 
 ## Bspline if caa data available, logistic selectivity if not
-outf[count<- count+1] <- paste(paste(5*(1:ngear %in% caaData)+6*( ! (1:ngear %in% caaData)), collapse='\t'), '\t# 1  -selectivity type ivector(isel_type) for gear')
-outf[count<- count+1] <- paste(paste(rep(3.5, ngear), collapse='\t'), '\t# 2  -Age/length at 50% selectivity (logistic)')
-outf[count<- count+1] <- paste(paste(rep(1, ngear), collapse='\t'), '\t# 3  -STD at 50% selectivity (logistic)')
+outf[count<- count+1] <- paste(paste(3*(1:ngear %in% caaData)+6*( ! (1:ngear %in% caaData)), collapse='\t'), '\t# 1  -selectivity type ivector(isel_type) for gear')
+outf[count<- count+1] <- paste(paste(3.5*( (1:ngear) != 4)+7.9*( ! (1:ngear)==3 %in% caaData), collapse='\t'), '\t# 2  -Age/length at 50% selectivity (logistic)')
+outf[count<- count+1] <- paste(paste(1*( (1:ngear) != 4)+0.00001*( ! (1:ngear)==3 %in% caaData), collapse='\t'), '\t# 3  -STD at 50% selectivity (logistic)')
 outf[count<- count+1] <- paste(paste(rep(round(nodesAge*nage), ngear), collapse='\t'), '\t# 4  -No. of age nodes for each gear (0=ignore)')
-outf[count<- count+1] <- paste(paste( round( nOccurrences(caaData, vect2=1:ngear) * nodesYear), collapse='\t'), '\t# 5  -No. of year nodes for 2d spline(0=ignore)')
+outf[count<- count+1] <- paste(paste( rep(0, ngear), collapse='\t'), '\t# 5  -No. of year nodes for 2d spline(0=ignore)')
 outf[count<- count+1] <- paste(paste( round( (1:ngear %in%caaData) * 2 + -1*(!nOccurrences(caaData, vect2=1:ngear))  ), collapse='\t'), '\t# 6  -Phase of estimation (-1 for fixed)')
 outf[count<- count+1] <- paste(paste( rep(15, ngear), collapse='\t'), '\t# 7  -Penalty wt for 2nd differences w=1/(2*sig^2)')
 outf[count<- count+1] <- paste(paste( rep(50, ngear), collapse='\t'), '\t# 8  -Penalty wt for dome-shaped w=1/(2*sig^2)')

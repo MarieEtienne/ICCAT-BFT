@@ -1,22 +1,22 @@
 
 ####################################################################################
 ##                                                                                ##
-##  Main file to convert vpa data *.d1 in iSCAM data and control file             ##
+##  Code to convert vpa data *.d1 in iSCAM data and control file                  ##
 ##                                                                                ##
 ##   Authors: Marie-Pierre Etienne marie.etienne@agroparistech.fr                 ##
 ##   Date: Jul. 25,  2013                                                         ##
-##   Date: Aug. 28,  2012                                                         ##
+##   Date: Aug. 1,  2013                                                          ##
 ##                                                                                ##
 ####################################################################################
+
+
 rm(list=ls())
-setwd('/home/metienne/ICCAT/ICCAT-BFT/CAAModels/iSCAM/sources')
 main.dir <- '/home/metienne/ICCAT/ICCAT-BFT' 
 #data file, in vpa format, path relative to main directory
 f.in <- 'Inputs/bfte/2012/vpa/inflated/low/bfte2012.d1'
 
 #directory where data and ctl files have to written, path relative to main directory
 wd <- 'CAAModels/iSCAM'
-
 
 
 ##################################################################################
@@ -40,7 +40,6 @@ std50 <- 0.1*m50  #std at 50% maturity
 ###################################################################################
 VERB  <- 0    #1  -verbose ADMB output (0=off, 1=on)')
 REC   <- 1    #2 -recruitment model (1=beverton-holt, 2=ricker)')
-
 #****************************************
 # // parameters for bicubic spline
 #****************************************
@@ -61,7 +60,7 @@ while(!is.null(dir.out)){
   }else
     dir.out=NULL
 }
-
+file.copy(from="Makefile",to=file.path(main.dir,wd,'Makefile'),overwrite=T)
 #######################################################################
 ### READING INPUT VPA format file
 #######################################################################
@@ -91,6 +90,7 @@ out<- wd
 source('Utils.R')
 source('writeData4ISCAM.R')
 source('writeCTL4iSCAM.R')
+source('writePFC4iSCAM.R')
 
 outf<- character(0)
 outf[1] <- paste0(file.path(main.dir, out,'ICCAT.dat'), '\t# Data File Name' )
