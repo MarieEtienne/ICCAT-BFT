@@ -3,3 +3,6 @@
 *rpt
 *.pdf
 *iscam
+*.aux
+*.blg
+Report/ICCAT.log
