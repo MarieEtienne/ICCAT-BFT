@@ -3,6 +3,8 @@
 *rpt
 *.pdf
 *iscam
-*.aux
-*.blg
+Report/*.aux
+Report/*.blg
 Report/ICCAT.log
+Report/.RData
+Report/.Rhistory
