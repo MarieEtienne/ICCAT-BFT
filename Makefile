@@ -9,7 +9,8 @@ REXEC=Rscript
 prefix=$(ISCAM_HOME)
 DAT=
 CTL=ICCAT
-ARG='bfte/2012/vpa/inflated/low/'
+ARG='bfte/2012/vpa/simple/low/'
+ARGSIM=0
 MCFLAG=-mcmc 10000 -mcsave 100 -nosdmcmc
 NR=4
 
@@ -35,6 +36,10 @@ $(REXEC): $(DIST)
  
 mcmc:  $(EXEC) 
 	cd $(ARG) && $(MAKE) mcmc
+
+sim:  $(EXEC) 
+	cd $(ARG) && $(MAKE) sim $(ARGSIM)
+
 
 
 
