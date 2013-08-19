@@ -34,3 +34,4 @@ sellogistic <- function(age, mu_a=6, sigma_a=2)
 {
   return(1 / (1 + exp( -(age-mu_a)/sigma_a) ))
 }
+
