@@ -3,9 +3,9 @@
 library(knitr)
 # set global chunk options
 opts_chunk$set(fig.path='figure/ICCAT-', fig.align='center', fig.show='hold')
-options(replace.assign=TRUE,width=90)
+options(replace.assign=TRUE,width=80)
 main.dir <- "/home/metienne/ICCAT/ICCAT-BFT"
-wd       <- "bfte/2012/vpa/simple/low"
+wdsimple       <- "bfte/2012/vpa/reported/low"
 load(file.path(main.dir, 'Report','RData','Info.RData'))
 setwd(main.dir)
 attach(Info)
@@ -13,12 +13,6 @@ attach(Info)
 
 
 RDataFiles<- readLines(file.path(main.dir,'Report', 'RData', 'datafile.out'))
-ns <- grep('(sage)', RDataFiles)
-sage <- as.numeric(unlist(strsplit(RDataFiles[ns], "\t"))[2])
-ns <- grep('(nage)', RDataFiles)
-nage <- as.numeric(unlist(strsplit(RDataFiles[ns], "\t"))[2])
-print(nage)
-iSCAMDATA <- readLines(file.path(main.dir,wd, 'ICCAT.dat'))
 
 
 
@@ -44,26 +38,19 @@ cat(RDataFiles[ns+1])
 
 
 
-ns <- grep("## ABUNDANCE INDICES", iSCAMDATA)
-na_gears <- as.numeric(unlist(strsplit(iSCAMDATA[ns+2],"\t"))[2])
-nobs  <- as.numeric(unlist(strsplit(iSCAMDATA[ns+3],"\t|#"))[2:(1+na_gears)])
-survey <- list()
-ns<- ns+11
-compt <- 0
-gear.tmp <- rep(NA, na_gears)
-for( i in 1:na_gears)
+survey=list()
+gear.list <- unique(iSCAMsurvey$gear)
+for( i in 1:nit)
 {
-    survey[[i]] <- matrix(as.numeric(unlist(strsplit(iSCAMDATA[(ns+compt):(ns+nobs[i]-1+compt)],"\t| "))), ncol=5, byrow=T)
-    gear.tmp[i] = survey[[i]][1,3]
-    compt <- compt+nobs[i]
+    survey[[i]] <- iSCAMsurvey[iSCAMsurvey$gear==gear.list[i],]
     survey[[i]][,2] <- survey[[i]][,2]/ max(survey[[i]][,2])
     if(i == 1 ){
-      plot(survey[[i]][,2]~survey[[i]][,1],type="l",xlim=c(1950,2011), ylim=c(0,1.4), lty=gear.tmp[i], col=gear.tmp[i], xlab="Year", ylab="Normalised abundance index")
+      plot(survey[[i]][,2]~survey[[i]][,1],type="l",xlim=c(1950,2011), ylim=c(0,1.4), lty=gear.list[i], col=gear.list[i], xlab="Year", ylab="Normalised abundance index")
     } else {
-      lines(survey[[i]][,2]~survey[[i]][,1],  lty=gear.tmp[i], col=gear.tmp[i])
+      lines(survey[[i]][,2]~survey[[i]][,1],  lty=gear.list[i], col=gear.list[i])
     }
 }
-legend("topleft", legend=paste("Gear", gear.tmp), col=gear.tmp, lty=gear.tmp)   
+legend("topleft", legend=paste("Gear", gear.list), col=gear.list, lty=gear.list)   
 
 
 
@@ -76,79 +63,77 @@ for( a_ind in sage:nage){
 names(CAAReformat)=c("Year", "Age", "Catch")  
 radius <- sqrt( CAAReformat$Catch/ pi ) 
 with(CAAReformat, 
-     symbols(Year, Age, circles=radius, inches=0.35, fg="white", bg="red", xlab="Year", ylab="Age")
+     symbols(Year, Age, circles=radius, inches=0.35, fg="white", bg="red", ylab="Age", xlab="Year")
      )
 
 
 
-ns <- grep("## Survey Age comps", iSCAMDATA)
-if(length(ns) >0)
-  iSCAMDATA <- iSCAMDATA[-ns]
-ns <- grep("## AGE COMPOSITION DATA", iSCAMDATA)
-na_gearsSel <- as.numeric(unlist(strsplit(iSCAMDATA[ns+2],"\t"))[2])
-nobsSel  <- as.numeric(unlist(strsplit(iSCAMDATA[ns+3],"\t|#"))[2:(1+na_gears)])
-selectivity <- list()
-ns<- ns+8
-compt <- 0
-gear.tmp <- rep(NA, na_gearsSel)
 
-for( i in 1:na_gearsSel)
+gear.list <- unique(compositionCatch[,2])
+selectivity=list()
+age <- sage:nage
+for( i in 1:na_gear)
 {
-  tmp.select <- unlist(strsplit(iSCAMDATA[(ns+compt):(ns+nobsSel[i]-1+compt)],"\t| |\t | \t"))
-  tmp.select <- tmp.select[tmp.select!=""]
-  selectivity[[i]] <- matrix(as.numeric(tmp.select), ncol=nage+2, byrow=T)
-  selectivity[[i]][,3:(2+nage)] <- selectivity[[i]][,3:(2+nage)] / 
-    apply(selectivity[[i]][,3:(2+nage)], 1, sum)
+  ind <- which(compositionCatch[,2]==gear.list[i])
+  selectivity[[i]] <- compositionCatch[ind,3:(nage-sage+3)]
+  selectivity[[i]] <- selectivity[[i]] /  apply(selectivity[[i]], 1, sum)
   selectivity[[i]]<- apply(selectivity[[i]], 2, mean)
-  gear.tmp[i] <- selectivity[[i]][2]
   if(i == 1 ){
-    plot(selectivity[[i]][3:(nage+2)]~seq(sage,nage,1),type="l",xlim=c(sage, nage), ylim=c(0,1), lty=gear.tmp[i], col=gear.tmp[i], xlab="Year", ylab="Normalised catch at age")
+    plot(selectivity[[i]]~age,type="l",xlim=c(sage, nage), ylim=c(0,1), lty=gear.list[i], col=gear.list[i], xlab="Year", ylab="Normalised catch at age")
   } else {
-    lines(selectivity[[i]][3:(nage+2)]~seq(sage,nage,1),  lty=gear.tmp[i], col=gear.tmp[i])
+    lines(selectivity[[i]]~age,  lty=gear.list[i], col=gear.list[i])
   }
-  compt <- compt+nobsSel[i]
 }
-legend("topleft", legend=paste("Gear", gear.tmp), col=gear.tmp, lty=gear.tmp)     
+legend("topleft", legend=paste("Gear", gear.list), col=gear.list, lty=gear.list)     
 
 
 
-for( i in names(popParameters)  )
-      cat(i, ' = ',  popParameters[[i]],'\n') 
+natM
+
+
+
+      cat('linf  = ',  linf,'\n') 
+      cat('k  = ',  k,'\n') 
+      cat('to  = ',  t0,'\n') 
+      cat(' sclw =', sclw,'#1.95e-5 #scaler in length-weight allometry')
+      cat('plw = ', plw ,' #power in length-weight allometry')
+      cat('m50 = ', m50, '#50% maturity')
+      cat('std50 = ', std50, '#std at 50% maturity');
 
 
 
 src.dir <- "/home/metienne/ICCAT/ICCAT-BFT/sources"
 setwd(src.dir)
 source('read.admb.R')
-res      <- read.admb(ifile=file.path(main.dir, wd,'ICCAT'))
+res      <- read.admb(ifile=file.path(main.dir, wdsimple,'ICCAT'))
 
 
 
 ns <- grep("## File used as entry", RDataFiles)
 cat(RDataFiles[ns+1])
 selectivity <- res$log_sel
-ind <- which(apply(selectivity[,2:ncol(res$log_sel)], 1, sum)!=0)
+gear.list=unique(selectivity[,1])
+ind <- c(1,which(diff(selectivity[,1])!=0)+1)
 selectivity <- selectivity[ind,]
-ind <- c(1,which(diff(selectivity[,1])>0)+1)
-selectivity <- selectivity[ind,2:ncol(selectivity)]
-selectivity <- exp(selectivity)
-selectivity <- selectivity/10
+selectivity[,2:ncol(selectivity)] <- exp(selectivity[,2:ncol(selectivity)])/10
 ngear <- res$ngear
-for( i in 1:nrow(selectivity))
+for( i in 1:ngear)
 {
   if(i==1){
-    plot(res$age, selectivity[i,], "l", col=i, lty=i, ylim=c(0,1), yla="Selectivity", xlab="Age")
-    ind = which(compositionCatch[,2]==i)
-    points(res$age, apply(compositionCatch[ind,],2, mean)[3:(nage-sage+3)], col=i, cex=0.7 )
+    plot(res$age, selectivity[selectivity[,1]==gear.list[i], 2:(nage-sage+2)], "l", col=gear.list[i], lty=gear.list[i], ylim=c(0,1), yla="Selectivity", xlab="Age")
+    ind = which(compositionCatch[,2]==gear.list[i])
+    if(length(ind)>0)
+      points(res$age, apply(compositionCatch[ind,],2, mean)[3:(nage-sage+3)], col=gear.list[i], cex=0.7, pch=19 )
   }
   else{
-    lines(res$age, selectivity[i,], "l", col=i, lty=i)
-    ind = which(compositionCatch[,2]==i)
-    points(res$age, apply(compositionCatch[ind,],2, mean)[3:(nage-sage+3)], col=i, cex=0.7 )
+    lines(res$age, selectivity[selectivity[,1]==gear.list[i], 2:(nage-sage+2)], "l", col=gear.list[i], lty=gear.list[i])
+    ind = which(compositionCatch[,2]==gear.list[i])
+     if(length(ind)>0)
+       points(res$age, apply(compositionCatch[ind,],2, mean)[3:(nage-sage+3)], col=gear.list[i], cex=0.7, pch=19 )
   }
   
 }
-legend("topleft", legend=paste("Est : Gear ", 1:ngear), lty=1:ngear, col=1:ngear)  
+legend("topleft", legend=paste("Est : Gear ", gear.list), lty=gear.list, col=gear.list)  
 
 
 
@@ -159,21 +144,30 @@ legend("topleft", legend=paste("Est : Gear ", 1:ngear), lty=1:ngear, col=1:ngear
 
 
 print(res$fmsy)
-print(res$ft)
+print(res$msy)
+print(res$bmsy)
+print(res$bo)
+print(res$ro)
 print(res$q)
 
 
 
-print(res$bmsy)
-print(res$bt)
-print(res$bo)
-
-
-
-print(res$m)
 print(res$steepness)
-print(res$F)
-print(res$Bstatus)
-print(res$Fstatus)
+
+
+
+plot(x=res$yr, y=res$ft[1,],  xlab="Year",  ylab="Fishing effort", type="b")
+
+
+
+plot(x=res$yrs,y=res$sbt/1000,  xlab="Year", ylab="Spawning biomass (tons)", type="b")
+
+
+
+plot(res$Fstatus[1,]~res$Bstatus[1:62],  xlab="B/Bmsy", type="l", ylab="F/Fmsy", xlim=c(0,2), ylim=c(0,2))
+
+
+
+detach(Info)
 
 

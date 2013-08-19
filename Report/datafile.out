@@ -1,0 +1,4 @@
+NA
+## SELECTIVITY PARAMETERS Columns for gear                                   ##
+## OPTIONS FOR SELECTIVITY (isel_type):                                      ##
+3 3 3 6 3 3 3 3  # 1  -selectivity type ivector(isel_type) for gear

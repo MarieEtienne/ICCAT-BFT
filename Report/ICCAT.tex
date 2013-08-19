@@ -91,21 +91,33 @@
 \setcounter{secnumdepth}{2}
 \setcounter{tocdepth}{2}
 \usepackage{url}
-\usepackage[unicode=true,pdfusetitle,
- bookmarks=true,bookmarksnumbered=true,bookmarksopen=true,bookmarksopenlevel=2,
- breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=false]
- {hyperref}
-\hypersetup{
- pdfstartview={XYZ null null 1}}
-\usepackage{breakurl}
-\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+%\usepackage[unicode=true,pdfusetitle,
+% bookmarks=true,bookmarksnumbered=true,bookmarksopen=true,bookmarksopenlevel=2,
+% breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=false]
+% {hyperref}
+%\hypersetup{
+% pdfstartview={XYZ null null 1}}
+%\usepackage{breakurl}
+
+\usepackage{courier}
+
+%% Newcommand Utils
+\newcommand{\RMQ}[1]{\par \hspace{-2cm}\textcolor{red}{RMQ : #1 }\par }
+\newcommand{\ASS}[1]{\par \textcolor{blue}{ASSUMPTION : #1}\par}
+\newcommand{\rcode}{\texttt{R}}
 
 
-\begin{document}
+%% Newcommand for tuna report
+\newcommand{\iscam}{\texttt{iSCAM}}
+\newcommand{\admb}{\texttt{admb} }
+\newcommand{\com}[1]{\textcolor{red}{#1}}
 
 
+\newcommand{\fmsy}{F$_{\textnormal{MSY}}$}
+\newcommand{\bmsy}{B$_{\textnormal{MSY}}$}
 
 
+\newcommand{\Nt}{\boldsymbol N_t}
 
 
 \title{Report for ICCAT-GBYP 04/2013}
@@ -114,53 +126,417 @@
 \author[2]{Murdoch McAlllister}
 \affil[1]{AgroParisTech}
 \affil[2]{UBC}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+
+\begin{document}
+
+\graphicspath{{/home/metienne/ICCAT/ICCAT-BFT/Report/}}
+ 
+
+
+
+
+
 
 \maketitle
 \section{Introduction}
-\section{Fitting iSCAM on Bluefin Tuna }
+\verb+admb+ and \verb+iSCAM+ are assumed to be installed, a \verb+PATH+ variable \verb+ADMB_HOME+ exists and contains the path to \verb+admb+ directory. In addition a \verb+PATH+ variable, called \verb+ISCAM+ contains the path to \verb+iscam+ executable.   
+\section{R codes produced and how to use them}
+All the codes and results described  or used in this report are freely
+available on \url{https://github.com/MarieEtienne/ICCAT-BFT}. 
+
+\iscam  has  been  developped  by  Steven  Martell,  is  available  on
+\url{https://github.com/smartell/iSCAM} and described in \cite{Martell11}.
+
+Using \iscam  required to write  some several datafiles as  inputs. To
+produce an automatic process and in a context of reproducible science,
+some \rcode codes  are used to translate a vpa  format file \verb+*.d1*+ in
+inputs     file      for     \iscam.     The     main      file     is
+\verb+sources/setISCAMFiles.R+  and required  the directory  where the
+*.d1 file  is located. It  generates the input  files for \iscam  in a
+directory based on the input  directory. With the current organisation
+of the on GitHub, the input files are in \verb+ICCAT-BFT/Input/bfte/2012/...+, so
+a directory  \verb+bfte/2012/..+ will  be created  in \verb+ICCAT-BFT+
+and \iscam can belaunched from this directory.
+
+
+To keep  the reproducibility of  this work,  the outputs showed  in this
+report  are  automatically extracted  from  the  orginal R  files  and
+outputs from \iscam.
+
+
+
+
+\section{Description of iSCAM}
+This section  sums up the principle  aspects of iSCAM used  on Bluefin
+Tuna population dynamic data.
+\subsection{Population model - Latent process Level}
+iSCAM is an age structured model.  Fish are splitted into classes from
+age $sage$ to year $nage$. Let us denote by $\Nt = (N_{1,t}, \ldots, N_{A,t})$ the number
+of individuals in every classe age $a$ ($a\in [1,A]$) on year $t$ ($t\in [1;T]$).
+
+\begin{gather}
+  % \mbox{Initial state of the population}\\
+  \mbox{Population dynamic after year syr (t>1)}\\
+  N_{a,t}= \left\lbrace 
+    \begin{array}{l}
+      R_t, \quad a=1\\
+      N_{a-1,t-1} \exp(-Z_{t-1, a-1}), \quad a\in [2;A-1]\\
+      N_{a-1,t-1} \exp(-Z_{t-1, a-1}) + N_{a,t-1} \exp(-Z_{t-1, a}), \quad a\in [2;A-1],\\
+    \end{array}  \right. \\
+\end{gather}
+ where $Z_{a,t}$  stands for the total  mortality rate at age  $a$ in
+  year $y$ and $R_t$ is the recruitment at year $t$.
+
+\RMQ{No variability in dynamic part of the model ?}
+
+%\ASS{The first age class is 1 year, recruitment at year $t$ depends on
+%  mature at year $t-1$, according to ICCAT report}
+%\ASS{Beverton-Holt model is used for recruitment -- may be changed }
+
+%\begin{gather}
+%\mbox{Recruitment after year syr (t>1)}\\
+%R_t= \frac{s_0 B_{t-1}}{1+\beta B_{t-1}} \exp{\epsilon^R_t}, \\
+%\epsilon^R_t\underset{i.i.d}{\sim}\mathcal{N}\left(-\frac{\tau_R^2}{2}, \tau_R^2\right),\\
+%\end{gather} 
+\iscam is very similar to VPA from the recuitment point of view, since
+it doesn't assume any stock recruitment relation ship. The recruitment
+model is specified by the following equation
+\begin{gather}
+  R_t =\bar{R}e^{\omega_t}
+\end{gather}
+
+\begin{gather}
+\mbox{Definition of mature biomass}\\
+B_t= \sum_{a=1}^A N_{t,a} f_a,
+\end{gather} 
+$f_a$ being the fertility at age $a$. 
+
+\ASS{$f_a$ doesn't depend  on year $t$, fertility at  age is considred
+  as fixed over year}
+
+  
+  
+\begin{gather}
+  \mbox{Definition of total mortality rate ate age}\\
+  Z_{t,a}= M_t + \sum_{k=1}^K F_{k,t} v_{k, t,a}, \quad \mbox{gear} k,
+  \mbox{class }a, \mbox{year }t.   \\
+  M_t =M_{t-1}\ \exp{\phi_t},\quad \phi_t \underset{i.i.d}{\sim}\mathcal{N}\left(0, \tau_{\phi}^2\right)
+\end{gather} 
+\ASS{To account  for the commercial  catch (only one time  series and
+for the seven abundance indices,  eight gears have been declared. gear
+one corresponds  to commercial fisheries,  gear 2 to 8  corresponds to
+the seven abundance indices, therefore $F_{f,t}=0$ for $k \geq 2$}
+
+\iscam    allows     to    specify    different    form     for    the
+selectivity/vulnerability.  When  age composition data  are available,
+choice has been made to model the selectivity using Bspline curves.
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlfunctioncall{set.seed}(1121)
-(x <- \hlfunctioncall{rnorm}(20))
-\end{alltt}
 \begin{verbatim}
-##  [1]  0.14496  0.43832  0.15319  1.08494  1.99954 -0.81188  0.16027  0.58589  0.36009
-## [10] -0.02531  0.15088  0.11008  1.35968 -0.32699 -0.71638  1.80977  0.50840 -0.52746
-## [19]  0.13272 -0.15594
-\end{verbatim}
-\begin{alltt}
-\hlfunctioncall{mean}(x)
-\end{alltt}
-\begin{verbatim}
-## [1] 0.3217
-\end{verbatim}
-\begin{alltt}
-\hlfunctioncall{var}(x)
-\end{alltt}
-\begin{verbatim}
-## [1] 0.5715
+## ## SELECTIVITY PARAMETERS Columns for gear                                   ##
+## ## OPTIONS FOR SELECTIVITY (isel_type):                                      ##
+## 3 1 1  # 1  -selectivity type ivector(isel_type) for gear
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
 
 
-The first element of \texttt{x} is 0.145. Boring boxplots
-and histograms recorded by the PDF device:
+The numbers  of nodes for the  Bspline curves can be  chosen equal for
+all gear with age composition data 
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{verbatim}
+## 5 0 0  # 4  -No. of age nodes for each gear (0=ignore)
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+For gear  4 corresponding to the  Norvegian Purse seine index,  no age
+composition data  are available.  In \cite{tuna2012}, it  is indicated
+that this index is  relevant only for the last class  age. Since it is
+not  directly   possible  to  specify   a  selectivity  with   only  0
+coeffeicient except for one age,  a logistic selectivity curve has been
+adopted with the following parameters.
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{verbatim}
+## 6 6 6  # 2  -Age/length at 50% selectivity (logistic)
+## 1 1 1  # 3  -STD at 50% selectivity (logistic)
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+\subsection{Observation Level}
+\subsection{Age composition data}
+
+Following  \cite{Schnute+95}, \iscam  uses by  default a  multivariate
+logistic  function  for  age  composition data.  It  is  assumed  that
+$p_{atk}$ which is the  proportion of fish of age $a$  in year $t$ for
+gear $k$ is drawn from the following distribution (gear $k$ is omitted
+for clarity) which is defined thanks to a latent variable $X_{at}$
+\begin{gather}
+\epsilon^{C}_{at} \overset{i.i.d}{\sim} \mathcal{N}(0,\tau^2_C)\\
+X_{at}       =       \log{\mu_{at}}       +       \epsilon_{at}       -
+\frac{1}{A}\sum_{a=1}^A\left(\log{\mu_{at}} + \epsilon_{at} \right) \\
+e^{X_{at}} = \frac{\mu_{at}e^{\epsilon_{at}}}{ \left(\prod_{a=1}^A \mu_{at}e^{\epsilon_{at}}\right) ^{1/A}}\\
+p_{at} = \frac{e^{X_{at}} } {\sum_{a=1}^A e^{X_{at}} }\\
+\end{gather}
+\subsection{Abundance indices}
+The total vulnerable biomass at year $t$ for gear $k$ is definde by
+\begin{gather}
+V_{k,t}=\sum_{a=1}^A N_{t,a} e^{-\lambda_{k,t} Z_{t,a}} v_{k,a} w_a,\\
+\end{gather}
+ where $\lambda_{k,t}$ is the fraction  of the mortality to adjust for
+ survey  timing,  it  is  specified  by the  user,  they  have  v=been
+ specified according to the input data file 
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{verbatim}
+## ## Survey timing (if 0, the gear has no associated index)
+## 0	 0.5	0.5
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+ 
+\begin{gather}
+I_{k,t} = q_k V_{k,t} \exp{\epsilon_{k,t}^I}\\
+\epsilon_{k,t}^I \overset{i.i.d}{\sim} \mathcal{N}(0,\tau_I^2)\\
+\end{gather}
+\subsection{Catch}
+Catch  with  gear  $k$  in  year  $t$  is  denoted  by  $C_{k,t}$  and
+definedusing Baranov Catch equation by
+\begin{gather}
+C_{k,t}   =   \sum_{a=1}^A   \frac{N_{t,a}   w_a   F_{k,t}   v_{k,t,a}
+  (1-e^{-Z_{t,a}}) }{Z_{t,a}},\\
+\hat{C}_{k,t} = C_{k,t} \exp{\epsilon_{k,t}^C}, \quad \epsilon_{k,t}\overset{i.i.d}{\sim}\mathcal{N}(0, \tau^2_C)\\
+\end{gather}
+
+
+
+\section{Fitting iSCAM on Bluefin Tuna Data}
+
+\subsection{Description of the data set vailable data}
+
+\subsubsection{Abundance indices}
+Seven abundance indices are available 
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
+
+{\centering \includegraphics[width=\maxwidth]{figure/ICCAT-Abundance} 
+
+}
+
+
+
+\end{knitrout}
+
+\subsection{Available catch}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
+
+{\centering \includegraphics[width=\maxwidth]{figure/ICCAT-Catch} 
+
+}
+
+
+
+\end{knitrout}
+
+\subsubsection{Data on Selectivity}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
+
+{\centering \includegraphics[width=\maxwidth]{figure/ICCAT-Selectivity} 
+
+}
+
+
+
+\end{knitrout}
+
+   
+\subsection{Fixed parameters}
+The mortality at age is fixed to the values of the VPA approach.
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{verbatim}
+##  [1] 0.490 0.240 0.240 0.240 0.240 0.200 0.175 0.150 0.125 0.100
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+$$\Phi = (l_\infty, k, t_o,a,b,\dot{a},\dot{\gamma})$$
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{verbatim}
+## linf  =  319
+## k  =  0.093
+## to  =  -0.97
+##  sclw = 1.95e-05 #1.95e-5 #scaler in length-weight allometry
+## plw =  3.009  #power in length-weight allometry
+## m50 =  4 #50% maturity
+## std50 =  0.8 #std at 50% maturity
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+
+
+\subsection{Initial values for estiamted parameters}
+$$\theta   =  (R_0,   \kappa,   M,  \bar{R},   \rho,  v^2,   \gamma_k,
+\boldsymbol{F}_{t}, (phi_t)_t=1^T, (\epsilon_t^R)_{t=1}^T)$$
+
+
+	%% ro          = mfexp(theta(1));
+	%% dvariable h = theta(2);
+	%% m           = mfexp(theta(3));
+	%% log_avgrec  = theta(4);
+	%% log_recinit = theta(5);
+	%% rho         = theta(6);
+	%% varphi      = sqrt(1.0/theta(7));
+	%% sig         = sqrt(rho) * varphi;
+	%% tau         = sqrt(1-rho) * varphi;
+
+        
+        The  control  file  provides  initial  values  for  parameters
+        $\theta$, the  following values  have been used  to initialise
+        the model.
+
+\subsubsection*{Value for $R_0$}
+
+
+\subsubsection*{Value for $\bar{R}$}
+If the  model doesn't supposed  unfished conditions at  starting year,
+the recruitment at  the first year is  not $R_0$. It is  assumed to be
+equal to
+$$R_{t=1} = \bar{R}_{init} \exp{\epsilon_1^R}$$
+In \iscam code, the recruitmnent at year $t$ is defined by
+$$R_t(t)=\bar{R} \exp{\epsilon_t^R}, $$
+  where $\epsilon_t^R\overset{i.i.d}{\sim} \mathcal{N}(0,\sigma_R^2)$.
+
+
+\subsection{Assumption on vulnerability parameters}
+When catch at age data are available, a vunlnerability curve using cubic Bsplines is fitted and currently it is assumed to be constant over time. (\com{Option 3 in selectivity option for \iscam})
+It is currently not possible with \iscam to specify 0 for vulnerability, since it is expressed in log scale and because \admb behaves better with differentiable functions.
+
+
+
+\section{First runs on one data file}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Loading required package: MASS}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# Attaching package: 'MASS'}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# The following object(s) are masked \_by\_ '.GlobalEnv':\\\#\# \\\#\#\ \ \ \  survey}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Loading required package: KernSmooth}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# KernSmooth 2.23 loaded\\\#\# Copyright M. P. Wand 1997-2009}}
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: NAs introduced by coercion}}\end{kframe}
+\end{knitrout}
+
+
+The file used for this first run is 
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{verbatim}
+## /home/metienne/ICCAT/ICCAT-BFT/Inputs/bfte/2012/vpa/reported/low/bfte2012.d1
+\end{verbatim}
+\end{kframe}
+
+{\centering \includegraphics[width=\maxwidth]{figure/ICCAT-Selectivity2} 
+
+}
+
+
+
+\end{knitrout}
+
+\subsection{Summary of obtained results}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcomment{# print(res$A) print(res$Ahat) print(res$A_nu)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlcomment{## two plots side by side (option fig.show='hold')}
-\hlfunctioncall{par}(mar = \hlfunctioncall{c}(4, 4, 0.1, 0.1), cex.lab = 0.95, cex.axis = 0.9, mgp = \hlfunctioncall{c}(2, 0.7, 0), tcl = -0.3, 
-    las = 1)
-\hlfunctioncall{boxplot}(x)
-\hlfunctioncall{hist}(x, main = \hlstring{""})
+\hlfunctioncall{print}(res$fmsy)
+\end{alltt}
+\begin{verbatim}
+## [1] 0.09455
+\end{verbatim}
+\begin{alltt}
+\hlfunctioncall{print}(res$msy)
+\end{alltt}
+\begin{verbatim}
+## [1] 83363400
+\end{verbatim}
+\begin{alltt}
+\hlfunctioncall{print}(res$bmsy)
+\end{alltt}
+\begin{verbatim}
+## [1] 655735000
+\end{verbatim}
+\begin{alltt}
+\hlfunctioncall{print}(res$bo)
+\end{alltt}
+\begin{verbatim}
+## [1] 1.925e+09
+\end{verbatim}
+\begin{alltt}
+\hlfunctioncall{print}(res$ro)
+\end{alltt}
+\begin{verbatim}
+## [1] 7328580
+\end{verbatim}
+\begin{alltt}
+\hlfunctioncall{print}(res$q)
+\end{alltt}
+\begin{verbatim}
+## [1] 1.127 1.335
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlfunctioncall{print}(res$steepness)
+\end{alltt}
+\begin{verbatim}
+## [1] 0.6974
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+\subsection{Fishing effort}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlfunctioncall{plot}(x = res$yr, y = res$ft[1, ], xlab = \hlstring{"Year"}, ylab = \hlstring{"Fishing effort"}, type = \hlstring{"b"})
 \end{alltt}
 \end{kframe}
 
-{\centering \includegraphics[width=.4\linewidth]{figure/minimal-boring-plots1} 
-\includegraphics[width=.4\linewidth]{figure/minimal-boring-plots2} 
+{\centering \includegraphics[width=\maxwidth]{figure/ICCAT-Ft} 
 
 }
 
@@ -169,9 +545,54 @@ and histograms recorded by the PDF device:
 \end{knitrout}
 
 
+\subsection{Spawning biomass}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlfunctioncall{plot}(x = res$yrs, y = res$sbt/1000, xlab = \hlstring{"Year"}, ylab = \hlstring{"Spawning \hlfunctioncall{biomass} (tons)"}, 
+    type = \hlstring{"b"})
+\end{alltt}
+\end{kframe}
+
+{\centering \includegraphics[width=\maxwidth]{figure/ICCAT-SBT} 
+
+}
+
+
+
+\end{knitrout}
+
+
+\subsection{Kobe Plot}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlfunctioncall{plot}(res$Fstatus[1, ] ~ res$Bstatus[1:62], xlab = \hlstring{"B/Bmsy"}, type = \hlstring{"l"}, ylab = \hlstring{"F/Fmsy"}, 
+    xlim = \hlfunctioncall{c}(0, 2), ylim = \hlfunctioncall{c}(0, 2))
+\end{alltt}
+\end{kframe}
+
+{\centering \includegraphics[width=\maxwidth]{figure/ICCAT-KobePlot} 
+
+}
+
+
+
+\end{knitrout}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlfunctioncall{detach}(Info)
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+\section{Results coming from VPA}
 \section{Simulation tests}
 \section{Stock assesment methodology}
-%\bibliographystyle{apalike}
-%\bibliography{biblio}
+\bibliographystyle{apalike}
+\bibliography{biblio}
 
 \end{document} 
