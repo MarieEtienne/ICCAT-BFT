@@ -5,16 +5,27 @@
 ##                                                                                ##
 ##   Authors: Marie-Pierre Etienne marie.etienne@agroparistech.fr                 ##
 ##   Date: Jul. 25,  2013                                                         ##
-##   Date: Aug. 14,  2013                                                          ##
+##   Date: Aug. 23,  2013                                                         ##
 ##                                                                                ##
+##                                                                                ##
+##  The purpose of this code is to build the 4 main files recquired by iscam      ##                                                                              ##
+##              ICCAT.dat data in iSCAM format                                    ##
+##              ICCAT.ctl control for parameters estimation                       ##
+##              ICCAT.pfc projection file (not used but recquired)                ##
+##              ICCAT.psc simulation file                                         ##
+##                                                                                ##
+##                                                                                ##
+##              main.dir contains the directory where the data                    ##
+##                  sub directory  Inputs/ with VPA data files                    ##
+##                  sub directory  sources/ with R files                          ##
+##                  sub directory  Reports/ generate the report                   ##
+##                                                                                ##
+##              args should be the name of the subdirectory containig vpa data    ##
 ####################################################################################
 args <- commandArgs(trailingOnly = TRUE)
-#args=c("","Inputs/bfte/2012/vpa/inflated/low/")
-f.in <- '/home/metienne/ICCAT/ICCAT-BFT/Inputs/bfte/2012/vpa/inflated/low/bfte2012.d1'
 print(args)
 main.dir <- '/home/metienne/ICCAT/ICCAT-BFT' 
 setwd(main.dir)
-#data file, in vpa format, with path relative to main directory
 
 #directory where data and ctl files have to written, path relative to main directory
 wd <- ''
@@ -58,13 +69,13 @@ ForgotWeight <- 1 #if 1 weight at age are derived from the given relationship no
 ## ------------------------------------------------------------------------- ##',
 ## ival         lb      ub      phz     prior   p1      p2      #parameter   ##
 
-log_R0      <-  c(14.9,  -5.0,    30,    4,    0,    -5.0,   30.)#log_ro/msy 
+log_R0      <-  c(14.9,  -5.0,    30,    1,    0,    -5.0,   30.)#log_ro/msy 
 h           <-  c(0.92,   0.2,   1.0,    4,    3,       3,     2)       #steepness/fmsy',)
 log_m       <-  c(-1.47,   -5.0,   0.0,    -1,    1,  -1.469,  0.05)    #log.m',
 log_avgrec  <-  c( 14.2,   -5.0,    20,    1,    0,    -5.0,    20)      #log_avgrec',
-log_recinit <-  c( 15,   -5.0,    20,    1,    0,    -5.0,    20)      #log_recinit',
-rho         <-  c(0.14, 0.001, 0.999,    3,    3,    12.0,  52.8)    #rho',
-tau         <-  c(0.8, 0.001,    10,     3,    4,     1e-1, 1e-1)    #kappa (precision)',
+log_recinit <-  c( 14.2,   -5.0,    20,    1,    0,    -5.0,    20)      #log_recinit',
+rho         <-  c(0.4, 0.001, 0.999,    -1,    3,    2.5,  2.5)    #rho',
+kappa         <-  c(0.8, 0.001,    12,     3,    4,     2.5, 0.8)    #kappa (precision)',
 #****************************************
 # // parameters for bicubic spline
 #****************************************
@@ -73,12 +84,24 @@ selectivityType <- c(3, 1, 1, 6, 1, 3, 13, 13)
 age50sel <- c(6,6,6,9.9,6,6,6,6)
 sd50sel <-  c(1,1,1,0.1,1,1,1,1)
 
+#****************************************
+# // parameters for simulation
+#****************************************
+std.agecomp <- 0.2
+sim_q <- 1e-5
+sim_rho <-0.4
+sim_varphi <- 1
+sim_age_tau <- 0.035
+sim_so <- 0.35
+sim_beta <-1.53e-7
+
 
 ##extract directory name
-f.in = args[2]
+f.in = args[1]
 f.in.split <- unlist(strsplit(f.in,'/'))
-dir.out <- f.in.split
-dir.out <-f.in.split[2:(length(dir.out))]
+dir.out <-f.in.split[2:(length(f.in.split))]
+if(length(args)>1)
+  dir.out <- unlist(strsplit(file.path('simulation',args[2]), '/'))
 
 while(!is.null(dir.out)){
   if(! (dir.out[1] %in% dir(file.path(main.dir,wd), full.names=F, recursive=F))){
@@ -91,7 +114,6 @@ while(!is.null(dir.out)){
     dir.out=NULL
 }
 file.copy(from=file.path(main.dir,'sources/Makefile'),to=file.path(main.dir,wd,'Makefile'),overwrite=T)
-file.copy(from=file.path(main.dir,'ICCAT.psc'), to=file.path(main.dir,wd,'ICCAT.psc'), overwrite=T)
 
 #######################################################################
 ### READING INPUT VPA format file
@@ -99,8 +121,8 @@ file.copy(from=file.path(main.dir,'ICCAT.psc'), to=file.path(main.dir,wd,'ICCAT.
 f.in      <- file.path(main.dir,paste(f.in.split, collapse='/'))
 listFiles <- list.files(f.in)
 f.pot     <- listFiles[which(
-          grepl(pattern=".d1", x=listFiles, fixed=TRUE) & 
-          (!grepl(pattern=".d1~", x=listFiles, fixed=TRUE)))]
+  grepl(pattern=".d1", x=listFiles, fixed=TRUE) & 
+    (!grepl(pattern=".d1~", x=listFiles, fixed=TRUE)))]
 if(length(f.pot)>1)
 {
   stop(paste('Several *.d1 files found : ', paste(f.pot, collapse='\ '), '\n', sep=''))
@@ -119,7 +141,7 @@ if(length(f.pot)>1)
   outr[countr <- countr+1] <- c("## File used as entry                       ##")
   outr[countr <- countr+1] <- f.in
   
-
+  
   
   source(file.path(src.dir,'writeData4ISCAM.R'))
   source(file.path(src.dir,'writeCTL4iSCAM.R'))
