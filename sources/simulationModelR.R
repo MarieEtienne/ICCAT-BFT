@@ -1,0 +1,139 @@
+
+####################################################################################
+##                                                                                ##
+##  Code to simulate data and overwrite real data                                 ##
+##                                                                                ##
+##   Authors: Marie-Pierre Etienne marie.etienne@agroparistech.fr                 ##
+##   Date: Aug. 26,  2013                                                         ##
+##   Date: Aug. 26,  2013                                                         ##
+##                                                                                ##
+##                                                                                ##
+##  The purpose of this code is to generate                                       ##                                                                              ##
+##              ICCAT.dat data in iSCAM format                                    ##
+##              using simulation parameters                                       ##
+####################################################################################
+
+simulationModel<- function(seed)
+{
+  # par is a list containing 
+  # pop parameters R0, Rinit, so, beta, M, F, tau_R
+  # selectivity 
+  # age composition tau2_A
+  # inidices q, tau2_I
+  # indices tau2_C
+  #natM
+  tau_R <- 0.05
+  tau_A <- 0.1
+  tau_I <- 0.1
+  tau_C <- 0.1
+  ft    <-rep(0.2, nyr-syr+1)
+  age   <-  sage : nage
+  m50   <- 4     #50% maturity
+  std50 <- 0.2*m50  #std at 50% maturity
+  fa    <- 1/(1+ exp( (m50-age)/std50))
+  sbt   <-rep(NA, nyr-syr+1) 
+  surv.timing <- rep(0.5, ngear)
+  q <- rep(1e-5, ngear)
+  
+  std.agecomp <- 0.2
+  sim_q <- 1e-5
+  sim_rho <-0.4
+  sim_varphi <- 1
+  sim_age_tau <- 0.035
+  beta <-5e-6
+  so <- 10
+  R0 <- so/beta
+  
+  ####################################################################################
+  ##   Selectivity                                                                  ##
+  ####################################################################################
+   
+   selectivityFile<- "selectivityTable.txt"
+   tmp <- readLines(file.path(main.dir,selectivityFile))
+   selected.indices=c('SM_TP', 'LL_JP1','NW_PS', 'JP_LL2','SP_BB1', 'SP_BB2')#, 'SP_BB3')
+   tmp<- tmp[c(T,c('SM_TP', 'LL_JP1','NW_PS', 'JP_LL2','SP_BB1', 'SP_BB2', 'SP_BB3')%in%selected.indices)]
+   tmp <- unlist(strsplit(tmp, " "))
+   tmp <- as.numeric(tmp[grep("[0-9]", tmp)])
+   selectivity.matrix <- exp(matrix(tmp, byrow=T, ncol=nage-sage+1))
+  ## totalMortality
+  Z <- t(sapply(1:(nyr-syr+1), 
+              function(i) {
+              tmp<- (Info$natM+ft[i]*selectivity.matrix[1,]) 
+              }
+              ))
+  ## 
+  ##vulnerability list
+  Vul <- list()
+  for( g in 1:ngear)
+    Vul[[g]] <- matrix(selectivity.matrix[g,], byrow=T, nrow=nyr-syr+1, ncol=nage-sage+1)
+  
+  ####################################################################################
+  ##   Population model                                                             ##
+  ####################################################################################
+  noise<- rnorm(nyr-syr+1)
+  N<- matrix(NA, ncol=nage-sage+1, nrow=nyr-syr+1)
+  N[1,1]=R0 *exp(noise[1]*tau_R - tau_R^2/2)
+
+  for( i in 1:(nage-sage))
+  {
+    N[1, i+1] <- N[1,i] *exp(-Info$natM[i])
+  }
+  N[1,nage-sage+1] <- N[1,nage-sage+1] + N[1,nage-sage+1] * exp(- Info$natM[nage-sage+1]) 
+  
+ sbt[1]<- sum(N[1,]*fa)
+  
+  for( j in 1:(nyr-syr))
+  {
+    N[j+1,1] <- sbt[j] * so / (1+ beta * sbt[j]) * exp(noise[j+1]*tau_R-tau_R^2/2)  
+    N[j+1, 2:(nage-sage+1)] <-   N[j, 1:(nage-sage)] * exp(-Z[j, 1:(nage-sage)]) 
+    N[j+1,nage-sage+1]      <- N[j+1,nage-sage+1] + N[j,nage-sage+1]* exp(-Z[j, nage-sage+1])
+    sbt[j+1]<- sum(N[j+1,]*fa)
+  }##              args should be the name of the subdirectory containig vpa data    ##
+
+
+  ####################################################################################
+  ##   CAA Data                                                                     ##
+  ####################################################################################
+ pat <- list(NULL)
+  for (g in 1:ngear)
+ {
+   tmp <- Vul[[g]]*N
+   tmp <- tmp / apply(tmp, 1, sum)
+   pat[[g]] <- tmp*exp(matrix(rnorm(length(tmp)), ncol=nage-sage+1, nrow=nyr-syr+1)*tau_A) # no need for bias correction since everything is renormalised at the end
+   pat[[g]] <- tmp / apply(pat[[g]], 1, sum)
+ }
+  ncomp <- nrow(compositionCatch)
+  for( i in 1:ncomp)
+  {
+    gg <- compositionCatch[i,2]
+    yy <- compositionCatch[i,1]-syr+1
+    compositionCatch[i, 3:(nage+2)] <- pat[[gg]][yy,]
+  }
+  ####################################################################################
+  ##   Abundance indices                                                            ##
+  ####################################################################################
+  I <- list(NULL)
+  for (g in 1:ngear)
+  {
+    tmp <- Vul[[g]]*N*exp(-surv.timing[g]*Z)
+    tmp <-  apply(tmp, 1, sum)
+    I[[g]] <- q[g] * tmp * exp(rnorm(length(tmp))*tau_I-tau_I^2/2) 
+  }
+  nsur <- nrow(iSCAMsurvey)
+  for( i in 1:nsur)
+  {
+    gg <- iSCAMsurvey[i,3]
+    yy <- compositionCatch[i,1]-syr+1
+    iSCAMsurvey[i, 2] <- round(I[[gg]][[yy]],3)
+  }
+
+  
+  
+  ####################################################################################
+  ##   Catch                                                                        ##
+  ####################################################################################
+  tmp <- Vul[[1]]* matrix(ft,  nrow=nyr-syr+1, ncol=nage-sage+1) * N * (1-exp(-Z))/ Z
+  Catch  <- round(apply(tmp, 1, sum)*exp(rnorm(nyr-syr+1)*tau_C-tau_C^2/2))    
+}
+   
+   
