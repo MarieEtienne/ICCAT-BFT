@@ -19,15 +19,17 @@ count <- 1
 #############################################################
 ##  Model dimension section                                ##
 #############################################################
-outf[count:(count<-(count+24))] <- c(
+outf[count:(count<-(count+4))] <- c(
   '## _____________________________ ##',
   '## Projection file control (pfc) ##',
   '## _____________________________ ##',
   '##',
-  '## n_tac  length of catch vector.',
-  '3',
-  '## tac vector (mt)',
-  '1.00 10. 100',
+  '## n_tac  length of catch vector.')
+TAC <- seq(0,30000, 2000)
+outf[count<- count+1] <- length(TAC)
+outf[count<- count+1]<- '## tac vector (mt)'
+outf[count<- count+1] <- paste(TAC, collapse="\t")
+outf[(count+1):(count<- count+17)] <-c(
   '##',
   '## _____________________________ ##',
   '## Control options               ##',

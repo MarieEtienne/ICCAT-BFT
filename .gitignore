@@ -8,3 +8,7 @@ Report/*.blg
 Report/ICCAT.log
 Report/.RData
 Report/.Rhistory
+iscam.*
+bfte/2012/vpa/*
+*.Rhistory
+MakefileToBeModified

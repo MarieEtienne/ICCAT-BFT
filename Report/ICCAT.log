@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012/Debian) (format=pdflatex 2013.7.17)  19 AUG 2013 05:39
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012/Debian) (format=pdflatex 2013.7.17)  26 AUG 2013 12:30
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -517,167 +517,315 @@ LaTeX Font Info:    Font shape `U/msb/m/n' will be
 (Font)              scaled to size 6.25204pt on input line 141.
 LaTeX Font Info:    Font shape `T1/pplx/bx/n' in size <14.4> not available
 (Font)              Font shape `T1/pplx/b/n' tried instead on input line 142.
-LaTeX Font Info:    Try loading font information for T1+pcr on input line 143.
+LaTeX Font Info:    Try loading font information for T1+pcr on input line 147.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1pcr.fd
 File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
 )
-LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 10.42007pt on input line 146.
-LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 7.91925pt on input line 146.
-LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 10.42007pt on input line 146.
-LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 7.91925pt on input line 146.
-
-Overfull \hbox (21.32567pt too wide) in paragraph at lines 151--161
-\T1/pplx/m/n/10 With the cur-rent or-gan-i-sa-tion of the on GitHub, the in-put
- files are in []\T1/pcr/m/n/10 ICCAT-BFT/Input/bfte/2012/...\T1/pplx/m/n/10 ,
- []
-
 LaTeX Font Info:    Font shape `T1/pplx/bx/n' in size <12> not available
-(Font)              Font shape `T1/pplx/b/n' tried instead on input line 173.
-[1
+(Font)              Font shape `T1/pplx/b/n' tried instead on input line 155.
+LaTeX Font Info:    Font shape `U/msa/m/n' will be
+(Font)              scaled to size 10.42007pt on input line 157.
+LaTeX Font Info:    Font shape `U/msa/m/n' will be
+(Font)              scaled to size 7.91925pt on input line 157.
+LaTeX Font Info:    Font shape `U/msb/m/n' will be
+(Font)              scaled to size 10.42007pt on input line 157.
+LaTeX Font Info:    Font shape `U/msb/m/n' will be
+(Font)              scaled to size 7.91925pt on input line 157.
+ [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Package color Info: Redefining color shadecolor on input line 235.
+Overfull \hbox (60.68855pt too wide) detected at line 233
+\OML/zplm/m/it/10 M[] \OT1/zplm/m/n/10 = \OT1/pplx/m/n/10 0.49,  \OML/zplm/m/it
+/10 M[] \OT1/zplm/m/n/10 = \OT1/pplx/m/n/10 0.24,  \OML/zplm/m/it/10 M[] \OT1/z
+plm/m/n/10 = \OT1/pplx/m/n/10 0.24,  \OML/zplm/m/it/10 M[] \OT1/zplm/m/n/10 = \
+OT1/pplx/m/n/10 0.24,  \OML/zplm/m/it/10 M[] \OT1/zplm/m/n/10 = \OT1/pplx/m/n/1
+0 0.24,  \OML/zplm/m/it/10 M[] \OT1/zplm/m/n/10 = \OT1/pplx/m/n/10 0.2,  \OML/z
+plm/m/it/10 M[] \OT1/zplm/m/n/10 = \OT1/pplx/m/n/10 0.175,  \OML/zplm/m/it/10 M
+[] \OT1/zplm/m/n/10 = \OT1/pplx/m/n/10 0.15,  \OML/zplm/m/it/10 M[] \OT1/zplm/m
+/n/10 = \OT1/pplx/m/n/10 0.125, \OML/zplm/m/it/10 M[] \OT1/zplm/m/n/10 = \OT1/p
+plx/m/n/10 0.1
+ []
 
-Overfull \hbox (36.75589pt too wide) in paragraph at lines 240--240
+Package color Info: Redefining color shadecolor on input line 240.
+
+Overfull \hbox (36.75589pt too wide) in paragraph at lines 245--245
 []\T1/pcr/m/n/10 ## ## SELECTIVITY PARAMETERS Columns for gear                 
                   ##[] 
  []
 
 
-Overfull \hbox (36.75589pt too wide) in paragraph at lines 240--240
+Overfull \hbox (36.75589pt too wide) in paragraph at lines 245--245
 []\T1/pcr/m/n/10 ## ## OPTIONS FOR SELECTIVITY (isel_type):                    
                   ##[] 
  []
 
-Package color Info: Redefining color shadecolor on input line 249.
-Package color Info: Redefining color shadecolor on input line 264.
+Package color Info: Redefining color shadecolor on input line 256.
+Package color Info: Redefining color shadecolor on input line 271.
 [2]
-Package color Info: Redefining color shadecolor on input line 297.
+Package color Info: Redefining color shadecolor on input line 307.
 LaTeX Font Info:    Font shape `T1/pplx/bx/n' in size <10> not available
-(Font)              Font shape `T1/pplx/b/n' tried instead on input line 325.
-Package color Info: Redefining color shadecolor on input line 328.
+(Font)              Font shape `T1/pplx/b/n' tried instead on input line 343.
+Package color Info: Redefining color shadecolor on input line 346.
  <figure/ICCAT-Abundance.pdf, id=19, 505.89pt x 505.89pt>
 File: figure/ICCAT-Abundance.pdf Graphic file (type pdf)
 
 <use figure/ICCAT-Abundance.pdf>
-Package pdftex.def Info: figure/ICCAT-Abundance.pdf used on input line 330.
+Package pdftex.def Info: figure/ICCAT-Abundance.pdf used on input line 348.
 (pdftex.def)             Requested size: 455.24411pt x 455.25046pt.
  [3]
-Package color Info: Redefining color shadecolor on input line 340.
+Package color Info: Redefining color shadecolor on input line 358.
 
 <figure/ICCAT-Catch.pdf, id=23, 505.89pt x 505.89pt>
 File: figure/ICCAT-Catch.pdf Graphic file (type pdf)
 
 <use figure/ICCAT-Catch.pdf>
-Package pdftex.def Info: figure/ICCAT-Catch.pdf used on input line 342.
+Package pdftex.def Info: figure/ICCAT-Catch.pdf used on input line 360.
 (pdftex.def)             Requested size: 455.24411pt x 455.25046pt.
  [4 <./figure/ICCAT-Abundance.pdf>]
-Package color Info: Redefining color shadecolor on input line 353.
+Package color Info: Redefining color shadecolor on input line 372.
 
 <figure/ICCAT-Selectivity.pdf, id=32, 505.89pt x 505.89pt>
 File: figure/ICCAT-Selectivity.pdf Graphic file (type pdf)
 
 <use figure/ICCAT-Selectivity.pdf>
-Package pdftex.def Info: figure/ICCAT-Selectivity.pdf used on input line 355.
+Package pdftex.def Info: figure/ICCAT-Selectivity.pdf used on input line 374.
 (pdftex.def)             Requested size: 455.24411pt x 455.25046pt.
  [5 <./figure/ICCAT-Catch.pdf>]
-Package color Info: Redefining color shadecolor on input line 367.
-Package color Info: Redefining color shadecolor on input line 377.
- [6 <./figure/ICCAT-Selectivity.pdf>]
-Package color Info: Redefining color shadecolor on input line 435.
-LaTeX Font Info:    Font shape `T1/pcr/m/it' in size <10> not available
-(Font)              Font shape `T1/pcr/m/sl' tried instead on input line 438.
-Package color Info: Redefining color shadecolor on input line 454.
+Package color Info: Redefining color shadecolor on input line 386.
 
-Overfull \hbox (18.75589pt too wide) in paragraph at lines 457--457
+<figure/ICCAT-Selectivity1.pdf, id=42, 505.89pt x 505.89pt>
+File: figure/ICCAT-Selectivity1.pdf Graphic file (type pdf)
+
+<use figure/ICCAT-Selectivity1.pdf>
+Package pdftex.def Info: figure/ICCAT-Selectivity1.pdf used on input line 388.
+(pdftex.def)             Requested size: 455.24411pt x 455.25046pt.
+ [6 <./figure/ICCAT-Selectivity.pdf>]
+Package color Info: Redefining color shadecolor on input line 401.
+Package color Info: Redefining color shadecolor on input line 411.
+
+[7 <./figure/ICCAT-Selectivity1.pdf>]
+Package color Info: Redefining color shadecolor on input line 469.
+LaTeX Font Info:    Font shape `T1/pcr/m/it' in size <10> not available
+(Font)              Font shape `T1/pcr/m/sl' tried instead on input line 472.
+Package color Info: Redefining color shadecolor on input line 488.
+
+Overfull \hbox (18.75589pt too wide) in paragraph at lines 491--491
 []\T1/pcr/m/n/10 ## /home/metienne/ICCAT/ICCAT-BFT/Inputs/bfte/2012/vpa/reporte
 d/low/bfte2012.d1[] 
  []
 
-<figure/ICCAT-Selectivity2.pdf, id=50, 505.89pt x 505.89pt>
+<figure/ICCAT-Selectivity2.pdf, id=62, 505.89pt x 505.89pt>
 File: figure/ICCAT-Selectivity2.pdf Graphic file (type pdf)
 
 <use figure/ICCAT-Selectivity2.pdf>
-Package pdftex.def Info: figure/ICCAT-Selectivity2.pdf used on input line 460.
+Package pdftex.def Info: figure/ICCAT-Selectivity2.pdf used on input line 494.
 (pdftex.def)             Requested size: 455.24411pt x 455.25046pt.
- [7]
-Package color Info: Redefining color shadecolor on input line 470.
-Package color Info: Redefining color shadecolor on input line 478.
-LaTeX Font Info:    Font shape `T1/pcr/bx/n' in size <10> not available
-(Font)              Font shape `T1/pcr/b/n' tried instead on input line 480.
- [8 <./figure/ICCAT-Selectivity2.pdf>]
-Package color Info: Redefining color shadecolor on input line 520.
-Package color Info: Redefining color shadecolor on input line 533.
+Package color Info: Redefining color shadecolor on input line 504.
+ [8]
+<figure/ICCAT-SelectivityBygear.pdf, id=67, 505.89pt x 505.89pt>
+File: figure/ICCAT-SelectivityBygear.pdf Graphic file (type pdf)
 
-Overfull \hbox (54.75589pt too wide) in paragraph at lines 535--535
-[][]\T1/pcr/b/n/10 plot[]\T1/pcr/m/n/10 (x = res$yr, y = res$ft[1, ], xlab = []
-"Year"[], ylab = []"Fishing effort"[], type = []"b"[])[] 
+<use figure/ICCAT-SelectivityBygear.pdf>
+Package pdftex.def Info: figure/ICCAT-SelectivityBygear.pdf used on input line 
+510.
+(pdftex.def)             Requested size: 455.24411pt x 455.25046pt.
+Package color Info: Redefining color shadecolor on input line 521.
+ [9 <./figure/ICCAT-Selectivity2.pdf>]
+LaTeX Font Info:    Font shape `T1/pcr/bx/n' in size <10> not available
+(Font)              Font shape `T1/pcr/b/n' tried instead on input line 523.
+
+Overfull \hbox (30.75589pt too wide) in paragraph at lines 533--533
+[]    \T1/pcr/m/n/10 ind <- []\T1/pcr/b/n/10 which[]\T1/pcr/m/n/10 (composition
+Catch[, 2] == gear.list[i] & compositionCatch[, 1] <=[] 
  []
 
-<figure/ICCAT-Ft.pdf, id=66, 505.89pt x 505.89pt>
+
+Overfull \hbox (48.75589pt too wide) in paragraph at lines 541--541
+[]        []\T1/pcr/b/n/10 plot[]\T1/pcr/m/n/10 (res$age, selectivity[selectivi
+ty[, 1] == gear.list[i], 2:(nage - sage +[] 
+ []
+
+
+Overfull \hbox (72.75589pt too wide) in paragraph at lines 542--542
+[]            \T1/pcr/m/n/10 2)], []"l"[], col = gear.list[i], lty = gear.list[
+i], ylim = []\T1/pcr/b/n/10 c[]\T1/pcr/m/n/10 (0, 1), ylab = []""[],[] 
+ []
+
+LaTeX Font Info:    Try loading font information for TS1+pcr on input line 548.
+
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1pcr.fd
+File: ts1pcr.fd 2001/06/04 font definitions for TS1/pcr.
+)
+Overfull \hbox (30.75589pt too wide) in paragraph at lines 548--548
+[][]        \T1/pcr/m/n/10 # if(!(ind.scr%%2)){ print(ind.scr); mtext(\TS1/pcr/
+m/n/10 '\T1/pcr/m/n/10 Selectivity\TS1/pcr/m/n/10 '\T1/pcr/m/n/10 , side=2, lin
+e=2;[][] 
+ []
+
+
+Overfull \hbox (24.75589pt too wide) in paragraph at lines 551--551
+[]        []\T1/pcr/b/n/10 for[] \T1/pcr/m/n/10 (j in ind) []\T1/pcr/b/n/10 poi
+nts[]\T1/pcr/m/n/10 (res$age, compositionCatch[j, 3:(nage - sage + 3)],[] 
+ []
+
+[10 <./figure/ICCAT-SelectivityBygear.pdf>]
+
+LaTeX Warning: No positions in optional float specifier.
+               Default added (so using `tbp') on input line 563.
+
+<figure/ICCAT-SelecBef80.pdf, id=87, 505.89pt x 505.89pt>
+File: figure/ICCAT-SelecBef80.pdf Graphic file (type pdf)
+
+<use figure/ICCAT-SelecBef80.pdf>
+Package pdftex.def Info: figure/ICCAT-SelecBef80.pdf used on input line 566.
+(pdftex.def)             Requested size: 455.24411pt x 455.25046pt.
+Package color Info: Redefining color shadecolor on input line 579.
+ [11 <./figure/ICCAT-SelecBef80.pdf>]
+Overfull \hbox (30.75589pt too wide) in paragraph at lines 591--591
+[]    \T1/pcr/m/n/10 ind <- []\T1/pcr/b/n/10 which[]\T1/pcr/m/n/10 (composition
+Catch[, 2] == gear.list[i] & compositionCatch[, 1] >=[] 
+ []
+
+
+Overfull \hbox (48.75589pt too wide) in paragraph at lines 599--599
+[]        []\T1/pcr/b/n/10 plot[]\T1/pcr/m/n/10 (res$age, selectivity[selectivi
+ty[, 1] == gear.list[i], 2:(nage - sage +[] 
+ []
+
+
+Overfull \hbox (72.75589pt too wide) in paragraph at lines 600--600
+[]            \T1/pcr/m/n/10 2)], []"l"[], col = gear.list[i], lty = gear.list[
+i], ylim = []\T1/pcr/b/n/10 c[]\T1/pcr/m/n/10 (0, 1), ylab = []""[],[] 
+ []
+
+
+Overfull \hbox (30.75589pt too wide) in paragraph at lines 606--606
+[][]        \T1/pcr/m/n/10 # if(!(ind.scr%%2)){ print(ind.scr); mtext(\TS1/pcr/
+m/n/10 '\T1/pcr/m/n/10 Selectivity\TS1/pcr/m/n/10 '\T1/pcr/m/n/10 , side=2, lin
+e=2;[][] 
+ []
+
+
+Overfull \hbox (24.75589pt too wide) in paragraph at lines 609--609
+[]        []\T1/pcr/b/n/10 for[] \T1/pcr/m/n/10 (j in ind) []\T1/pcr/b/n/10 poi
+nts[]\T1/pcr/m/n/10 (res$age, compositionCatch[j, 3:(nage - sage + 3)],[] 
+ []
+
+
+LaTeX Warning: No positions in optional float specifier.
+               Default added (so using `tbp') on input line 620.
+
+<figure/ICCAT-SelecAft80.pdf, id=97, 505.89pt x 505.89pt>
+File: figure/ICCAT-SelecAft80.pdf Graphic file (type pdf)
+
+<use figure/ICCAT-SelecAft80.pdf>
+Package pdftex.def Info: figure/ICCAT-SelecAft80.pdf used on input line 623.
+(pdftex.def)             Requested size: 455.24411pt x 455.25046pt.
+Package color Info: Redefining color shadecolor on input line 636.
+Package color Info: Redefining color shadecolor on input line 644.
+Package color Info: Redefining color shadecolor on input line 686.
+ [12] [13 <./figure/ICCAT-SelecAft80.pdf>]
+Package color Info: Redefining color shadecolor on input line 699.
+
+Overfull \hbox (72.75589pt too wide) in paragraph at lines 701--701
+[][]\T1/pcr/b/n/10 plot[]\T1/pcr/m/n/10 (x = res$yr, y = res$ft[1, ], xlab = []
+"Year"[], ylab = []"Fishing mortality"[], type = []"b"[])[] 
+ []
+
+<figure/ICCAT-Ft.pdf, id=111, 505.89pt x 505.89pt>
 File: figure/ICCAT-Ft.pdf Graphic file (type pdf)
  <use figure/ICCAT-Ft.pdf>
-Package pdftex.def Info: figure/ICCAT-Ft.pdf used on input line 539.
+Package pdftex.def Info: figure/ICCAT-Ft.pdf used on input line 705.
 (pdftex.def)             Requested size: 455.24411pt x 455.25046pt.
-Package color Info: Redefining color shadecolor on input line 550.
+Package color Info: Redefining color shadecolor on input line 716.
 
-[9 <./figure/ICCAT-Ft.pdf>]
-Overfull \hbox (48.75589pt too wide) in paragraph at lines 552--552
+Overfull \hbox (48.75589pt too wide) in paragraph at lines 718--718
 [][]\T1/pcr/b/n/10 plot[]\T1/pcr/m/n/10 (x = res$yrs, y = res$sbt/1000, xlab = 
 []"Year"[], ylab = []"Spawning []\T1/pcr/b/n/10 biomass[] \T1/pcr/m/n/10 (tons)
 "[],[] 
  []
 
-<figure/ICCAT-SBT.pdf, id=76, 505.89pt x 505.89pt>
+<figure/ICCAT-SBT.pdf, id=112, 505.89pt x 505.89pt>
 File: figure/ICCAT-SBT.pdf Graphic file (type pdf)
  <use figure/ICCAT-SBT.pdf>
-Package pdftex.def Info: figure/ICCAT-SBT.pdf used on input line 557.
+Package pdftex.def Info: figure/ICCAT-SBT.pdf used on input line 723.
 (pdftex.def)             Requested size: 455.24411pt x 455.25046pt.
-Package color Info: Redefining color shadecolor on input line 568.
 
-Overfull \hbox (72.75589pt too wide) in paragraph at lines 570--570
+[14 <./figure/ICCAT-Ft.pdf>]
+Package color Info: Redefining color shadecolor on input line 734.
+
+Overfull \hbox (72.75589pt too wide) in paragraph at lines 736--736
 [][]\T1/pcr/b/n/10 plot[]\T1/pcr/m/n/10 (res$Fstatus[1, ] ~ res$Bstatus[1:62], 
-xlab = []"B/Bmsy"[], type = []"l"[], ylab = []"F/Fmsy"[],[] 
+xlab = []"B/Bmsy"[], type = []"b"[], ylab = []"F/Fmsy"[],[] 
  []
 
-<figure/ICCAT-KobePlot.pdf, id=77, 505.89pt x 505.89pt>
+<figure/ICCAT-KobePlot.pdf, id=122, 505.89pt x 505.89pt>
 File: figure/ICCAT-KobePlot.pdf Graphic file (type pdf)
 
 <use figure/ICCAT-KobePlot.pdf>
-Package pdftex.def Info: figure/ICCAT-KobePlot.pdf used on input line 575.
+Package pdftex.def Info: figure/ICCAT-KobePlot.pdf used on input line 741.
 (pdftex.def)             Requested size: 455.24411pt x 455.25046pt.
-Package color Info: Redefining color shadecolor on input line 584.
- [10 <./figure/ICCAT-SBT.pdf>] (./ICCAT.bbl
-[11 <./figure/ICCAT-KobePlot.pdf>]) [12] (./ICCAT.aux) ) 
+Package color Info: Redefining color shadecolor on input line 750.
+ [15 <./figure/ICCAT-SBT.pdf>]
+Package color Info: Redefining color shadecolor on input line 760.
+Package color Info: Redefining color shadecolor on input line 787.
+
+<figure/ICCAT-RetroSpawning.pdf, id=132, 505.89pt x 505.89pt>
+File: figure/ICCAT-RetroSpawning.pdf Graphic file (type pdf)
+
+<use figure/ICCAT-RetroSpawning.pdf>
+Package pdftex.def Info: figure/ICCAT-RetroSpawning.pdf used on input line 789.
+
+(pdftex.def)             Requested size: 455.24411pt x 455.25046pt.
+Package color Info: Redefining color shadecolor on input line 799.
+
+<figure/ICCAT-RetroBmsy.pdf, id=133, 505.89pt x 505.89pt> [16 <./figure/ICCAT-K
+obePlot.pdf>]
+File: figure/ICCAT-RetroBmsy.pdf Graphic file (type pdf)
+ <use figure/ICCAT-RetroBmsy.pdf>
+Package pdftex.def Info: figure/ICCAT-RetroBmsy.pdf used on input line 801.
+(pdftex.def)             Requested size: 455.24411pt x 455.25046pt.
+Package color Info: Redefining color shadecolor on input line 811.
+
+<figure/ICCAT-RetroFmsy.pdf, id=143, 505.89pt x 505.89pt> [17 <./figure/ICCAT-R
+etroSpawning.pdf>]
+File: figure/ICCAT-RetroFmsy.pdf Graphic file (type pdf)
+ <use figure/ICCAT-RetroFmsy.pdf>
+Package pdftex.def Info: figure/ICCAT-RetroFmsy.pdf used on input line 813.
+(pdftex.def)             Requested size: 455.24411pt x 455.25046pt.
+ [18 <./figure/ICCAT-RetroBmsy.pdf>]
+Overfull \hbox (21.32567pt too wide) in paragraph at lines 835--845
+\T1/pplx/m/n/10 With the cur-rent or-gan-i-sa-tion of the on GitHub, the in-put
+ files are in []\T1/pcr/m/n/10 ICCAT-BFT/Input/bfte/2012/...\T1/pplx/m/n/10 ,
+ []
+
+[19 <./figure/ICCAT-RetroFmsy.pdf>] (./ICCAT.bbl) [20] (./ICCAT.aux) ) 
 Here is how much of TeX's memory you used:
- 4739 strings out of 493485
- 62701 string characters out of 3143526
- 128272 words of memory out of 3000000
- 7845 multiletter control sequences out of 15000+200000
- 70005 words of font info for 161 fonts, out of 3000000 for 9000
+ 4798 strings out of 493485
+ 64149 string characters out of 3143526
+ 127290 words of memory out of 3000000
+ 7893 multiletter control sequences out of 15000+200000
+ 70298 words of font info for 162 fonts, out of 3000000 for 9000
  957 hyphenation exceptions out of 8191
- 38i,14n,23p,340b,299s stack positions out of 5000i,500n,10000p,200000b,50000s
-{/usr/share/texlive/tex
-mf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
-/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
-ts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/mathpazo/fpl
-mr.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/mathpazo/fplmri.pfb></
-usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrb8a.pfb></usr/share/tex
-live/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texlive/texmf-di
-st/fonts/type1/urw/courier/ucrro8a.pfb></usr/share/texlive/texmf-dist/fonts/typ
-e1/urw/palatino/uplb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palat
-ino/uplbi8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.
-pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on ICCAT.pdf (12 pages, 195408 bytes).
+ 38i,14n,23p,281b,299s stack positions out of 5000i,500n,10000p,200000b,50000s
+{/usr/sha
+re/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dis
+t/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/font
+s/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/publi
+c/mathpazo/fplmr.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/mathpazo
+/fplmri.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrb8a.pfb><
+/usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/te
+xlive/texmf-dist/fonts/type1/urw/courier/ucrro8a.pfb></usr/share/texlive/texmf-
+dist/fonts/type1/urw/palatino/uplb8a.pfb></usr/share/texlive/texmf-dist/fonts/t
+ype1/urw/palatino/uplbi8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/pa
+latino/uplr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplri
+8a.pfb>
+Output written on ICCAT.pdf (20 pages, 283739 bytes).
 PDF statistics:
- 138 PDF objects out of 1000 (max. 8388607)
- 97 compressed objects within 1 object stream
+ 219 PDF objects out of 1000 (max. 8388607)
+ 155 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 36 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 71 words of extra memory for PDF output out of 10000 (max. 10000000)
 

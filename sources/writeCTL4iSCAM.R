@@ -42,7 +42,7 @@ outf[count<- count+1] <- paste(paste(log_m, collapse='\t'),'\t#log_m, natural mo
 outf[count<- count+1] <- paste(paste(log_avgrec, collapse='\t'),'\t#log_Rbar, average recruitment')
 outf[count<- count+1] <- paste(paste(log_recinit, collapse='\t'),'\t#log_Rinit, initial recruitment')
 outf[count<- count+1] <- paste(paste(rho, collapse='\t'),'\t#proportion of variance for observation process')
-outf[count<- count+1] <- paste(paste(tau, collapse='\t'),'\t# total variance')
+outf[count<- count+1] <- paste(paste(kappa, collapse='\t'),'\t# total variance')
 
 outf[(count+1):(count<-(count+15))] <- c( 
   '## SELECTIVITY PARAMETERS Columns for gear                                   ##',
@@ -62,8 +62,8 @@ outf[(count+1):(count<-(count+15))] <- c(
   '## ------------------------------------------------------------------------- ##')
 
 outr[(countr+1):(countr<- countr+2)] <- c(  '## SELECTIVITY PARAMETERS Columns for gear                                   ##',
-                                         '## OPTIONS FOR SELECTIVITY (isel_type):                                      ##'
-                                         )
+                                            '## OPTIONS FOR SELECTIVITY (isel_type):                                      ##'
+                                            )
 #logistic for JP_LL and Bspline for commercial
 caa_avail <- compositionCatch[,2] 
 gear.list <- 1:ngear
@@ -94,15 +94,15 @@ outf[count<- count+1] <- c('## -------------------------------------------------
 outf[(count+1):(count<- count+ngear)] <- rep(syr, ngear) 
 
 outf[(count+1):(count<- count+10)] <- c('##',
-  '##',
-  '##',
-  '## ------------------------------------------------------------------------- ##',
-  '## PRIORS FOR SURVEY Q                                                       ##',
-  '## Prior type:                                                               ##',
-  '##			0 - uninformative prior                                         ##',
-  '##			1 - normal prior density for log(q)                             ##',
-  '##			2 - random walk in q                                            ##',
-  '## ------------------------------------------------------------------------- ##')
+                                        '##',
+                                        '##',
+                                        '## ------------------------------------------------------------------------- ##',
+                                        '## PRIORS FOR SURVEY Q                                                       ##',
+                                        '## Prior type:                                                               ##',
+                                        '##  		0 - uninformative prior                                         ##',
+                                        '##			1 - normal prior density for log(q)                             ##',
+                                        '##			2 - random walk in q                                            ##',
+                                        '## ------------------------------------------------------------------------- ##')
 outf[count<- count+1] <- paste(ngear-1,'\t# -number of surveys (nits)')
 outf[count<- count+1] <- paste(paste(rep(0, ngear-1), collapse='\t'),'\t# -prior type (see legend above)')
 outf[count<- count+1] <- paste(paste(rep(0, ngear-1), collapse='\t'),'\t# -prior log(mean)')
@@ -119,12 +119,12 @@ outf[count<- count+1] <- paste('\t', VERB,'\t# 1  -verbose ADMB output (0=off, 1
 outf[count<- count+1] <- paste('\t', REC,'\t# 2  -recruitment model (1=beverton-holt, 2=ricker)')
 
 outf[count<- count+1] <- paste0('\t', 0.2,'\t# 3  -std in observed catches in first phase.')
-outf[count<- count+1] <- paste0('\t',0.07,'\t# 4  -std in observed catches in last phase.')
+outf[count<- count+1] <- paste0('\t',0.1,'\t# 4  -std in observed catches in last phase.')
 
 outf[(count+1):(count<- count+11)] <- c(
   '\t0\t# 5  -Assume unfished in first year (0=FALSE, 1=TRUE)',
   '\t0.00\t# 6  -Minimum proportion to consider in age-proportions for dmvlogistic',
-  '\t0.40\t# 7  -Mean fishing mortality for regularizing the estimates of Ft',
+  '\t0.30\t# 7  -Mean fishing mortality for regularizing the estimates of Ft',
   '\t0.2\t# 8  -std in mean fishing mortality in first phase',
   '\t1.00\t# 9  -std in mean fishing mortality in last phase',
   '\t-1\t# 10 -phase for estimating m_deviations (use -1 to turn off mdevs)',
@@ -133,19 +133,18 @@ outf[(count+1):(count<- count+11)] <- c(
   '\t0.50\t# 13 -fraction of total mortality that takes place prior to spawning',
   '\t1\t# 14 -switch for age-composition likelihood (1=dmvlogistic,2=dmultinom)',
   '\t0\t# 15 -switch for IFD distribution in selectivity simulations			 ##')
-  #####################################################################################',
-  ##     END OF FILE MARK                                                            ##',
-  #####################################################################################',
-  outf[(count+1):(count<- count+5)]<- 
-    c('##',
-      '## ------------------------------------------------------------------------- ##',
-      '## MARKER FOR END OF CONTROL FILE (eofc)                                     ##',
-      '## ------------------------------------------------------------------------- ##',
-      '999')
-  
+#####################################################################################',
+##     END OF FILE MARK                                                            ##',
+#####################################################################################',
+outf[(count+1):(count<- count+5)]<- 
+  c('##',
+    '## ------------------------------------------------------------------------- ##',
+    '## MARKER FOR END OF CONTROL FILE (eofc)                                     ##',
+    '## ------------------------------------------------------------------------- ##',
+    '999')
+
 con.out = file(description=f.out, open="w")
 writeLines(outf, con=con.out,  sep='\n' ) 
 close.connection(con.out)
-
 
 

@@ -23,6 +23,8 @@
 ## Age-schedule and population parameters                                    ##
 ## ------------------------------------------------------------------------- ##
 	0.23		# -natural mortality rate (m_fixed) TOBE DEPRECATED
+## -natural mortality rate at age
+	 0.49	0.24	0.24	0.24	0.24	0.2	0.175	0.15	0.125	0.1
 	319		# -asymptotic length (linf) - cm 
 	0.093		# -body growth coefficient (k)
 	-0.97		# -theoretical age at zero length (to)
