@@ -18,10 +18,11 @@ prefix=$(ISCAM_HOME)
 DAT=RUN.dat
 CTL=ICCAT
 ARG='bfte/2012/vpa/reported/low'
-ARGSIM=0
+ARGSIM=1
 MCFLAG=-mcmc 10000 -mcsave 100 -nosdmcmc
 NR=4
 NOSIM  = 1
+NSTART  = 1
 MAINDIR ="/home/metienne/ICCAT/ICCAT-BFT"
 
 
@@ -56,10 +57,10 @@ $(DIST):
 	cp $(DIST) $(ARG)/$@
 
 $(CTL).ctl: $(DIST) sources/setISCAMFiles.R 
-	Rscript sources/setISCAMFiles.R  Inputs/$(ARG)
+	Rscript sources/setISCAMFiles.R  Inputs/$(ARG) 
 
 
-# |------------------------------------------------------------------------------------|
+# |---------------------------------------------------------------------------------- |
 # | MCMC and MCEVAL
 # |------------------------------------------------------------------------------------|
 # |
@@ -106,7 +107,7 @@ clean:
 # | simdirs     : is the list of simulation directories to copy material to.
 # | datadone: is a loop for looping over directories
 
-simdirs := $(shell echo 'cat(formatC(1:$(NOSIM), digits=3, flag="0"))' | R --vanilla --slave)
+simdirs := $(shell echo 'cat(formatC($(NSTART):($(NSTART)+$(NOSIM)-1), digits=3, flag="0"))' | R --vanilla --slave)
 createdir:=$(foreach dir,simulation/$(simdirs),$(dir)/createdir)
 datadone:= $(foreach dir,$(simdirs),$(dir)/datadone)
 runsims := $(foreach dir,$(simdirs),$(dir)/runsims)
@@ -116,20 +117,19 @@ runsims := $(foreach dir,$(simdirs),$(dir)/runsims)
 # |
 
 
-$(datadone): 
-	mkdir simulation/$(@D);
-	cp  $(ARG)/$(CTL).[cdp]*[!v] $(ARG)/RUN.dat  $(EXEC) simulation/$(@D)
-	echo "cd simulation/$(@D); ./$(EXEC) -ind $(DAT) -sim  $(@D) "
-	cd simulation/$(@D); ./$(EXEC) -ind $(DAT)  
-	cd simulation/$(@D); touch datadone
+$(datadone):
+	Rscript sources/setISCAMFiles.R  Inputs/$(ARG) $(@D)
+	cp  $(ARG)/$(CTL).[cp]*[!v]   $(EXEC) simulation/$(@D)
+	cp $(DIST) simulation/$(@D)
+	cd simulation/$(@D); ./$(EXEC) -ind $(DAT)
+#	cd simulation/$(@D); touch datadone
 
 data: $(datadone)
-
 
 cleansims: 
 	rm -r simulation/0* 
 
-sim: data allSims.Rdata $(EXEC).par
+sim: data 
 
 # |------------------------------------------------------------------------------------|
 # | COLLECT SUMMARY STATISTICS FROM SIMULATION RUNS (target = collect)

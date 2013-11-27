@@ -54,7 +54,7 @@
 
 
 %% Newcommand for tuna report
-\newcommand{\iscam}{\texttt{iSCAM}}
+\newcommand{\iscam}{\texttt{iSCAM }}
 \newcommand{\admb}{\texttt{admb} }
 \newcommand{\com}[1]{\textcolor{red}{#1}}
 
@@ -231,10 +231,10 @@ $p_{atk}$ which is the  proportion of fish of age $a$  in year $t$ for
 gear $k$ is drawn from the following distribution (gear $k$ is omitted
 for clarity) which is defined thanks to a latent variable $X_{at}$
 \begin{gather}
-\epsilon^{A}_{at} \overset{i.i.d}{\sim} \mathcal{N}(0,\tau^2_A)\\
+\epsilon^{A}_{at} \overset{i.i.d}{\sim} \mathcal{N}(0,\tau^2_A)\nonumber \\ 
 X_{at}       =       \log{\mu_{at}}       +       \epsilon_{at}^A       -
-\frac{1}{A}\sum_{a=1}^A\left(\log{\mu_{at}} + \epsilon_{at}^A \right) \\
-e^{X_{at}} = \frac{\mu_{at}e^{\epsilon_{at}^A}}{ \left(\prod_{a=1}^A \mu_{at}e^{\epsilon_{at}^A}\right) ^{1/A}}\\
+\frac{1}{A}\sum_{a=1}^A\left(\log{\mu_{at}} + \epsilon_{at}^A \right) \nonumber \\
+e^{X_{at}} = \frac{\mu_{at}e^{\epsilon_{at}^A}}{ \left(\prod_{a=1}^A \mu_{at}e^{\epsilon_{at}^A}\right) ^{1/A}}\nonumber\\
 p_{at} = \frac{e^{X_{at}} } {\sum_{a=1}^A e^{X_{at}} }\\
 \end{gather}
 The multivariate logistic distribution  avoids the drawback of a very high
@@ -243,7 +243,7 @@ precision when using a classical multinomiale distribution.
 \subsection{Abundance indices}
 The total vulnerable biomass at year $t$ for gear $k$ is defined by
 \begin{gather}
-V_{k,t}=\sum_{a=1}^A N_{t,a} e^{-\lambda_{k,t} Z_{t,a}} v_{k,a} w_a,\\
+V_{k,t}=\sum_{a=1}^A N_{t,a} e^{-\lambda_{k,t} Z_{t,a}} v_{k,a} w_a,
 \end{gather}
  where $\lambda_{k,t}$ is the fraction  of the mortality to adjust for
  survey timing, it is specified by the user. They have been
@@ -256,7 +256,7 @@ cat(RDataFiles[ns+1])
  
 \begin{gather}
 I_{k,t} = q_k V_{k,t} \exp{\epsilon_{k,t}^I}\\
-\epsilon_{k,t}^I \overset{i.i.d}{\sim} \mathcal{N}(0,\tau_I^2)\\
+\epsilon_{k,t}^I \overset{i.i.d}{\sim} \mathcal{N}(0,\tau_I^2)\nonumber
 \end{gather}
 \subsection{Catch}
 Catch  with  gear  $k$  in  year  $t$  is  denoted  by  $C_{k,t}$  and
@@ -264,7 +264,7 @@ defined using Baranov Catch equations by
 \begin{gather}
 \hat{C}_{k,t}   =   \sum_{a=1}^A   \frac{N_{t,a}   w_a   F_{k,t}   v_{k,t,a}
   (1-e^{-Z_{t,a}}) }{Z_{t,a}},\\
-C_{k,t} = \hat{C}_{k,t} \exp{\epsilon_{k,t}^C}, \quad \epsilon_{k,t}\overset{i.i.d}{\sim}\mathcal{N}(0, \tau^2_C)\\
+C_{k,t} = \hat{C}_{k,t} \exp{\epsilon_{k,t}^C}, \quad \epsilon_{k,t}\overset{i.i.d}{\sim}\mathcal{N}(0, \tau^2_C)\nonumber
 \end{gather}
 
 
@@ -388,7 +388,7 @@ $$\Phi = (l_\infty, k, t_o,a,b,\dot{a},\dot{\gamma})$$
 
 \subsection{Initial values for estimated parameters}
 $$\theta   =  (R_0,   \kappa,   M,  \bar{R},   \rho,  v^2,   \gamma_k,
-\boldsymbol{F}_{t}, (phi_t)_t=1^T, (\epsilon_t^R)_{t=1}^T)$$
+\boldsymbol{F}_{t}, (\phi_t)_{t=1}^T, (\epsilon_t^R)_{t=1}^T)$$
 
 
 	%% ro          = mfexp(theta(1));
@@ -406,10 +406,10 @@ $$\theta   =  (R_0,   \kappa,   M,  \bar{R},   \rho,  v^2,   \gamma_k,
         $\theta$, the  following values  have been used  to initialise
         the model.
 
-\subsubsection*{Value for $R_0$}
+\paragraph{Value for $R_0$}
 
 
-\subsubsection*{Value for $\bar{R}$}
+\paragraph{Value for $\bar{R}$}
 If the  model doesn't supposed  unfished conditions at  starting year,
 the recruitment at  the first year is  not $R_0$. It is  assumed to be
 equal to
@@ -425,12 +425,12 @@ It is currently not possible with \iscam to specify 0 for vulnerability, since i
 
 
 
-\section{First runs on one data file}
+\section{Running \iscam on Bluefin Tuna data}
 
 <<echo=F>>=
 src.dir <- "/home/metienne/ICCAT/ICCAT-BFT/sources"
 setwd(src.dir)
-source('read.admb.R')
+ok <- source('read.admb.R')
 res      <- read.admb(ifile=file.path(main.dir, wdsimple,'ICCAT'))
 @
 

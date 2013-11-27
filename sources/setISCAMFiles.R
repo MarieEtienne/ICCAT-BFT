@@ -5,7 +5,7 @@
 ##                                                                                ##
 ##   Authors: Marie-Pierre Etienne marie.etienne@agroparistech.fr                 ##
 ##   Date: Jul. 25,  2013                                                         ##
-##   Date: Aug. 23,  2013                                                         ##
+##   Date: Nov. 25,  2013                                                         ##
 ##                                                                                ##
 ##                                                                                ##
 ##  The purpose of this code is to build the 4 main files recquired by iscam      ##                                                                              ##
@@ -23,7 +23,7 @@
 ##              args should be the name of the subdirectory containig vpa data    ##
 ####################################################################################
 args <- commandArgs(trailingOnly = TRUE)
-args <-c('Inputs/bfte/2012/vpa/reported/low' ,'1')
+#args <-c('Inputs/bfte/2012/vpa/reported/low' ,'1')
 print(args)
 
 ##### if simulation mode (sim >0) then sim is the seed for the simulation
@@ -33,14 +33,21 @@ setwd(main.dir)
 
 #directory where data and ctl files have to written, path relative to main directory
 wd <- ''
+SIM_FLAG <- F
+
 #directory to find R code
 src.dir <- file.path(main.dir,wd,'sources')
 freport.out<- file.path(main.dir,'Report','RData','datafile.out') 
 
-selectivityFile<- "selectivityTable.txt"
+if(length(args)>1){
+  simseed <- as.numeric(args[2])
+  SIM_FLAG <- T
+}
+
 ##################################################################################
 ##                              DATA iSCAM Parameters
 ###################################################################################
+selectivityFile<- "selectivityTable.txt"
 selected.indices=c('SM_TP', 'LL_JP1','NW_PS', 'JP_LL2','SP_BB1', 'SP_BB2')#, 'SP_BB3')
 #************************************************************************
 #population parameters extracted from 2012 BFT report for eastern stock
@@ -78,7 +85,7 @@ h           <-  c(0.92,   0.2,   1.0,    4,    3,       3,     2)       #steepne
 log_m       <-  c(-1.47,   -5.0,   0.0,    -1,    1,  -1.469,  0.05)    #log.m',
 log_avgrec  <-  c( 12.5,   -5.0,    20,    1,    0,    -5.0,    20)      #log_avgrec',
 log_recinit <-  c( 12.5,   -5.0,    20,    1,    0,    -5.0,    20)      #log_recinit',
-rho         <-  c(0.4, 0.001, 0.999,    1,    3,    2.5,  2.5)    #rho',
+rho         <-  c(0.4, 0.001, 0.999,    -1,    3,    2.5,  2.5)    #rho',
 kappa         <-  c(0.8, 0.001,    12,     3,    4,     2.5, 0.8)    #kappa (precision)',
 #****************************************
 # // parameters for bicubic spline
@@ -104,9 +111,8 @@ sim_beta <-1.53e-7
 f.in = args[1]
 f.in.split <- unlist(strsplit(f.in,'/'))
 dir.out <-f.in.split[2:(length(f.in.split))]
-if(length(args)>1)
-  dir.out <- unlist(strsplit(file.path('simulation',args[2]), '/'))
-
+if(SIM_FLAG)
+  dir.out <- unlist(strsplit(file.path('simulation',formatC(as.numeric(args[2]), digit=3, flag="0")), '/'))
 while(!is.null(dir.out)){
   if(! (dir.out[1] %in% dir(file.path(main.dir,wd), full.names=F, recursive=F))){
     dir.create(file.path(main.dir, wd, dir.out[1]))
@@ -117,7 +123,7 @@ while(!is.null(dir.out)){
   }else
     dir.out=NULL
 }
-file.copy(from=file.path(main.dir,'sources/Makefile'),to=file.path(main.dir,wd,'Makefile'),overwrite=T)
+file.copy(from=file.path(main.dir,'Makefile'),to=file.path(main.dir,wd,'Makefile'),overwrite=T)
 
 #######################################################################
 ### READING INPUT VPA format file
@@ -156,15 +162,7 @@ if(length(f.pot)>1)
   print(outr)
   cat('****************************************************\n')
   
-  outf<- character(0)
-  outf[1] <- paste0(file.path(main.dir, out,'ICCAT.dat'), '\t# Data File Name' )
-  outf[2] <- paste0(file.path(main.dir, out,'ICCAT.ctl'), '\t# Control File Name' )
-  outf[3] <- paste0(file.path(main.dir, out,'ICCAT.pfc'), '\t# Projection File Name' )
-  outf[4] <- paste0(file.path(main.dir, out,'ICCAT.psc'), '\t# Simualtion File Name' )
   
-  con.out = file(description=file.path(main.dir, wd,'RUN.dat'), open="w")
-  writeLines(outf, con=con.out,  sep='\n' ) 
-  close.connection(con.out)
   
   print(freport.out)
   con.out = file(description=freport.out, open="w")
@@ -182,13 +180,20 @@ if(length(f.pot)>1)
                 waa=waa, natM=natMortality)
   save(Info, file=file.path(main.dir,"Report/RData/Info.RData"))
   save(vpa.dat, file=file.path(main.dir,wd,"vpa.RData"))
-  if(length(args)>1)
+  if(SIM_FLAG)
   {
-    simseed <- as.numeric(args[2])
     simulationModel(simseed)
-    SIM_FLAG <- T
     source(file.path(src.dir,'writeData4ISCAM.R'))
-    rm(SIM_FLAG)
-  }
+
+    }
+  outf<- character(0)
+  outf[1] <- paste0(file.path(main.dir, out,'ICCAT.dat'), '\t# Data File Name' )
+  outf[2] <- paste0(file.path(main.dir, out,'ICCAT.ctl'), '\t# Control File Name' )
+  outf[3] <- paste0(file.path(main.dir, out,'ICCAT.pfc'), '\t# Projection File Name' )
+  outf[4] <- paste0(file.path(main.dir, out,'ICCAT.psc'), '\t# Simualtion File Name' )
+  
+  con.out = file(description=file.path(main.dir, wd,'RUN.dat'), open="w")
+  writeLines(outf, con=con.out,  sep='\n' ) 
+  close.connection(con.out)
   detach(vpa.dat)
 }  
