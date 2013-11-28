@@ -121,8 +121,7 @@ $(datadone):
 	Rscript sources/setISCAMFiles.R  Inputs/$(ARG) $(@D)
 	cp  $(ARG)/$(CTL).[cp]*[!v]   $(EXEC) simulation/$(@D)
 	cp $(DIST) simulation/$(@D)
-	cd simulation/$(@D); ./$(EXEC) -ind $(DAT)
-#	cd simulation/$(@D); touch datadone
+	-cd simulation/$(@D);./$(EXEC) -ind $(DAT)
 
 data: $(datadone)
 
@@ -131,50 +130,3 @@ cleansims:
 
 sim: data 
 
-# |------------------------------------------------------------------------------------|
-# | COLLECT SUMMARY STATISTICS FROM SIMULATION RUNS (target = collect)
-# |------------------------------------------------------------------------------------|
-# | COLLECTALL is an R-script to open report files and save output to allSims.Rdata
-COLLECTALL='dn<-dir("$(ARG)",pattern="^[[:digit:]]");\
-				sims <- lapply(dn,function(d){require(Riscam);setwd(file.path("$(ARG)/",d));\
-				A<-read.rep("iscam.rep");\
-				B<-read.rep("iscam.sim");setwd($(MAINDIR));\
-				bstatus <- log2(A$$sbt[33]/A$$bmsy)-log2(B$$sbt[33]/B$$bmsy) ;\
-                                fstatus <- log2(A$$ft[1,33]/A$$fmsy)-log2(B$$ft[1,33]/B$$fmsy);\
-                                nu      <- subset(A$$A_nu,A$$A_nu[,2]==1)[,-c(1,2)];\
-                                effN    <- sum(nu^2)/A$$age_tau2[1];\
-                                list(age=A$$age,yr=A$$yr, ngear=A$$ngear, Fmsy=A$$fmsy,MSY=A$$msy,Bmsy=A$$bmsy,\
-                                  hat.Fmsy=B$$fmsy,hat.MSY=B$$msy,hat.Bmsy=B$$bmsy,\
-                                  Bo = A$$bo, hat.Bo = B$$bo,\
-				  ro=A$$ro, rbar=A$$rbar, log_sel=A$$log_sel,\
-				  sigma=A$$sig,tau=A$$tau,age_tau2=A$$age_tau2,\
-				  rho=A$$rho, varphi=A$$varphi,\
-				  Fstatus.err=fstatus,Bstatus.err=bstatus,\
-                                  EffectiveN=effN)\
-			        }); \
-				save(sims,file=file.path($(MAINDIR),"$(ARG)","allSims.Rdata"))'
-
-COLLECTRETRO =  'dn<-dir(pattern="^[[:digit:]]"); \
-                                runs <- lapply(dn,function(d){setwd(d);\
-                                source("$(MAINDIR)/sources/retroStat.R");\
-                                setwd("..");\
-                                bias <- c(mean=mean(bias),abs.mean=mean(abs(bias)),bias)});\
-                                save(runs,file="retroSims.Rdata")'
-
-#SPAWNBIO = 'dn<-dir(pattern="^[[:digit:]]"); \
-                        spbio <- lapply(dn,function(d){require(Riscam);setwd(d);\
-                        A<-read.rep("PHake2010.rep");\
-                        sbt <- A$$sbt[1:33];setwd("..");return(sbt)});\
-                        save(spbio,file="spawnbio.Rdata")'
-
-allSims.Rdata: data
-	@echo $(COLLECTALL) | R --vanilla --slave
-
-
-#retroSims.Rdata: allDONE
-#        @echo $(COLLECTRETRO) | R --vanilla --slave
-
-#spawnbio.Rdata: allDONE
-#        @echo $(SPAWNBIO) | R --vanilla --slave
-
-#collect: allSims.Rdata retroSims.Rdata spawnbio.Rdata
