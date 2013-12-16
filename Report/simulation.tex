@@ -1,0 +1,66 @@
+Simulations has been run to check the hability of \iscam at estimating
+the parameters. To assess the \iscam is run in similar condition, some
+datasets have been  simulated using similar values  of parameters than
+the ones obtained on Bluefin Tuna data. 
+
+\subsection{Simulation model}
+\subsection{Simulation framework}
+\subsubsection{Paraemeters value}
+\begin{table}[ht]
+\centering
+\begin{tabular}{ c  p{4cm}  p{8cm} }
+  \hline
+Name & Value & Notes \\ 
+  \hline
+\multicolumn{3}{c}{\bf Parameters be estimated}\\
+$s_0$ & $10$ & \\
+$\beta$ & $5e-6$ & \\
+$\rho$ & 0.4 & \\
+$\varphi$ & 1 & \\
+$\tau_R$ & $0.774=\sqrt{1-\rho} * \varphi$ & \\
+$\tau_I$ & $0.632=\sqrt{\rho} * \varphi$ & \\
+$\tau_C$&0.1 &\\
+$\tau_A$ & 0.1 & \\
+$v_{k,a}$&  see \ref{res:seltable}  & the  selectivity table  is taken
+according to the results obtained on BFT \\
+$q_k$ & $10^{-5}$ & Same value for all gear\\
+\multicolumn{3}{c}{\bf Other quantities  of interest (fixed parameters
+  or derived from parameters)}\\
+$\Phi_E$ & $1.423536 $ & \\
+$M_a$ & $\left(0.490,0.24, 0.24, 0.24, 0.240,\right.$ $\left. 0.20, 
+0.175 , 0.15, 0.125, 0.10\right)$&\\
+$m_{50}$& $4$&\\
+$\sigma_{50}$& $0.8$&\\
+$R_0$ &  $1.859505\, 10^6$ & fixed  according to $\beta$ and  $s_0$ using
+$R_0= (s_0*\Phi_E-1)/(\beta*\Phi_E)$ \\
+$sb_0$ & $2.647072 \, 10^6$ & Spawning biomass at time 0, i.e. $syr$\\
+$ h $ & $0.780646$ & derived from equation $h= 0.2 * (1+\beta*sb_0)/(1+0.2*\beta*sb_0)$\\
+
+\\ \hline
+\end{tabular}
+\caption{Leading parameters}
+\end{table}
+
+\subsection{Results on leading parameters}
+\subsection{Results on management parameters}
+Spécifier le nombre de jeu de données,  le nombre de fois ou on a jete
+la simu car la matrice hessienne n'était pas définie positive.
+
+\begin{figure}
+  \includegraphics[width=8cm]{R0estimation}
+  \includegraphics[width=8cm]{tau_Restimation}
+\end{figure} 
+
+\begin{figure}
+  \includegraphics[width=8cm]{tau_Iestimation}
+  \includegraphics[width=8cm]{varPhiestimation}
+\end{figure} 
+
+\begin{figure}
+  \includegraphics[width=8cm]{SteepnessEstimation}
+\end{figure}
+
+
+
+Results highly biased, has to check with Steve the simulation model or simulate from R 
+

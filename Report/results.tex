@@ -1,0 +1,61 @@
+
+\subsection{Management parameters}
+\subsubsection{Fishing mortality}
+\begin{alltt}
+\hlfunctioncall{plot}(x = res$yr, y = res$ft[1, ], xlab = \hlstring{"Year"}, ylab = \hlstring{"Fishing mortality"}, type = \hlstring{"b"})
+\end{alltt}
+
+{\centering \includegraphics[width=\maxwidth]{figure/ICCAT-Ft} 
+
+}
+
+
+
+
+
+\subsubsection{Spawning biomass}
+\begin{alltt}
+\hlfunctioncall{plot}(x = res$yrs, y = res$sbt/1000, xlab = \hlstring{"Year"}, ylab = \hlstring{"Spawning \hlfunctioncall{biomass} (tons)"}, 
+    type = \hlstring{"b"})
+\end{alltt}
+
+{\centering \includegraphics[width=\maxwidth]{figure/ICCAT-SBT} 
+
+}
+
+
+
+\subsubsection{Kobe Plot}
+\begin{alltt}
+\hlfunctioncall{plot}(res$Fstatus[1, ] ~ res$Bstatus[1:62], xlab = \hlstring{"B/Bmsy"}, type = \hlstring{"b"}, ylab = \hlstring{"F/Fmsy"}, 
+    xlim = \hlfunctioncall{c}(0, 2), ylim = \hlfunctioncall{c}(0, 2))
+\end{alltt}
+
+{\centering \includegraphics[width=\maxwidth]{figure/ICCAT-KobePlot} 
+
+}
+\begin{alltt}
+\hlfunctioncall{detach}(Info)
+\end{alltt}
+
+{\centering \includegraphics[width=\maxwidth]{figure/ICCAT-RetroSpawning} 
+
+}
+
+
+{\centering \includegraphics[width=\maxwidth]{figure/ICCAT-RetroBmsy} 
+
+}
+
+
+
+{\centering \includegraphics[width=\maxwidth]{figure/ICCAT-RetroFmsy} 
+
+}
+
+\subsection{Monte Carlo approach}
+\subsubsection{Prior specification}
+\subsubsection{Results}
+
+\subsection{Comparaison with results from stock assesmnent}
+

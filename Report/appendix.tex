@@ -1,0 +1,20 @@
+\verb+admb+ and \verb+iSCAM+ are assumed to be installed, a \verb+PATH+ variable \verb+ADMB_HOME+ exists and contains the path to \verb+admb+ directory. In addition a \verb+PATH+ variable, called \verb+ISCAM+ contains the path to \verb+iscam+ executable.   
+\section{R codes produced and how to use them}
+All the codes and results described  or used in this report are freely
+available on \url{https://github.com/MarieEtienne/ICCAT-BFT}. 
+
+\iscam  has  been  developped  by  Steven  Martell,  is  available  on
+\url{https://github.com/smartell/iSCAM} and described in \cite{Martell11}.
+
+Using \iscam  required to write  some several datafiles as  inputs. To
+produce an automatic process and in a context of reproducible science,
+some \rcode codes  are used to translate a vpa  format file \verb+*.d1*+ in
+inputs     file      for     \iscam.     The     main      file     is
+\verb+sources/setISCAMFiles.R+  and required  the directory  where the
+*.d1 file  is located. It  generates the input  files for \iscam  in a
+directory based on the input  directory. With the current organisation
+of the on GitHub, the input files are in \verb+ICCAT-BFT/Input/bfte/2012/...+, so
+a directory  \verb+bfte/2012/..+ will  be created  in \verb+ICCAT-BFT+
+and \iscam can belaunched from this directory.
+
+\section{How to run the codes to reproduce the analysis}
