@@ -4,6 +4,11 @@
 %  mature at year $t-1$, according to ICCAT report}
 %\ASS{Beverton-Holt model is used for recruitment -- may be changed }
 
+\ASS{To account  for the commercial  catch (only one time  series and
+for the seven abundance indices),  eight gears have been declared. gear
+one corresponds  to commercial fisheries,  gear 2 to 8  corresponds to
+the seven abundance indices, therefore $F_{f,t}=0$ for $k \geq 2$}
+
 \paragraph{Mortality}
 The mortality at age is fixed to the values used for the VPA approach.
 
@@ -61,6 +66,9 @@ adopted with the following parameters.
 
 
 \paragraph{Abundance indices}
+
+
+
 The total vulnerable biomass at year $t$ for gear $k$ is defined by
 \begin{gather}
 V_{k,t}=\sum_{a=1}^A N_{t,a} e^{-\lambda_{k,t} Z_{t,a}} v_{k,a} w_a,

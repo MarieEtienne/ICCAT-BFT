@@ -1,0 +1,201 @@
+This section  sums up the principle  aspects of iSCAM used  on Bluefin
+Tuna population dynamic data.
+\subsection{Latent process Level}
+\subsubsection{Population model}
+\iscam is an age structured model.  Fish population is splitted into age classes from
+age $sage$ to age $nage$. Let us denote by $\Nt = (N_{1,t}, \ldots, N_{A,t})$ the number
+of individuals in every classe age $a$ ($a\in [1,A]$) on year $t$ ($t\in [1;T]$).
+
+\begin{gather}
+  % \mbox{Initial state of the population}\\
+  \mbox{Population dynamic after year syr (t>1)}\\
+  N_{a,t}= \left\lbrace 
+    \begin{array}{l}
+      R_t, \quad a=1\\
+      N_{a-1,t-1} \exp(-Z_{t-1, a-1}), \quad a\in [2;A-1]\\
+      N_{a-1,t-1} \exp(-Z_{t-1, a-1}) + N_{a,t-1} \exp(-Z_{t-1, a}), \quad a\in [2;A-1],\\
+    \end{array}  \right. \\
+\end{gather}
+ where $Z_{a,t}$  stands for the total  mortality rate at age  $a$ in
+  year $y$ and $R_t$ is the recruitment at year $t$.
+
+
+
+
+\begin{gather}
+\mbox{Recruitment after year syr (t>1)}\\
+R_t= \frac{s_0 B_{t-1}}{1+\beta B_{t-1}} \exp{\epsilon^R_t}, \\
+\epsilon^R_t\underset{i.i.d}{\sim}\mathcal{N}\left(-\frac{\tau_R^2}{2}, \tau_R^2\right),\\
+\end{gather} 
+
+\iscam assumes a stock recruitment relationship, Beverton and Holt
+(BH) or Ricker (R) model may be used which links the mature biomass at
+time $t$ $B_t$and the recruitment at time $t+1$. The presented work used the BH model. 
+There is slight trick in \iscam, since this relation ship is estimated
+in the latest phase of the estimation process. During the first phases the recruitment
+model is specified by the following equation
+\begin{gather}
+\label{eq:iscamRec}  R_t =\bar{R}e^{\omega_t},
+\end{gather}
+where  $\omega_t\overset{i.i.d}{\sim}  \mathcal{N}(0,  \tau^2_R)$  and
+$\bar{R}$ is the average recruitment. This
+approach  of the  early  phases is  very  close to  the  VPA from  the
+recruitment  point  of  view,  since   it  doesn't  assume  any  stock
+recruitment relationship. 
+
+
+
+\begin{gather}
+\mbox{Definition of mature biomass}\\
+B_t= \sum_{a=1}^A N_{t,a} f_a,
+\end{gather} 
+$f_a$ being the fertility at age $a$. 
+
+$f_a$ doesn't depend  on year $t$, fertility at  age is considred
+  as fixed over year
+
+  
+  
+\begin{gather}
+  \mbox{Definition of total mortality rate ate age}\\
+  Z_{t,a}= M_a + \sum_{k=1}^K F_{k,t} v_{k, t,a}, \quad \mbox{gear }k,
+  \mbox{class }a, \mbox{year }t.   \\
+\end{gather} 
+In  the  BFT  data  available  there is  only  one  time  series  for
+ catch (catch are  not split among different  gears), considering that
+ the gear index corresponding to the 
+commercial fisheries equals one, the previous expression may be simplified as~:
+
+\begin{gather}
+  \mbox{Definition of total mortality rate ate age}\\
+  Z_{t,a}= M_a + F_t v_{1, t,a}, \quad \mbox{gear } 1,
+  \mbox{class }a, \mbox{year }t,   \\
+\end{gather} 
+
+where $F_t$ is the instantaneous  fishing mortality and $v_{1,t,a}$ is
+the vulnerability for gear $1$, in year $t$ for age classe a.
+
+\subsubsection{Vulnerability model}
+\label{sec:vulnerability}
+\iscam    allows     to    specify    different    form     for    the
+selectivity/vulnerability. The vulnerability  may either be completely
+specified by the user, or when  age composition data are available the
+vulnerability may be  inferred. In the latter case,  different form of
+selectvity curve may be specified:  for example the selectivity may be
+chosen as a logistic function of age, or even, with a more flexible approach, using B-spline.  The B-splines
+functions may  even model a  variation accross years. In  this work,
+only logistic or simple Bspline has been used to circumvent estimation issues.
+
+
+\subsection{Observation Level}
+\subsubsection{Age composition data}
+
+Following  \cite{Schnute+95}, \iscam  uses by  default a  multivariate
+logistic  function  for  age  composition data.  It  is  assumed  that
+$p_{atk}$ which is the  proportion of fish of age $a$  in year $t$ for
+gear $k$ is drawn from the following distribution (gear $k$ is omitted
+for clarity) which is defined thanks to a latent variable $X_{at}$
+\begin{gather}
+\epsilon^{A}_{at} \overset{i.i.d}{\sim} \mathcal{N}(0,\tau^2_A)\nonumber \\ 
+X_{at}       =       \log{\mu_{at}}       +       \epsilon_{at}^A       -
+\frac{1}{A}\sum_{a=1}^A\left(\log{\mu_{at}} + \epsilon_{at}^A \right) \nonumber \\
+e^{X_{at}} = \frac{\mu_{at}e^{\epsilon_{at}^A}}{ \left(\prod_{a=1}^A \mu_{at}e^{\epsilon_{at}^A}\right) ^{1/A}}\nonumber\\
+p_{at} = \frac{e^{X_{at}} } {\sum_{a=1}^A e^{X_{at}} }\\
+\end{gather}
+The multivariate logistic distribution  avoids the drawback of a very high
+precision when using a classical multinomiale distribution.
+
+\subsubsection{Abundance indices}
+The total vulnerable biomass at year $t$ for gear $k$ is defined by
+\begin{gather}
+V_{k,t}=\sum_{a=1}^A N_{t,a} e^{-\lambda_{k,t} Z_{t,a}} v_{k,a} w_a,
+\end{gather}
+ where $\lambda_{k,t}$ is the fraction  of the mortality to adjust for
+ survey timing, it is specified by the user.
+
+ 
+\begin{gather}
+I_{k,t} = q_k V_{k,t} \exp{\epsilon_{k,t}^I}\\
+\epsilon_{k,t}^I \overset{i.i.d}{\sim} \mathcal{N}(0,\tau_I^2)\nonumber
+\end{gather}
+\subsubsection{Catch}
+Catch  with  gear  $k$  in  year  $t$  is  denoted  by  $C_{k,t}$  and
+defined using Baranov Catch equations by
+\begin{gather}
+\hat{C}_{k,t}   =   \sum_{a=1}^A   \frac{N_{t,a}   w_a   F_{k,t}   v_{k,t,a}
+  (1-e^{-Z_{t,a}}) }{Z_{t,a}},\\
+C_{k,t} = \hat{C}_{k,t} \exp{\epsilon_{k,t}^C}, \quad \epsilon_{k,t}\overset{i.i.d}{\sim}\mathcal{N}(0, \tau^2_C)\nonumber
+\end{gather}
+
+\subsection{Summary of the symbols in \iscam}
+
+Table  \ref{tab:parameters}  and  \ref{tab:symbols}  recall  the  main
+symbol used in this report and give their corresponding name in \iscam
+description available  in \cite{Martell11}. Some of  the names have
+been changed to unify the notation  standards. When the name is commun
+to this paper and \iscam users Guide, nothing is specified.
+
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{p{3cm}p{4cm}p{8cm}}
+  \hline
+Parameters & Name in \iscam & Signification \\ 
+  \hline
+$\tau_C$& $\sigma_C$ & Standard deviation in observed catch\\
+$\tau_A$ & $\tau$,  mentionned only through its estimation  on page 21
+of \cite{Martell12} & standard deviation in the multivariate logistic function \\
+$v_{k,a}$& &vulnerability for gear $k$ at age $a$\\
+$R_0$ && Recruitment in unfished conditions\\
+$h$ && Steepness\\
+$q_k$ & & Catchability coefficient for gear $k$\\
+$\rho$ & & the proportion of total variation allocated to the variance
+of the survey index\\
+$\varphi^2$ & $1/\mathcal{V}^2$& total variance $\varphi^2=\tau^2_R+\tau^2_I$\\
+$\tau_I=\varphi*\sqrt{\rho}$ & $\sigma$ & Standard deviation in the survey index\\
+$\tau_R=\varphi*\sqrt{1-\rho}$ & $\tau$& Standard deviation in process
+errors\\
+   \hline
+\end{tabular}
+\caption{Leading parameters}
+\label{tab:parameters}
+\end{table}
+
+\subsubsection{Other symbols}
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{p{3.5cm}p{3.5cm}p{8cm}}
+  \hline
+Name & Name in \iscam & Signification \\ 
+  \hline
+$A$ & & last class age\\
+$\kappa=4h / (1-h)$ & & Good year compensation ratio for BH\\
+$s_0= \kappa/\Phi_E$ & & BH relationship\\
+$\beta=(\kappa-1) / (R_0 \Phi_E)$ &&BH relationship\\
+$\epsilon_t^R$ & $\delta_t$& recruitment errors\\
+$\epsilon_{t,a}^A$ & $\eta_{t,a}$& errors in the multivariate logistic \\
+$\epsilon_{k,t}^I$ & $\epsilon_{k,t}$& residuals in abundance survey\\
+$\epsilon_t^C$ & $\eta_{k,t}$& residuals in catch data\\
+$\bar{R}$ &  &Average recruitment  used in  firt estimation  phases as
+mentionned in equation \ref{eq:iscamRec}\\
+$B_t$ & &Spawning biomass in numbers \\
+$N_{a,t}$&& Number of individuals of age a in year t\\
+$f_a$ && fecundity at age $a$\\
+$M_a$ && instantaneous mortality at age $a$\\
+$F_{k,t}, F_{t}$&& Instantaneous fishing mortality  for gear k in year
+t, since  there is only one  commercial gear considered, index  $k$ is
+mostly omitted\\
+$Z_{a,t}$& &Instantaneous total mortality for age a in year t\\ 
+$X_{a,t}$&   not  named   in  \iscam&   Quantities  involved   in  the
+multivariate logistic\\
+$\mu_{a,t}$ &  & unormalized proportion at age\\
+& $\widehat{p_{a,t}}=\mu_{a,t}/\sum_a \mu_{a,t}$& proportion at age\\
+$p_{a,t}$& & Observed proprotion at age\\
+$V_{k,t}$& & Total vulnerable biomass for gear k in year t\\
+${w}_{a}$& &Weight at age a\\
+   \hline
+\end{tabular}
+\caption{List of symbols used in \iscam}
+\label{tab:symbols}
+\end{table}
