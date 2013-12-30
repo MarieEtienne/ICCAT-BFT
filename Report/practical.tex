@@ -1,16 +1,31 @@
+The first section  aims at expliciting the choices made  to run \iscam
+on BFT  data. The second section  shows the estimation of  the leading
+parameters in  order to  justify the  simulation framework  develop in
+section \ref{sec:simulation}. The detailed  complete results are given
+in section \ref{sec:results}.
+
+
+
 
 \subsection{Tunning up \iscam - choices}
-%\ASS{The first age class is 1 year, recruitment at year $t$ depends on
-%  mature at year $t-1$, according to ICCAT report}
-%\ASS{Beverton-Holt model is used for recruitment -- may be changed }
 
-\ASS{To account  for the commercial  catch (only one time  series and
-for the seven abundance indices),  eight gears have been declared. gear
+\paragraph{Preliminary remarks}
+The first age class is 1 year, recruitment at year $t$ depends on
+mature  biomass  at  year  $t-1$,  according  to  \cite{tuna2012}.  The
+Beverton-Holt model is used for recruitment.
+
+
+To account for the total commercial catch (only one time series) and
+for the seven abundance indices,  eight gears have been declared. Gear
 one corresponds  to commercial fisheries,  gear 2 to 8  corresponds to
-the seven abundance indices, therefore $F_{f,t}=0$ for $k \geq 2$}
+the seven  abundance indices, each  gear having its  one vulnerability
+specification. The fishing moratility is  driven by the catch for gear
+1 and  therefore $F_{k,t}=0$ for  $k \geq  2$. For clarity,  index $k$
+will be omitted in the sequel since there is no ambiguity.
 
 \paragraph{Mortality}
-The mortality at age is fixed to the values used for the VPA approach.
+The mortality at age is fixed to  the values used for the VPA approach
+described in \cite{tuna2012}.
 
 \begin{table}[ht]
 \centering
@@ -26,45 +41,40 @@ Mortality & 0.49 & 0.24 & 0.24 & 0.24 & 0.24 & 0.20 & 0.17 & 0.15 & 0.12 & 0.10 
 
 \paragraph{Selectivity}
 As mentionned in \iscam allows to specify different form for the
-selectivity/vulnerability.  When  age composition data  are available,
+selectivity/vulnerability.  When age composition data are available,
 choice has been made to model  the selectivity using Bspline curves or
-logistic function.
+logistic function.  The selectivity has  been chosen to  stay constant
+over years.
+
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rp{8cm}}
+  \hline
+  Gear & Selectivity shape \\ 
+  \hline
+1 & Constant (over years) cubic spline with 5 nodes \\
+2 & Logistic shape \\ 
+3 & Logistic shape \\
+4 & fixed logistic $\mu_{50}=9.9$, $sd=0.1$\\
+5 & Logistic shape \\
+6 & Logistic shape \\
+7 & Logistic shape \\
+\hline
+\end{tabular}
+\end{table}
+
+
+Gear  $4$ corresponds  to the  Norvegian Purse  seine abundance  index
+which is documented  to focus  only on  last age  class. As  it is  not possible  to
+specify $0$ vulnerability for some  age (due to a log transformation),
+the selectivity curve  has been set to a logistic  function with fixed
+parameters, the parameters being chosen to micmic the desired behavior.
 
 
 
-% ## ## SELECTIVITY PARAMETERS Columns for gear                                   ##
-% ## ## OPTIONS FOR SELECTIVITY (isel_type):                                      ##
-% ## 3 1 1 6 1 3 13  # 1  -selectivity type ivector(isel_type) for gear
 
-
-
-The numbers  of nodes for the  Bspline curves can be  chosen equal for
-all gear with age composition data 
-
-% \begin{knitrout}
-% \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-% \begin{verbatim}
-% ## 5 0 0 0 0 5 0  # 4  -No. of age nodes for each gear (0=ignore)
-% \end{verbatim}
-% \end{kframe}
-% \end{knitrout}
-
-For gear  4 corresponding to the  Norvegian Purse seine index,  no age
-composition data  are available.  In \cite{tuna2012}, it  is indicated
-that this index is  relevant only for the last class  age. Since it is
-not  directly   possible  to  specify   a  selectivity  with   only  0
-coefficient except for one age in \iscam, a logistic selectivity curve has been
-adopted with the following parameters.
-% \begin{knitrout}
-% \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-% \begin{verbatim}
-% ## 6 6 6 9.9 6 6 6  # 2  -Age/length at 50% selectivity (logistic)
-% ## 1 1 1 0.1 1 1 1  # 3  -STD at 50% selectivity (logistic)
-% \end{verbatim}
-% \end{kframe}
-% \end{knitrout}
-
-
+ARRETER ICI A POURSUIVRE !!!
 \paragraph{Abundance indices}
 
 

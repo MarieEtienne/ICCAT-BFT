@@ -5,14 +5,18 @@ library(knitr)
 opts_chunk$set(fig.path='figure/ICCAT-', fig.align='center', fig.show='hold')
 options(replace.assign=TRUE,width=80)
 main.dir <- "/home/metienne/ICCAT/ICCAT-BFT"
-wdsimple       <- "bfte/2012/vpa/reported/lowSave"
+wdsimple       <- "bfte/2012/vpa/reported/low"
 load(file.path(main.dir, 'Report','RDataSave','Info.RData'))
 setwd(main.dir)
+dir("/iSCAM/src/r-code/R/")
+iSCAMR <- dir("../iSCAM/src/r-code/R/")
+for(f in iSCAMR)
+ source(paste("../iSCAM/src/r-code/R/", f, sep=""), echo=T)
 attach(Info)
 
 
 
-RDataFiles<- readLines(file.path(main.dir,'Report', 'RDataSave', 'datafile.out'))
+RDataFiles<- readLines(file.path(main.dir,'Report', 'RData', 'datafile.out'))
 
 
 
@@ -45,12 +49,12 @@ for( i in 1:nit)
     survey[[i]] <- iSCAMsurvey[iSCAMsurvey$gear==gear.list[i],]
     survey[[i]][,2] <- survey[[i]][,2]/ max(survey[[i]][,2])
     if(i == 1 ){
-      plot(survey[[i]][,2]~survey[[i]][,1],type="l",xlim=c(1950,2011), ylim=c(0,1.4), lty=gear.list[i], col=gear.list[i], xlab="Year", ylab="Normalised abundance index")
+      plot(survey[[i]][,2]~survey[[i]][,1],type="l",xlim=c(1945,2011), ylim=c(0,1.6), lty=gear.list[i], col=gear.list[i], xlab="Year", ylab="Normalised abundance index")
     } else {
       lines(survey[[i]][,2]~survey[[i]][,1],  lty=gear.list[i], col=gear.list[i])
     }
 }
-legend("topleft", legend=paste("Gear", gear.list), col=gear.list, lty=gear.list)   
+legend("topleft", legend=paste( Info$surveyName), cex=0.9,col=gear.list, lty=gear.list, )   
 
 
 
@@ -133,7 +137,7 @@ natM
 
 src.dir <- "/home/metienne/ICCAT/ICCAT-BFT/sources"
 setwd(src.dir)
-source('read.admb.R')
+ok <- source('read.admb.R')
 res      <- read.admb(ifile=file.path(main.dir, wdsimple,'ICCAT'))
 
 

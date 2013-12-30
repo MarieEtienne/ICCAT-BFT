@@ -1,0 +1,687 @@
+\documentclass[a4paper]{article}
+
+
+\usepackage{graphicx}
+\usepackage{graphics}
+
+\usepackage[english]{babel}
+\usepackage[figuresright]{rotating}
+\usepackage{bm}
+
+\usepackage{enumerate}
+\usepackage{float}
+\usepackage{dsfont}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+%\usepackage{natbib}
+\usepackage{authblk}
+
+\usepackage{color}
+%%%%%%%%%%%%%%%%%%  Author newcommand begin
+\newtheorem{defi}{Definition}
+
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\R}{\mathbb{R}}
+\renewcommand{\P}{\mathbb{P}}
+\newcommand{\Var}{\mathbb{V}ar}
+\newcommand{\Cov}{\mathbb{C}ov}
+\newcommand{\Comb}[2]{\left(\begin{array}{c}#1 \cr #2\end{array}\right) }
+%%%%%%%%%%%%%%%%%  Author newcommend end
+
+\usepackage[sc]{mathpazo}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{2}
+\usepackage{url}
+%\usepackage[unicode=true,pdfusetitle,
+% bookmarks=true,bookmarksnumbered=true,bookmarksopen=true,bookmarksopenlevel=2,
+% breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=false]
+% {hyperref}
+%\hypersetup{
+% pdfstartview={XYZ null null 1}}
+%\usepackage{breakurl}
+
+\usepackage{courier}
+
+%% Newcommand Utils
+\newcommand{\RMQ}[1]{\par \hspace{-2cm}\textcolor{red}{RMQ : #1 }\par }
+\newcommand{\ASS}[1]{\par \textcolor{blue}{ASSUMPTION : #1}\par}
+\newcommand{\rcode}{\texttt{R}}
+
+
+%% Newcommand for tuna report
+\newcommand{\iscam}{\texttt{iSCAM }}
+\newcommand{\admb}{\texttt{admb} }
+\newcommand{\com}[1]{\textcolor{red}{#1}}
+
+
+\newcommand{\fmsy}{F$_{\textnormal{MSY}}$}
+\newcommand{\bmsy}{B$_{\textnormal{MSY}}$}
+
+
+\newcommand{\Nt}{\boldsymbol N_t}
+
+
+\title{Report for ICCAT-GBYP 04/2013}
+\author[1]{Marie-Pierre Etienne\thanks{marie.etienne@agroparistech.fr}}
+\author[2]{Tom Carruthers }
+\author[2]{Murdoch McAlllister}
+\affil[1]{AgroParisTech}
+\affil[2]{UBC}
+
+\begin{document}
+
+\graphicspath{{/home/metienne/ICCAT/ICCAT-BFT/Report/}}
+ 
+<<setup, include=FALSE, cache=FALSE>>=
+library(knitr)
+# set global chunk options
+opts_chunk$set(fig.path='figure/ICCAT-', fig.align='center', fig.show='hold')
+options(replace.assign=TRUE,width=80)
+main.dir <- "/home/metienne/ICCAT/ICCAT-BFT"
+wdsimple       <- "bfte/2012/vpa/reported/lowSave"
+load(file.path(main.dir, 'Report','RDataSave','Info.RData'))
+setwd(main.dir)
+dir("/iSCAM/src/r-code/R/")
+iSCAMR <- dir("../iSCAM/src/r-code/R/")
+for(f in iSCAMR)
+ source(paste("../iSCAM/src/r-code/R/", f, sep=""), echo=T)
+attach(Info)
+@
+
+
+
+
+\maketitle
+\section{Introduction}
+
+
+To keep  the reproducibility of  this work,  the outputs showed  in this
+report  are  automatically extracted  from  the  orginal R  files  and
+outputs from \iscam.
+<<echo=F>>=
+RDataFiles<- readLines(file.path(main.dir,'Report', 'RDataSave', 'datafile.out'))
+@ 
+
+
+\section{Description of iSCAM}
+This section  sums up the principle  aspects of iSCAM used  on Bluefin
+Tuna population dynamic data.
+\subsection{Population model - Latent process Level}
+iSCAM is an age structured model.  Fish are splitted into age classes from
+age $sage$ to age $nage$. Let us denote by $\Nt = (N_{1,t}, \ldots, N_{A,t})$ the number
+of individuals in every classe age $a$ ($a\in [1,A]$) on year $t$ ($t\in [1;T]$).
+
+\begin{gather}
+  % \mbox{Initial state of the population}\\
+  \mbox{Population dynamic after year syr (t>1)}\\
+  N_{a,t}= \left\lbrace 
+    \begin{array}{l}
+      R_t, \quad a=1\\
+      N_{a-1,t-1} \exp(-Z_{t-1, a-1}), \quad a\in [2;A-1]\\
+      N_{a-1,t-1} \exp(-Z_{t-1, a-1}) + N_{a,t-1} \exp(-Z_{t-1, a}), \quad a\in [2;A-1],\\
+    \end{array}  \right. \\
+\end{gather}
+ where $Z_{a,t}$  stands for the total  mortality rate at age  $a$ in
+  year $y$ and $R_t$ is the recruitment at year $t$.
+
+
+%\ASS{The first age class is 1 year, recruitment at year $t$ depends on
+%  mature at year $t-1$, according to ICCAT report}
+%\ASS{Beverton-Holt model is used for recruitment -- may be changed }
+
+%\begin{gather}
+%\mbox{Recruitment after year syr (t>1)}\\
+%R_t= \frac{s_0 B_{t-1}}{1+\beta B_{t-1}} \exp{\epsilon^R_t}, \\
+%\epsilon^R_t\underset{i.i.d}{\sim}\mathcal{N}\left(-\frac{\tau_R^2}{2}, \tau_R^2\right),\\
+%\end{gather} 
+\iscam assumes a stock recruitment relationship, Beverton and Holt
+(BH) or Ricker (R) model may be used which links the mature biomass at
+time $t$ $B_t$and the recruitment at time $t+1$. The presented work used the BH model. 
+
+%is very similar to VPA from the recruitment point of view, since
+%it doesn't assume any stock recruitment relationship. The recruitment
+%model is specified by the following equation
+%\begin{gather}
+%  R_t =\bar{R}e^{\omega_t},
+%\end{gather}
+%where $\omega_t\overset{i.i.d}{\sim} \mathcal{N}(0, \tau^2_R).$
+
+\begin{gather}
+  R_t =\frac{s_0 B_{t-1}}{1+\beta B_{t-1}} e^{\delta_t - \tau^2_R/2},
+\end{gather}
+where $B_t$ is defined as the mature biomass by 
+\begin{gather}
+\mbox{Definition of mature biomass}\\
+B_t= \sum_{a=1}^A N_{t,a} f_a,
+\end{gather} 
+$f_a$ being the fertility at age $a$. 
+
+$f_a$ doesn't depend  on year $t$, fertility at  age is considred
+  as fixed over year
+
+  
+  
+\begin{gather}
+  \mbox{Definition of total mortality rate ate age}\\
+  Z_{t,a}= M_a + \sum_{k=1}^K F_{k,t} v_{k, t,a}, \quad \mbox{gear }k,
+  \mbox{class }a, \mbox{year }t.   \\
+\end{gather} 
+In  the  BFT  data  available  there is  only  one  time  series  for
+ catch (catch are  not split among different  gears), considering that
+ the gear index corresponding to the 
+commercial fisheries equals one, the previous expression may be simplified as~:
+
+\begin{gather}
+  \mbox{Definition of total mortality rate ate age}\\
+  Z_{t,a}= M_a + F_t v_{1, t,a}, \quad \mbox{gear } 1,
+  \mbox{class }a, \mbox{year }t,   \\
+\end{gather} 
+
+where $F_t$ is the instanteneous  fishing mortality and $v_{1,t,a}$ is
+the vulnearibility for gear $1$, in year $t$ for age classe a.
+
+
+To micmic  the VPA approach  mortality has  been fixed as  precised in
+\cite{tuna2012}, i.e.
+$$M_1=0.49, \ M_2=0.24, \ M_3=0.24, \ M_4=0.24, \ M_5=0.24,\ M_6=0.2, \
+M_7=0.175, \ M_8=0.15,\ M_9=0.125, M_{10}=0.1$$
+
+\iscam    allows     to    specify    different    form     for    the
+selectivity/vulnerability.  When  age composition data  are available,
+choice has been made to model  the selectivity using Bspline curves or
+logistic function.
+<<echo=F, evaluate=T>>=
+ns <- grep("## SELECTIVITY PARAMETERS Columns for gear", RDataFiles)
+cat(RDataFiles[ns])
+cat(RDataFiles[ns+1])
+cat(RDataFiles[ns+2])
+@ 
+
+
+
+The numbers  of nodes for the  Bspline curves can be  chosen equal for
+all gear with age composition data 
+
+<<echo=F>>=
+cat(RDataFiles[ns+5])
+@ 
+
+For gear  4 corresponding to the  Norvegian Purse seine index,  no age
+composition data  are available.  In \cite{tuna2012}, it  is indicated
+that this index is  relevant only for the last class  age. Since it is
+not  directly   possible  to  specify   a  selectivity  with   only  0
+coefficient except for one age in \iscam, a logistic selectivity curve has been
+adopted with the following parameters.
+<<echo=F>>=
+cat(RDataFiles[ns+3])
+cat(RDataFiles[ns+4])
+@ 
+
+\subsection{Observation Level}
+\subsection{Age composition data}
+
+Following  \cite{Schnute+95}, \iscam  uses by  default a  multivariate
+logistic  function  for  age  composition data.  It  is  assumed  that
+$p_{atk}$ which is the  proportion of fish of age $a$  in year $t$ for
+gear $k$ is drawn from the following distribution (gear $k$ is omitted
+for clarity) which is defined thanks to a latent variable $X_{at}$
+\begin{gather}
+\epsilon^{A}_{at} \overset{i.i.d}{\sim} \mathcal{N}(0,\tau^2_A)\nonumber \\ 
+X_{at}       =       \log{\mu_{at}}       +       \epsilon_{at}^A       -
+\frac{1}{A}\sum_{a=1}^A\left(\log{\mu_{at}} + \epsilon_{at}^A \right) \nonumber \\
+e^{X_{at}} = \frac{\mu_{at}e^{\epsilon_{at}^A}}{ \left(\prod_{a=1}^A \mu_{at}e^{\epsilon_{at}^A}\right) ^{1/A}}\nonumber\\
+p_{at} = \frac{e^{X_{at}} } {\sum_{a=1}^A e^{X_{at}} }\\
+\end{gather}
+The multivariate logistic distribution  avoids the drawback of a very high
+precision when using a classical multinomiale distribution.
+
+\subsection{Abundance indices}
+The total vulnerable biomass at year $t$ for gear $k$ is defined by
+\begin{gather}
+V_{k,t}=\sum_{a=1}^A N_{t,a} e^{-\lambda_{k,t} Z_{t,a}} v_{k,a} w_a,
+\end{gather}
+ where $\lambda_{k,t}$ is the fraction  of the mortality to adjust for
+ survey timing, it is specified by the user. They have been
+ specified according to the input data file 
+<<echo=F>>=
+ns <- grep("## Survey timing ", RDataFiles)
+cat(RDataFiles[ns])
+cat(RDataFiles[ns+1])
+@ 
+ 
+\begin{gather}
+I_{k,t} = q_k V_{k,t} \exp{\epsilon_{k,t}^I}\\
+\epsilon_{k,t}^I \overset{i.i.d}{\sim} \mathcal{N}(0,\tau_I^2)\nonumber
+\end{gather}
+\subsection{Catch}
+Catch  with  gear  $k$  in  year  $t$  is  denoted  by  $C_{k,t}$  and
+defined using Baranov Catch equations by
+\begin{gather}
+\hat{C}_{k,t}   =   \sum_{a=1}^A   \frac{N_{t,a}   w_a   F_{k,t}   v_{k,t,a}
+  (1-e^{-Z_{t,a}}) }{Z_{t,a}},\\
+C_{k,t} = \hat{C}_{k,t} \exp{\epsilon_{k,t}^C}, \quad \epsilon_{k,t}\overset{i.i.d}{\sim}\mathcal{N}(0, \tau^2_C)\nonumber
+\end{gather}
+
+
+
+\section{Fitting iSCAM on Bluefin Tuna Data}
+
+\subsection{Description of the data set vailable data}
+\ASS{To account  for the commercial  catch (only one time  series and
+for the seven abundance indices),  eight gears have been declared. gear
+one corresponds  to commercial fisheries,  gear 2 to 8  corresponds to
+the seven abundance indices, therefore $F_{f,t}=0$ for $k \geq 2$}
+
+
+\RMQ{AJOUTER ICI les graphes de selectivite par engin avec toutes les années}
+
+
+\subsubsection{Abundance indices}
+Seven abundance indices are available 
+<<Abundance, echo=F>>=
+survey=list()
+gear.list <- unique(iSCAMsurvey$gear)
+for( i in 1:nit)
+{
+    survey[[i]] <- iSCAMsurvey[iSCAMsurvey$gear==gear.list[i],]
+    survey[[i]][,2] <- survey[[i]][,2]/ max(survey[[i]][,2])
+    if(i == 1 ){
+      plot(survey[[i]][,2]~survey[[i]][,1],type="l",xlim=c(1945,2011), ylim=c(0,1.6), lty=gear.list[i], col=gear.list[i], xlab="Year", ylab="Normalised abundance index")
+    } else {
+      lines(survey[[i]][,2]~survey[[i]][,1],  lty=gear.list[i], col=gear.list[i])
+    }
+}
+legend("topleft", legend=paste( Info$surveyName), cex=0.9,col=gear.list, lty=gear.list, )   
+@
+\subsection{Available catch}
+<<Catch, echo=F>>=
+CAAReformat <- data.frame(NA, ncol=3, nrow=(nage-sage+1)*(nyr-syr+1))
+for( a_ind in sage:nage){
+  for(yr_ind in syr:nyr ){
+    CAAReformat[(yr_ind-syr)*(nage-sage+1)+a_ind-sage+1, ] <- c(yr_ind, a_ind, CAA[yr_ind-syr+1, a_ind-sage+1])
+  }
+}
+names(CAAReformat)=c("Year", "Age", "Catch")  
+radius <- sqrt( CAAReformat$Catch/ pi ) 
+with(CAAReformat, 
+     symbols(Year, Age, circles=radius, inches=0.35, fg="white", bg="red", ylab="Age", xlab="Year")
+     )
+@ 
+\subsubsection{Data on Selectivity}
+
+
+<<Selectivity, echo=F>>=
+
+gear.list <- unique(compositionCatch[,2])
+selectivity=list()
+age <- sage:nage
+for( i in 1:na_gear)
+{
+  ind <- which(compositionCatch[,2]==gear.list[i])
+  selectivity[[i]] <- compositionCatch[ind,3:(nage-sage+3)]
+  selectivity[[i]] <- selectivity[[i]] /  apply(selectivity[[i]], 1, sum)
+  selectivity[[i]]<- apply(selectivity[[i]], 2, mean)
+  if(i == 1 ){
+    plot(selectivity[[i]]~age,type="l",xlim=c(sage, nage), ylim=c(0,1), lty=gear.list[i], col=gear.list[i], xlab="Year", ylab="Average normalised catch at age")
+  } else {
+    lines(selectivity[[i]]~age,  lty=gear.list[i], col=gear.list[i])
+  }
+}
+legend("topleft", legend=paste("Gear", gear.list), col=gear.list, lty=gear.list)     
+@
+
+To investigate the  change in selectivity, we can  look at composition
+of the catch per gear and per year
+<<Selectivity1, echo=F>>=
+name.list=c("Comm", Info$surveyName)
+age <- sage:nage
+par(mfcol=c(3,2))
+for( i in 1:ngear)
+  {
+    ind <- which(compositionCatch[,2]==gear.list[i])
+   if(length(ind)>3)
+     {
+       seltmp<- compositionCatch[ind,]
+       seltmp[,3:(3+nage-sage)] <- seltmp[,3:(3+nage-sage)] / apply(seltmp[,3:(3+nage-sage)], 1, sum)
+       CAAtmp <- data.frame(NA, ncol=3, nrow=(nage-sage+1)*(nyr-syr+1))
+       for( a_ind in sage:nage){
+         for(yr_ind in syr:nyr ){
+           j= which(seltmp[,1]==yr_ind) 
+           if(length(j)>0)
+              CAAtmp[(yr_ind-syr)*(nage-sage+1)+a_ind-sage+1, ] <- c(yr_ind, a_ind,  seltmp[j,a_ind-sage+3])
+         }
+       }
+       names(CAAtmp)=c("Year", "Age", "Catch")  
+       CAAtmp <- CAAtmp[!is.na(CAAtmp[,1]),]
+       radius <- sqrt( CAAtmp$Catch/ pi ) 
+       radius <- (radius)/max(radius, na.rm=T)
+       with(CAAtmp, 
+            symbols(Year, Age, circles=radius, inches=0.1, fg="white", bg=i, ylab="Age", xlab="Year", main =paste("Gear", name.list[i]))
+            )
+     }
+  }
+@
+
+
+\subsection{Fixed parameters}
+The mortality at age is fixed to the values of the VPA approach.
+<<Mortality, echo=F>>=
+natM
+@ 
+
+$$\Phi = (l_\infty, k, t_o,a,b,\dot{a},\dot{\gamma})$$
+<<popParameters, echo=F>>=
+      cat('linf  = ',  linf,'\n') 
+      cat('k  = ',  k,'\n') 
+      cat('to  = ',  t0,'\n') 
+      cat(' sclw =', sclw,'#1.95e-5 #scaler in length-weight allometry')
+      cat('plw = ', plw ,' #power in length-weight allometry')
+      cat('m50 = ', m50, '#50% maturity')
+      cat('std50 = ', std50, '#std at 50% maturity');
+@ 
+
+
+
+\subsection{Initial values for estimated parameters}
+$$\theta   =  (R_0,   \kappa,   M,  \bar{R},   \rho,  v^2,   \gamma_k,
+\boldsymbol{F}_{t}, (\phi_t)_{t=1}^T, (\epsilon_t^R)_{t=1}^T)$$
+
+
+	%% ro          = mfexp(theta(1));
+	%% dvariable h = theta(2);
+	%% m           = mfexp(theta(3));
+	%% log_avgrec  = theta(4);
+	%% log_recinit = theta(5);
+	%% rho         = theta(6);
+	%% varphi      = sqrt(1.0/theta(7));
+	%% sig         = sqrt(rho) * varphi;
+	%% tau         = sqrt(1-rho) * varphi;
+
+        
+        The  control  file  provides  initial  values  for  parameters
+        $\theta$, the  following values  have been used  to initialise
+        the model.
+
+\paragraph{Value for $R_0$}
+
+
+\paragraph{Value for $\bar{R}$}
+If the  model doesn't supposed  unfished conditions at  starting year,
+the recruitment at  the first year is  not $R_0$. It is  assumed to be
+equal to
+$$R_{t=1} = \bar{R}_{init} \exp{\epsilon_1^R}$$
+In \iscam code, the recruitmnent at year $t$ is defined by
+$$R_t(t)=\bar{R} \exp{\epsilon_t^R}, $$
+  where $\epsilon_t^R\overset{i.i.d}{\sim} \mathcal{N}(0,\sigma_R^2)$.
+
+
+\subsection{Assumption on vulnerability parameters}
+When catch at age data are available, a vunlnerability curve using cubic Bsplines is fitted and currently it is assumed to be constant over time. (\com{Option 3 in selectivity option for \iscam})
+It is currently not possible with \iscam to specify 0 for vulnerability, since it is expressed in log scale and because \admb behaves better with differentiable functions.
+
+
+
+\section{Running \iscam on Bluefin Tuna data}
+
+<<echo=F>>=
+src.dir <- "/home/metienne/ICCAT/ICCAT-BFT/sources"
+setwd(src.dir)
+ok <- source('read.admb.R')
+res      <- read.admb(ifile=file.path(main.dir, wdsimple,'ICCAT'))
+@
+
+The file used for this first run is 
+<<Selectivity2, evaluate=T, echo=F>>=
+ns <- grep("## File used as entry", RDataFiles)
+cat(RDataFiles[ns+1])
+selectivity <- res$log_sel
+gear.list=unique(selectivity[,1])
+ind <- c(1,which(diff(selectivity[,1])!=0)+1)
+selectivity <- selectivity[ind,]
+selectivity[,2:ncol(selectivity)] <- exp(selectivity[,2:ncol(selectivity)])/10
+ngear <- res$ngear
+for( i in 1:ngear)
+{
+  if(i==1){
+    plot(res$age, selectivity[selectivity[,1]==gear.list[i], 2:(nage-sage+2)], "l", col=gear.list[i], lty=gear.list[i], ylim=c(0,1), yla="Selectivity", xlab="Age")
+    ind = which(compositionCatch[,2]==gear.list[i])
+    if(length(ind)>0)
+      points(res$age, apply(compositionCatch[ind,],2, mean)[3:(nage-sage+3)], col=gear.list[i], cex=0.7, pch=19 )
+  }
+  else{
+    lines(res$age, selectivity[selectivity[,1]==gear.list[i], 2:(nage-sage+2)], "l", col=gear.list[i], lty=gear.list[i])
+    ind = which(compositionCatch[,2]==gear.list[i])
+     if(length(ind)>0)
+       points(res$age, apply(compositionCatch[ind,],2, mean)[3:(nage-sage+3)], col=gear.list[i], cex=0.7, pch=19 )
+  }
+  
+}
+legend("topleft", legend=paste("Est : Gear ", gear.list), lty=gear.list, col=gear.list)  
+@ 
+
+<<SelectivityBygear, echo=F>>=
+par( oma = c( 0, 0, 3, 0 ), mfcol=c(1,1))
+split.screen(figs=c(3,2))
+ind.scr =1
+for(i in 1:ngear){
+  screen(ind.scr)
+  ind = which(compositionCatch[,2]==gear.list[i])
+  if(length(ind)>0){
+    ind.scr <- ind.scr +1
+    plot(res$age, selectivity[selectivity[,1]==gear.list[i], 2:(nage-sage+2)], "l", col=gear.list[i], lty=gear.list[i], ylim=c(0,1), yla="Selectivity", xlab="Age")
+      for(j in ind)
+      points(res$age, compositionCatch[j,3:(nage-sage+3)], col=gear.list[i], cex=0.7, pch=19 )
+    }
+}
+mtext("Selectivity at age", outer=TRUE)
+close.screen(all=TRUE)
+@ 
+
+
+<<SelecBef80, fig.cap="Selectivity at age before 1980">>=
+par( oma = c( 2, 2, 0, 0 ), mfcol=c(1,1), mar=c(2, 2, 1, 1))
+split.screen(figs=c(3,2))
+ind.scr =1
+for(i in 1:ngear){
+  screen(ind.scr)
+  ind = which(compositionCatch[,2]==gear.list[i] & compositionCatch[,1]<=1980)
+  if(length(ind)>0){
+    if(ind.scr>=5){ x.axt="s"} else{x.axt="n"}
+    plot(res$age, selectivity[selectivity[,1]==gear.list[i], 2:(nage-sage+2)], "l", col=gear.list[i], lty=gear.list[i], ylim=c(0,1), 
+         ylab="", xlab="",  xaxt=x.axt, yaxt="n")
+    if(ind.scr>=5){  print(ind.scr); mtext("Age", side=1, line=2, adj=0.5)}
+#    if(!(ind.scr%%2)){  print(ind.scr); mtext("Selectivity", side=2, line=2; adj=1)}
+    ind.scr <- ind.scr +1
+    for(j in ind)
+      points(res$age, compositionCatch[j,3:(nage-sage+3)], col=gear.list[i], cex=0.7, pch=19 )
+  }
+}
+close.screen(all.screens=T)
+@
+
+
+<<SelecAft80, fig.cap="Selectivity at age after 1980">>=
+par( oma = c( 2, 2, 0, 0 ), mfcol=c(1,1), mar=c(2, 2, 1, 1))
+split.screen(figs=c(3,2))
+ind.scr =1
+for(i in 1:ngear){
+  screen(ind.scr)
+  ind = which(compositionCatch[,2]==gear.list[i] & compositionCatch[,1]>=1980)
+  if(length(ind)>0){
+    if(ind.scr>=5){ x.axt="s"} else{x.axt="n"}
+    plot(res$age, selectivity[selectivity[,1]==gear.list[i], 2:(nage-sage+2)], "l", col=gear.list[i], lty=gear.list[i], ylim=c(0,1), 
+         ylab="", xlab="",  xaxt=x.axt, yaxt="n")
+    if(ind.scr>=5){  print(ind.scr); mtext("Age", side=1, line=2, adj=0.5)}
+#    if(!(ind.scr%%2)){  print(ind.scr); mtext("Selectivity", side=2, line=2; adj=1)}
+    ind.scr <- ind.scr +1
+    for(j in ind)
+      points(res$age, compositionCatch[j,3:(nage-sage+3)], col=gear.list[i], cex=0.7, pch=19 )
+  }
+}
+close.screen(all.screens=T)
+@ 
+
+\subsection{Summary of obtained results}
+<<estimatesA, echo=T>>=
+#print(res$A)
+#print(res$Ahat)
+#print(res$A_nu)
+@ 
+<<estimatesf>>=
+print(res$fmsy)
+print(res$msy)
+print(res$bmsy)
+print(res$bo)
+print(res$ro)
+print(res$q)
+@ 
+
+<<estimatesleading>>=
+print(res$steepness)
+@ 
+
+\subsection{Fishing mortality}
+<<Ft>>=
+plot(x=res$yr, y=res$ft[1,],  xlab="Year",  ylab="Fishing mortality", type="b")
+@ 
+
+\subsection{Spawning biomass}
+<<SBT>>=
+plot(x=res$yrs,y=res$sbt/1000,  xlab="Year", ylab="Spawning biomass (tons)", type="b")
+@ 
+
+\subsection{Kobe Plot}
+<<KobePlot>>=
+plot(res$Fstatus[1,]~res$Bstatus[1:62],  xlab="B/Bmsy", type="b", ylab="F/Fmsy", xlim=c(0,2), ylim=c(0,2))
+@ 
+<<>>=
+detach(Info)
+@ 
+
+\section{Retrospective analysis}
+<<echo=F>>=
+####################################################################################
+##                                                                                ##
+##   exploits results from retrospectiv analysis                                 ##
+##   Authors: Marie-Pierre Etienne marie.etienne@agroparistech.fr                 ##
+##   Date: Aug. 2,  2013                                                         ##
+##   Date: Aug,  23 2013                                                         ##
+##                                                                                ##
+##                                                                                ##
+####################################################################################
+
+res.dir <- "/home/metienne/ICCAT/ICCAT-BFT/bfte/2012/vpa/reported/lowSave/"
+src.dir <- "/home/metienne/ICCAT/ICCAT-BFT/sources"
+report.dir <- "/home/metienne/ICCAT/ICCAT-BFT/Report"
+
+source(file.path(src.dir, "read.admb.R"))
+## list the retrospective file available and strores it in retroFilesList.txt
+system(paste("ls", res.dir, "| grep ret > retroFilesList.txt")) 
+
+fullYears <- read.rep(file.path(res.dir,"ICCAT.rep"))
+             
+retroFiles <- readLines("retroFilesList.txt")
+nretro     <- length(retroFiles)
+
+retroResults <- lapply(retroFiles, function(d){
+                    tmp <- read.rep(file.path(res.dir,d))
+                    list(yr=tmp$yr, sbt=tmp$sbt, bmsy=tmp$bmsy,
+                         fmsy=tmp$fmsy, R0=tmp$ro)
+                    })
+@
+<<RetroSpawning, echo=F>>=
+######################################################################
+##   Spawning biomass graph                                         ##
+######################################################################
+
+y.lim=range(sapply(retroResults, function(d) range(log(d$sbt)) ), log(fullYears$sbt))
+par(mfcol=c(1,1))
+plot(fullYears$yr, log(fullYears$sbt[1:length(fullYears$yr)]), main="Spawning Biomass",
+     xlab="Years", ylab="Biomass in numbers", type="b", 
+     ylim=y.lim) 
+des1 <- lapply(retroResults, function(d){
+  lines(d$yr, log(d$sbt[1:length(d$yr)]), col=2)
+})  
+@
+
+<<RetroBmsy, echo=F>>=
+######################################################################
+##   Bmsy variation                                               ##
+######################################################################
+
+y.lim=range(sapply(retroResults, function(d) range(log(d$bmsy)) ), log(fullYears$bmsy))
+nmaxyr<- length(fullYears$yr)
+
+plot(x=0, y=log(fullYears$bmsy),  xlim=c(0,nretro), pch=19, col=2,
+     ylim=y.lim, xlab="Number of droped Years", ylab="Bmsy (log)", 
+     main="Variation of Bmsy over retrospective analysis")
+des2 <- lapply(retroResults, function(d){
+  points(x=nmaxyr-length(d$yr)+1, y=log(d$bmsy), col=2, pch=19)
+})  
+@
+
+<<RetroFmsy, echo=F>>=
+######################################################################
+##   Fmsy variation                                               ##
+######################################################################
+
+y.lim=range(sapply(retroResults, function(d) range((d$fmsy)) ), (fullYears$fmsy))
+plot(x=0, y=(fullYears$fmsy),  xlim=c(0,nretro), pch=19, col=2,
+     ylim=y.lim, xlab="Number of droped Years", ylab="Fmsy ", 
+     main="Variation of Fmsy over retrospective analysis")
+des3 <- lapply(retroResults, function(d){
+  points(x=nmaxyr-length(d$yr)+1, y=(d$fmsy), col=2, pch=19)
+})  
+
+@ 
+
+
+\section{Simulation tests}
+
+\begin{figure}
+  \includegraphics[width=8cm]{R0estimation}
+  \includegraphics[width=8cm]{tau_Restimation}
+  \end{figure} 
+
+\begin{figure}
+  \includegraphics[width=8cm]{tau_Iestimation}
+  \includegraphics[width=8cm]{varPhiestimation}
+\end{figure} 
+
+\begin{figure}
+  \includegraphics[width=8cm]{SteepnessEstimation}
+\end{figure}
+
+
+
+Results highly biased, has to check with Steve the simulation model or simulate from R 
+
+\appendix
+\verb+admb+ and \verb+iSCAM+ are assumed to be installed, a \verb+PATH+ variable \verb+ADMB_HOME+ exists and contains the path to \verb+admb+ directory. In addition a \verb+PATH+ variable, called \verb+ISCAM+ contains the path to \verb+iscam+ executable.   
+\section{R codes produced and how to use them}
+All the codes and results described  or used in this report are freely
+available on \url{https://github.com/MarieEtienne/ICCAT-BFT}. 
+
+\iscam  has  been  developped  by  Steven  Martell,  is  available  on
+\url{https://github.com/smartell/iSCAM} and described in \cite{Martell11}.
+
+Using \iscam  required to write  some several datafiles as  inputs. To
+produce an automatic process and in a context of reproducible science,
+some \rcode codes  are used to translate a vpa  format file \verb+*.d1*+ in
+inputs     file      for     \iscam.     The     main      file     is
+\verb+sources/setISCAMFiles.R+  and required  the directory  where the
+*.d1 file  is located. It  generates the input  files for \iscam  in a
+directory based on the input  directory. With the current organisation
+of the on GitHub, the input files are in \verb+ICCAT-BFT/Input/bfte/2012/...+, so
+a directory  \verb+bfte/2012/..+ will  be created  in \verb+ICCAT-BFT+
+and \iscam can belaunched from this directory.
+
+\section{How to run the codes to reproduce the analysis}
+\bibliographystyle{apalike}
+\bibliography{biblio}
+
+\end{document} 

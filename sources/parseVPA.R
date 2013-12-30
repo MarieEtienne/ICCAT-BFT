@@ -54,7 +54,7 @@ parseVpaData<- function(f.in, selected.indices=c('SM_TP', 'LL_JP1'))
   
   survey_type <-   as.integer(surveySpecification[,3])
   
-  
+  surveyName <- rep
   iSCAMsurvey <- data.frame(iyr=relIndices[,2], it=relIndices[,3],
                             gear=as.numeric(as.factor(relIndices[,1]))+1, #trick to number survey from 2 to nit+1 
                             wt=rep(1, nrow(relIndices)))
@@ -105,6 +105,6 @@ parseVpaData<- function(f.in, selected.indices=c('SM_TP', 'LL_JP1'))
        survey.num=survey.num, survey_type=survey_type, surveyTime=surveyTime,surveySpecification=surveySpecification,
        nit=nit, nit_obs=nit_obs, iSCAMsurvey=iSCAMsurvey,
        compositionCatch=compositionCatch, na_gear=na_gear, na_obs=na_obs,
-       waa=waa)
+       waa=waa, surveyName=selected.indices)
   return(res)
   }

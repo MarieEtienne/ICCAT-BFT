@@ -32,8 +32,6 @@ simulationModel<- function(seed)
     tau_C <- 0.1
     ft    <-rep(0.2, nyr-syr+1)
     age   <-  sage : nage
-    m50   <- 4     #50% maturity
-    std50 <- 0.2*m50  #std at 50% maturity
     fa    <- 1/(1+ exp( (m50-age)/std50))
     sbt   <-rep(NA, nyr-syr+1) 
     surv.timing <- rep(0.5, ngear)

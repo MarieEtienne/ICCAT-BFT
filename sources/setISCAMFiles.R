@@ -48,7 +48,7 @@ if(length(args)>1){
 ##                              DATA iSCAM Parameters
 ###################################################################################
 selectivityFile<- "selectivityTable.txt"
-selected.indices=c('SM_TP', 'LL_JP1','NW_PS', 'JP_LL2','SP_BB1', 'SP_BB2')#, 'SP_BB3')
+selected.indices=c('SM_TP', 'LL_JP1','NW_PS', 'JP_LL2','SP_BB1', 'SP_BB2', 'SP_BB3')
 #************************************************************************
 #population parameters extracted from 2012 BFT report for eastern stock
 #************************************************************************
@@ -91,7 +91,7 @@ kappa         <-  c(0.8, 0.001,    12,     3,    4,     2.5, 0.8)    #kappa (pre
 # // parameters for bicubic spline
 #****************************************
 nodesAge <- 0.5
-selectivityType <- c(3, 1, 1, 6, 1, 3, 13, 13)
+selectivityType <- c(3, 1, 1, 6, 1, 3, 1, 1)
 age50sel <- c(6,6,6,9.9,6,6,6,6)
 sd50sel <-  c(1,1,1,0.1,1,1,1,1)
 
@@ -177,7 +177,7 @@ if(length(f.pot)>1)
                 survey_type=survey_type, surveyTime=surveyTime,surveySpecification=surveySpecification,
                 nit=nit, nit_obs=nit_obs, iSCAMsurvey=iSCAMsurvey,
                 compositionCatch=compositionCatch, na_gear=na_gear, na_obs=na_obs,
-                waa=waa, natM=natMortality)
+                waa=waa, natM=natMortality, surveyName=surveyName)
   save(Info, file=file.path(main.dir,"Report/RData/Info.RData"))
   save(vpa.dat, file=file.path(main.dir,wd,"vpa.RData"))
   if(SIM_FLAG)
