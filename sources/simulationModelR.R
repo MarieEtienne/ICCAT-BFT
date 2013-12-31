@@ -36,13 +36,16 @@ simulationModel<- function(seed)
     sbt   <-rep(NA, nyr-syr+1) 
     surv.timing <- rep(0.5, ngear)
     q <- rep(1e-5, ngear)
+    h<- 0.9
+    R0 <- exp(14.64)
+    kappa <- 4*h/(1-h)
     
-     beta <-5e-6
-     so <- 10
     natSurvivorship <- c(1,exp(-cumsum(Info$natM[1:(nage-sage)])))
     phiE <- sum(natSurvivorship * fa)
-    R0 <- (so*phiE-1)/(beta*phiE)
-    sb0 <- phiE*R0
+    
+    beta < (kappa -1)/(R0*phiE)
+    so <- kappa/phiE
+    
     h <- 0.2 * (1+beta*sb0)/(1+0.2*beta*sb0)
     
     ####################################################################################
