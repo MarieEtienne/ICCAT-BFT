@@ -41,8 +41,8 @@ outf[count<- count+1] <- paste(paste(h, collapse='\t'),'\t#steepness h ')
 outf[count<- count+1] <- paste(paste(log_m, collapse='\t'),'\t#log_m, natural mortality')
 outf[count<- count+1] <- paste(paste(log_avgrec, collapse='\t'),'\t#log_Rbar, average recruitment')
 outf[count<- count+1] <- paste(paste(log_recinit, collapse='\t'),'\t#log_Rinit, initial recruitment')
-outf[count<- count+1] <- paste(paste(rho, collapse='\t'),'\t#proportion of variance for observation process')
-outf[count<- count+1] <- paste(paste(kappa, collapse='\t'),'\t# total variance')
+outf[count<- count+1] <- paste(paste(rho, collapse='\t'),'\t#proportion of the variance for observation process')
+outf[count<- count+1] <- paste(paste(kappa, collapse='\t'),'\t# square root of the total precision')
 
 outf[(count+1):(count<-(count+15))] <- c( 
   '## SELECTIVITY PARAMETERS Columns for gear                                   ##',
@@ -118,8 +118,8 @@ outf[(count+1):(count<- count+6)] <- c(
 outf[count<- count+1] <- paste('\t', VERB,'\t# 1  -verbose ADMB output (0=off, 1=on)')
 outf[count<- count+1] <- paste('\t', REC,'\t# 2  -recruitment model (1=beverton-holt, 2=ricker)')
 
-outf[count<- count+1] <- paste0('\t', 0.2,'\t# 3  -std in observed catches in first phase.')
-outf[count<- count+1] <- paste0('\t',0.1,'\t# 4  -std in observed catches in last phase.')
+outf[count<- count+1] <- paste0('\t', 0.4,'\t# 3  -std in observed catches in first phase.')
+outf[count<- count+1] <- paste0('\t',0.2,'\t# 4  -std in observed catches in last phase.')
 
 outf[(count+1):(count<- count+11)] <- c(
   '\t0\t# 5  -Assume unfished in first year (0=FALSE, 1=TRUE)',
