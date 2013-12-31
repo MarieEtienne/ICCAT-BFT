@@ -23,7 +23,7 @@
 ##              args should be the name of the subdirectory containig vpa data    ##
 ####################################################################################
 args <- commandArgs(trailingOnly = TRUE)
-#args <-c('Inputs/bfte/2012/vpa/reported/low' ,'1')
+#args <-c('Inputs/bfte/2012/vpa/reported/low' )
 print(args)
 
 ##### if simulation mode (sim >0) then sim is the seed for the simulation
@@ -48,7 +48,7 @@ if(length(args)>1){
 ##                              DATA iSCAM Parameters
 ###################################################################################
 selectivityFile<- "selectivityTable.txt"
-selected.indices=c('SM_TP', 'LL_JP1','NW_PS', 'JP_LL2','SP_BB1', 'SP_BB2', 'SP_BB3')
+selected.indices=c('SM_TP', 'LL_JP1','NW_PS', 'JP_LL2','SP_BB1', 'SP_BB2')#, 'SP_BB3')
 #************************************************************************
 #population parameters extracted from 2012 BFT report for eastern stock
 #************************************************************************
@@ -81,17 +81,17 @@ ForgotWeight <- 1 #if 1 weight at age are derived from the given relationship no
 ## ival         lb      ub      phz     prior   p1      p2      #parameter   ##
 
 log_R0      <-  c(13,  -5.0,    30,    1,    0,    -5.0,   30.)#log_ro/msy 
-h           <-  c(0.92,   0.2,   1.0,    4,    3,       3,     2)       #steepness/fmsy',)
+h           <-  c(0.85,   0.2,   0.99,    3,    3,       3,     2)       #steepness/fmsy',)
 log_m       <-  c(-1.47,   -5.0,   0.0,    -1,    1,  -1.469,  0.05)    #log.m',
 log_avgrec  <-  c( 12.5,   -5.0,    20,    1,    0,    -5.0,    20)      #log_avgrec',
 log_recinit <-  c( 12.5,   -5.0,    20,    1,    0,    -5.0,    20)      #log_recinit',
 rho         <-  c(0.4, 0.001, 0.999,    -1,    3,    2.5,  2.5)    #rho',
-kappa         <-  c(0.8, 0.001,    12,     3,    4,     2.5, 0.8)    #kappa (precision)',
+kappa         <-  c(0.4, 0.001,    12,     3,    4,     2.5, 0.8)    #kappa (precision)',
 #****************************************
 # // parameters for bicubic spline
 #****************************************
 nodesAge <- 0.5
-selectivityType <- c(3, 1, 1, 6, 1, 3, 1, 1)
+selectivityType <- c(3, 1, 1, 6, 1, 3, 3, 1)
 age50sel <- c(6,6,6,9.9,6,6,6,6)
 sd50sel <-  c(1,1,1,0.1,1,1,1,1)
 
