@@ -26,14 +26,15 @@ of individuals in every classe age $a$ ($a\in [1,A]$) on year $t$ ($t\in [1;T]$)
 \mbox{Recruitment after year syr (t>1)}\\
 R_t= \frac{s_0 B_{t-1}}{1+\beta B_{t-1}} \exp{\epsilon^R_t}, \\
 \epsilon^R_t\underset{i.i.d}{\sim}\mathcal{N}\left(-\frac{\tau_R^2}{2}, \tau_R^2\right),\\
+\label{eq:iscamBev}
 \end{gather} 
 
 \iscam assumes a stock recruitment relationship, Beverton and Holt
 (BH) or Ricker (R) model may be used which links the mature biomass at
 time $t$ $B_t$and the recruitment at time $t+1$. The presented work used the BH model. 
 There is slight trick in \iscam, since this relation ship is estimated
-in the latest phase of the estimation process. During the first phases the recruitment
-model is specified by the following equation
+in the latest phase of the estimation process. During the first estimation phases the recruitment
+model is specified by the following equation:
 \begin{gather}
 \label{eq:iscamRec}  R_t =\bar{R}e^{\omega_t},
 \end{gather}
@@ -44,6 +45,9 @@ recruitment  point  of  view,  since   it  doesn't  assume  any  stock
 recruitment relationship. 
 
 
+Special attention is recquired for the first year of the study. The recruitment parameter $R_{init}$ during this first year has to be estimated.
+If the stock is considered in unfished condition, then $R_{init}$ is assumed to be equal to $R_0$, otherwise $R_{init}$ is specifically estimated. 
+The approach developped for BFT has chosen not to consider first year in unifshed conditions.
 
 \begin{gather}
 \mbox{Definition of mature biomass}\\
@@ -74,6 +78,17 @@ commercial fisheries equals one, the previous expression may be simplified as~:
 
 where $F_t$ is the instantaneous  fishing mortality and $v_{1,t,a}$ is
 the vulnerability for gear $1$, in year $t$ for age classe a.
+
+The weight at age is derived from an allometric relationship betwenn length and weight, and from the von Bertalanffy growth equation to link age class and length.
+The fertility at age is asumed to follow a logistic function whose parameters $\mu_{mat 50\%}$ and $\sigma_{mat 50\%}$ 
+\begin{gather}
+  \mbox{Life trait specification}\\
+l_a = l_\infty \left( 1- \exp{\left(-k\left( a - t_0\right)\right)}\right) \\
+w_a = a_w\, l_a^{b_w} \\
+f_a = w_a \frac{1}{1+\exp{ \left(\frac{\mu_f - a}{\sigma_f}\right)}}\\
+  \end{gather}
+  
+
 
 \subsubsection{Vulnerability model}
 \label{sec:vulnerability}
@@ -121,10 +136,16 @@ I_{k,t} = q_k V_{k,t} \exp{\epsilon_{k,t}^I}\\
 \subsubsection{Catch}
 Catch  with  gear  $k$  in  year  $t$  is  denoted  by  $C_{k,t}$  and
 defined using Baranov Catch equations by
-\begin{gather}
+\begin{gather*}
 \hat{C}_{k,t}   =   \sum_{a=1}^A   \frac{N_{t,a}   w_a   F_{k,t}   v_{k,t,a}
   (1-e^{-Z_{t,a}}) }{Z_{t,a}},\\
-C_{k,t} = \hat{C}_{k,t} \exp{\epsilon_{k,t}^C}, \quad \epsilon_{k,t}\overset{i.i.d}{\sim}\mathcal{N}(0, \tau^2_C)\nonumber
+\end{gather*}
+
+Since all catch are aggregated and treated as one gear, this equation simplifies in 
+\begin{gather}
+\hat{C}_{t}   =   \sum_{a=1}^A   \frac{N_{t,a}   w_a   F_{t}   v_{1,t,a}
+  (1-e^{-Z_{t,a}}) }{Z_{t,a}},\\
+C_{t} = \hat{C}_{t} \exp{\epsilon_{t}^C}, \quad \epsilon_{t}\overset{i.i.d}{\sim}\mathcal{N}(0, \tau^2_C)\nonumber
 \end{gather}
 
 \subsection{Summary of the symbols in \iscam}
@@ -142,7 +163,7 @@ to this paper and \iscam users Guide, nothing is specified.
   \hline
 Parameters & Name in \iscam & Signification \\ 
   \hline
-$\tau_C$& $\sigma_C$ & Standard deviation in observed catch\\
+$\tau_C$& $\sigma_C$ & Standard deviation in observed catch - This parameter is not estimated but set to a given value\\
 $\tau_A$ & $\tau$,  mentionned only through its estimation  on page 21
 of \cite{Martell12} & standard deviation in the multivariate logistic function \\
 $v_{k,a}$& &vulnerability for gear $k$ at age $a$\\

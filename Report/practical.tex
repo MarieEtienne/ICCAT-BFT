@@ -40,41 +40,43 @@ Mortality & 0.49 & 0.24 & 0.24 & 0.24 & 0.24 & 0.20 & 0.17 & 0.15 & 0.12 & 0.10 
 
 
 \paragraph{Selectivity}
-As mentionned in \iscam allows to specify different form for the
+As mentionned in \cite{Martell12},	 \iscam allows to specify different form for the
 selectivity/vulnerability.  When age composition data are available,
 choice has been made to model  the selectivity using Bspline curves or
 logistic function.  The selectivity has  been chosen to  stay constant
-over years.
+over years. The specific choice between B-splines and logistic curves has been made to 
+assure the convergence of the optimization algorithm and the obtention of a definite positive Hessian matrix.
+
 
 
 \begin{table}[ht]
 \centering
-\begin{tabular}{rp{8cm}}
+\begin{tabular}{rrp{8cm}}
   \hline
-  Gear & Selectivity shape \\ 
+  Gear & Gear Name & Selectivity shape \\ 
   \hline
-1 & Constant (over years) cubic spline with 5 nodes \\
-2 & Logistic shape \\ 
-3 & Logistic shape \\
-4 & fixed logistic $\mu_{50}=9.9$, $sd=0.1$\\
-5 & Logistic shape \\
-6 & Logistic shape \\
-7 & Logistic shape \\
+1 & \verb+Catch+ & Constant (over years) cubic B-spline with 5 nodes \\
+2 & \verb+SM_TP+ & Logistic shape \\ 	
+3 & \verb+LL_JP1+ & Logistic shape \\
+4 & \verb+NW_PS+ & fixed logistic $\mu_{50}=9.9$, $sd=0.1$\\
+5 & \verb+JP_LL2+ & Logistic shape \\
+6 & \verb+SP_BB1+ & Constant (over years) cubic B-spline with 5 nodes \\
+7 & \verb+SP_BB2+ & Constant (over years) cubic B-spline with 5 nodes \\
+8 & \verb+SP_BB3+ & Logistic shape \\
 \hline
 \end{tabular}
+\caption{Choice for the selectivity curve for each gear}
+\label{table:selectivity}
 \end{table}
 
 
 Gear  $4$ corresponds  to the  Norvegian Purse  seine abundance  index
-which is documented  to focus  only on  last age  class. As  it is  not possible  to
+which is documented  to focus  only on  last age  class. Since  it is  not possible  to
 specify $0$ vulnerability for some  age (due to a log transformation),
 the selectivity curve  has been set to a logistic  function with fixed
 parameters, the parameters being chosen to micmic the desired behavior.
 
 
-
-
-ARRETER ICI A POURSUIVRE !!!
 \paragraph{Abundance indices}
 
 
@@ -86,160 +88,143 @@ V_{k,t}=\sum_{a=1}^A N_{t,a} e^{-\lambda_{k,t} Z_{t,a}} v_{k,a} w_a,
  where $\lambda_{k,t}$ is the fraction  of the mortality to adjust for
  survey timing, it is specified by the user. They have been
  specified according to the input data file 
-% \begin{knitrout}
-% \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-% \begin{verbatim}
-% ## ## Survey timing (if 0, the gear has no associated index)
-% ## 0	 0.5	0.5	0.5	0.0833333333333333	0.5	0.5
-% \end{verbatim}
-% \end{kframe}
-% \end{knitrout}
+ 
+Respectively, the total vulnerable number of fish at year $t$ for gear $k$ is defined by
+\begin{gather}
+V^{N}_{k,t}=\sum_{a=1}^A N_{t,a} e^{-\lambda_{k,t} Z_{t,a}} v_{k,a},
+\end{gather}
+ 
+ 
+ The value of $\lambda_{k,t}$ are taken constant over years. Six of them are specified as average indice along the year in the stock assesment,
+the last is assumed to happen one month after the start of the year. To micmic those choices, the timing parameters $\lambda$ are equal to 0.5 for six of the seven indices, the last one is set to $1/12$. Those choices are sum up in table \ref{table:timing} 
+ 
+ \begin{table}[ht]
+\centering
+\begin{tabular}{rrp{3.5cm}p{4cm}}
+  \hline
+  Gear & Gear Name & Number/Biomass & $\lambda_k$: Timing for the survey\\ 
+  \hline
+2 & \verb+SM_TP+ & Number & 0.5 \\ 	
+3 & \verb+LL_JP1+ & Number & 0.5 \\
+4 & \verb+NW_PS+ & Biomass & 0.5 \\
+5 & \verb+JP_LL2+ & Number & 1/12 \\
+6 & \verb+SP_BB1+ & Biomass & 0.5\\
+7 & \verb+SP_BB2+ & Biomass &0.5 \\
+8 & \verb+SP_BB3+ & Biomass &0.5\\
+\hline
+\end{tabular}
+\caption{Choice for the type and the timing of abundance indices}
+\label{table:timing}
+\end{table}
+ 
 
 
 \paragraph{Recruitment}
+The estimation of the recruitment parameters in \iscam  is split into two steps. In early phases, the recruitment is assumed to be stock independant using formula 
+to follow equation \ref{eq:iscamRec} and to be stock independant. In the last phases, a stock recruitment relationship is used as specified 
+in equation \ref{eq:iscamBev}. 
+
+\paragraph{Life trait history}
+The parameters regarding the life trait history are not estimated and are treated as fixed when running \iscam. Actually, there is some possibility to use weight at age data to estimate  the weight at age relatioship, but trying to use this option leads to unconsistent results.
+The values of the concerned parameters have been fixed according to \cite{tuna2012} and are summarized in table \ref{table:lifetraits}.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{p{2.5cm}p{3cm}p{3cm}p{6cm}}
+  \hline
+Parameters & Name in \iscam & Set Value & Signification  \\ \hline
+ $l_\infty$ & &$319$ & vonB parameters\\
+ $k$ & & $0.093$&vonB parameters\\
+ $t_0$ & &$-0.97$ &vonB parameters\\
+ $a_w$ & a &$1.95e-05$  & Weight at age allometric parameter\\
+ $b_w$ & b &  $3.009$ &Weight at age allometric parameter\\
+ $\mu_f$& $\dot{a}$ & $4$ & age for 50\% maturity\\
+ $\sigma_f$ & $\dot{\gamma}$ &  0.8 & Standard deviation at 50\% maturity\\
+\hline
+\end{tabular}
+\caption{The parameters reported in this table are considered as fixed to the specified value}
+\label{table:lifetraits}
+\end{table}
 
 
-\paragraph{Life trait specification}
-
-$$\Phi = (l_\infty, k, t_o,a,b,\dot{a},\dot{\gamma})$$
-\begin{verbatim}
-## linf  =  319
-## k  =  0.093
-## to  =  -0.97
-##  sclw = 1.95e-05 #1.95e-5 #scaler in length-weight allometry
-## plw =  3.009  #power in length-weight allometry
-## m50 =  4 #50% maturity
-## std50 =  0.8 #std at 50% maturity
-\end{verbatim}
 
 
 
 
 \subsubsection{Initial values for estimated parameters}
-$$\theta   =  (R_0,   \kappa,   M,  \bar{R},   \rho,  v^2,   \gamma_k,
-\boldsymbol{F}_{t}, (\phi_t)_{t=1}^T, (\epsilon_t^R)_{t=1}^T)$$
 
+The leading parameters are given in table \ref{tab:parameters}. \iscam recquires to give initial values for some parameters to start the optimization algorithm.
+Since the role of the recruitment differs between first phases and the last ones, it is also required to give initial values for $\R_{init}$ and $\overline{R}$.
+The proportion of the total variance allocated to the error in the observation process is not estimated and is set to $\rho=0.4$.
 
-	%% ro          = mfexp(theta(1));
-	%% dvariable h = theta(2);
-	%% m           = mfexp(theta(3));
-	%% log_avgrec  = theta(4);
-	%% log_recinit = theta(5);
-	%% rho         = theta(6);
-	%% varphi      = sqrt(1.0/theta(7));
-	%% sig         = sqrt(rho) * varphi;
-	%% tau         = sqrt(1-rho) * varphi;
-
-        
-        The  control  file  provides  initial  values  for  parameters
-        $\theta$, the  following values  have been used  to initialise
-        the model.
-
-\paragraph{Value for $R_0$}
-
-
-\paragraph{Value for $\bar{R}$}
-If the  model doesn't supposed  unfished conditions at  starting year,
-the recruitment at  the first year is  not $R_0$. It is  assumed to be
-equal to
-$$R_{t=1} = \bar{R}_{init} \exp{\epsilon_1^R}$$
-In \iscam code, the recruitmnent at year $t$ is defined by
-$$R_t(t)=\bar{R} \exp{\epsilon_t^R}, $$
-  where $\epsilon_t^R\overset{i.i.d}{\sim} \mathcal{N}(0,\sigma_R^2)$.
-
-
-\subsection{Assumption on vulnerability parameters}
-When catch at age data are available, a vunlnerability curve using cubic Bsplines is fitted and currently it is assumed to be constant over time. (\com{Option 3 in selectivity option for \iscam})
-It is currently not possible with \iscam to specify 0 for vulnerability, since it is expressed in log scale and because \admb behaves better with differentiable functions.
+\begin{table}[ht]
+\centering
+\begin{tabular}{p{2.1cm}p{2.1cm}p{2.2cm}p{2cm}p{6cm}}
+  \hline
+Parameters & Initial Value & interval & Phase & Signification  \\ \hline
+ $\log{R_0}$ & 13  & $[-5,30]$ & 1 & Logarithm of recruitment (numbers) in unfished conditions\\
+ $h$ & $0.85$ & $[0.2, 0.99]$ & 3 &  Steepness \\
+$\log{\bar{m}}$ & $-1.47$ & $[-5,0]$ &-1 & Logarithm of the average natural mortality\\
+$\bar{R}$& 12.5	& $[-5,	20]$ &	1	 & Logarithm of the average recruitment\\
+$R_{init}$ & 12.5&	$[-5,	20]$ &	1	 & Logarithm of the initial recruitment\\
+$\rho$ & 0.4	& $[0.001,0.999]$ & -1 & proportion of the total variance for the observation process \\
+$1/\varphi$ & 0.8 &	$[0.001,	12]$ & 	3 & the root of the precision of the total error \\
+\hline
+\end{tabular}
+\caption{Initial values and range for main paramaters. The estimation phase is also given.}
+\label{table:initial}
+\end{table}
 
 
 
+\subsubsection{Restriction on the datafile}
+Due to high numerical instability when using all abundance indices, we focus only on the six first abundance indices and ignore the indice \verb+SP_BB3+ .
 
 
-The file used for illustrating the way to use iscam on Bluefin Tuna is
-\begin{verbatim}
-## /home/metienne/ICCAT/ICCAT-BFT/Inputs/bfte/2012/vpa/reported/low/bfte2012.d1
-\end{verbatim}
+\subsection{First run}
+%To illustrate the results obtained on BFT East Stock, we focus on one datafile: \verb+Inputs/bfte/2012/vpa/reported/low/bfte2012.d1+
+
 
 {\centering \includegraphics[width=\maxwidth]{figure/ICCAT-Selectivity2} 
 
 }
 
-Only 6 gears
 
 
 {\centering \includegraphics[width=\maxwidth]{figure/ICCAT-SelectivityBygear} 
 }
 
 
+\begin{table}[ht]
+\centering
+\begin{tabular}{p{2.1cm}p{4cm}p{4cm}p{4cm}}
+  \hline
+Parameters & Inital value & Reported value & ICCAT 2012  report  \\ \hline
+ $\log{R_0}$ & $13$  &  $14.63$ & \\
+ $h$ & $0.85$ & $0.95$  &\\
+$log(\bar{R})$& $12.5$ & $14.29$ \\
+$R_{init}$ & $12.5$ & $14.42$\\
+$\rho$ & $0.4$ &  $0.4$ & 	\\
+$1/\varphi$ & $1.25$ & $1.017$ &\\
+$log(B_msy)$ &  &$18.71$ & \\
+$(f_msy)$ &  &$0.153$ & \\
+$log(B_{2011})$ &  &$19.44$ & \\
+$(f_{2011})$ &   &$0.047$ & \\
+\hline
+\end{tabular}
+\caption{Initial values and range for main paramaters.}
+\label{table:estimation}
+\end{table}
 
 
-\begin{figure}
-{\centering \includegraphics[width=\maxwidth]{figure/ICCAT-SelecBef80} 
 
-}
+This first run leads to the Kobe plot presented in figure \ref{fig:KobePlotFirstRun}.
+ \begin{figure}
+{\centering \includegraphics[width=\maxwidth]{figure/KobePlot} }
+ \caption{Evolution of the fishing effort and the stock status.}
+\label{fig:KobePlotFirstRun}
+ \end{figure}
 
-\caption[Selectivity at age before 1980]{Selectivity at age before 1980\label{fig:SelecBef80}}
-\end{figure}
-
-
-\begin{figure}
-{\centering \includegraphics[width=\maxwidth]{figure/ICCAT-SelecAft80} 
-
-}
-\caption[Selectivity at age after 1980]{Selectivity at age after 1980\label{fig:SelecAft80}}
-\end{figure}
-
-
-\subsection{First results}
-\begin{verbatim}
-## [1] 0.1385
-\end{verbatim}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
-\begin{alltt}
-\hlcomment{# print(res$A) print(res$Ahat) print(res$A_nu)}
-\end{alltt}
-\begin{alltt}
-\hlfunctioncall{print}(res$fmsy)
-\end{alltt}
-\begin{alltt}
-\hlfunctioncall{print}(res$msy)
-\end{alltt}
-\begin{verbatim}
-## [1] 29631000
-\end{verbatim}
-\begin{alltt}
-\hlfunctioncall{print}(res$bmsy)
-\end{alltt}
-\begin{verbatim}
-## [1] 152605000
-\end{verbatim}
-\begin{alltt}
-\hlfunctioncall{print}(res$bo)
-\end{alltt}
-\begin{verbatim}
-## [1] 526851000
-\end{verbatim}
-\begin{alltt}
-\hlfunctioncall{print}(res$ro)
-\end{alltt}
-\begin{verbatim}
-## [1] 2617200
-\end{verbatim}
-\begin{alltt}
-\hlfunctioncall{print}(res$q)
-\end{alltt}
-\begin{verbatim}
-## [1] 7.508e-04 7.771e-07 2.755e-08 1.903e-07 1.642e-06 6.104e-06
-\end{verbatim}
-
-
-\begin{alltt}
-\hlfunctioncall{print}(res$steepness)
-\end{alltt}
-\begin{verbatim}
-## [1] 0.9083
-\end{verbatim}
 
 \paragraph{Selectivity}
 
@@ -247,14 +232,14 @@ The vulnerability matrix is estimated to
 \begin{resultz}
 V=(v_{k,a})=\left(
     \begin{matrix}
-      0.64 & 0.87 & 1.34 & 1.31 & 0.91 & 0.73 & 0.79 & 0.96 & 1.16 & 1.27 \\ 
-      0.00 & 0.00 & 0.01 & 0.02 & 0.06 & 0.15 & 0.41 & 1.07 & 2.64 & 5.64 \\ 
-      0.00 & 0.00 & 0.01 & 0.02 & 0.06 & 0.18 & 0.52 & 1.36 & 2.97 & 4.85 \\ 
-      0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 9.97 \\ 
-      0.10 & 0.34 & 0.79 & 1.13 & 1.25 & 1.27 & 1.28 & 1.28 & 1.28 & 1.28 \\ 
-      2.05 & 2.20 & 2.29 & 1.75 & 0.98 & 0.45 & 0.18 & 0.06 & 0.02 & 0.01 \\ 
-      2.61 & 2.44 & 2.05 & 1.45 & 0.81 & 0.38 & 0.15 & 0.06 & 0.02 & 0.01 \\ 
-    \end{matrix} 
+0.063 & 0.085 & 0.134 & 0.132 & 0.092 & 0.074 & 0.079 & 0.097 & 0.117 & 0.127 \\ 
+0.000 & 0.000 & 0.001 & 0.002 & 0.006 & 0.015 & 0.041 & 0.108 & 0.264 & 0.563 \\ 
+0.000 & 0.000 & 0.001 & 0.002 & 0.006 & 0.018 & 0.053 & 0.137 & 0.297 & 0.486 \\ 
+0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 1.000 \\ 
+0.010 & 0.038 & 0.086 & 0.115 & 0.123 & 0.125 & 0.125 & 0.126 & 0.126 & 0.126 \\ 
+0.205 & 0.221 & 0.229 & 0.175 & 0.098 & 0.045 & 0.018 & 0.006 & 0.002 & 0.001 \\ 
+0.224 & 0.204 & 0.162 & 0.122 & 0.090 & 0.066 & 0.048 & 0.035 & 0.026 & 0.023 \\ 
+  \end{matrix} 
   \right)
   \label{res:seltable}
 \end{resultz}
