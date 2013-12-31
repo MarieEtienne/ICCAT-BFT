@@ -42,11 +42,10 @@ simulationModel<- function(seed)
     
     natSurvivorship <- c(1,exp(-cumsum(Info$natM[1:(nage-sage)])))
     phiE <- sum(natSurvivorship * fa)
-    
-    beta < (kappa -1)/(R0*phiE)
+    sb0 <- R0*phiE
+    beta <- (kappa -1)/(R0*phiE)
     so <- kappa/phiE
     
-    h <- 0.2 * (1+beta*sb0)/(1+0.2*beta*sb0)
     
     ####################################################################################
     ##   Selectivity                                                                  ##
