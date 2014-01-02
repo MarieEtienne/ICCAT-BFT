@@ -5,9 +5,11 @@
 *iscam
 Report/*.aux
 Report/*.blg
-Report/ICCAT.log
-Report/.RData
-Report/.Rhistory
+Report/*.bbl
+Report/.dvi
+Report/*.log
+Report/*.RData
+Report/*.Rhistory
 iscam.*
 bfte/2012/vpa/*
 *.Rhistory
