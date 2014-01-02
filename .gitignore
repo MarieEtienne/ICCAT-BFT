@@ -3,7 +3,7 @@
 *rpt
 *.pdf
 *iscam
-Report/*.aux
+*.aux
 Report/*.blg
 Report/*.bbl
 Report/.dvi
