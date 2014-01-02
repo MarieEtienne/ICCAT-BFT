@@ -23,7 +23,6 @@ MCFLAG=-mcmc 10000 -mcsave 100 -nosdmcmc
 NR=4
 NOSIM  = 1
 NSTART  = 1
-MAINDIR := $(HOME)/ICCAT/ICCAT-BFT
 
 
 
@@ -48,7 +47,6 @@ $(EXEC): $(DIST)
 	cp $(DIST) $@
 
 $(EXEC).par: $(DIST) $(CTL).ctl 
-	echo ${MAINDIR}
 	./$(EXEC) -ind $(DAT) $(ARG)
 
 run:  $(EXEC)

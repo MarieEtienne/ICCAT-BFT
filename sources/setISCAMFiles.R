@@ -28,9 +28,7 @@ print(args)
 
 ##### if simulation mode (sim >0) then sim is the seed for the simulation
 
-main.dir <- Sys.getenv("MAINDIR")
-print(main.dir)
-
+main.dir <- file.path(Sys.getenv("HOME"),"ICCAT/ICCAT-BFT")
 setwd(main.dir)
 
 #directory where data and ctl files have to written, path relative to main directory

@@ -1,7 +1,7 @@
-main.dir= setwd(Sys.getenv("MAINDIR"))
+main.dir= setwd(Sys.getenv("HOME"), "ICCAT/ICCAT-BFT")
 source(file.path(main.dir,"sources","read.admb.R')
 dn<-dir("simulation",pattern="^[[:digit:]]")
-sims <- lapply(dn,function(d){setwd(file.path(Sys.getenv("MAINDIR","simulation",d)))
+sims <- lapply(dn,function(d){setwd(file.path(Sys.getenv(main.dir,"simulation",d)))
                               print(d)
                               if(file.exists('iscam.cor'))
                               {
