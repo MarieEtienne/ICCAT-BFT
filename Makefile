@@ -23,7 +23,7 @@ MCFLAG=-mcmc 10000 -mcsave 100 -nosdmcmc
 NR=4
 NOSIM  = 1
 NSTART  = 1
-MAINDIR ="/home/metienne/ICCAT/ICCAT-BFT"
+MAINDIR := $(HOME)/ICCAT/ICCAT-BFT
 
 
 
@@ -48,6 +48,7 @@ $(EXEC): $(DIST)
 	cp $(DIST) $@
 
 $(EXEC).par: $(DIST) $(CTL).ctl 
+	echo ${MAINDIR}
 	./$(EXEC) -ind $(DAT) $(ARG)
 
 run:  $(EXEC)
@@ -56,9 +57,9 @@ run:  $(EXEC)
 $(DIST):
 	cp $(DIST) $(ARG)/$@
 
+
 $(CTL).ctl: $(DIST) sources/setISCAMFiles.R 
 	Rscript sources/setISCAMFiles.R  Inputs/$(ARG) 
-
 
 # |---------------------------------------------------------------------------------- |
 # | MCMC and MCEVAL
