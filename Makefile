@@ -14,10 +14,11 @@
 # |
 
 EXEC=iscam
+ARG=bfte/2012/vpa/reported/low
+TARGET=$(ARG)/$(EXEC)
 prefix=$(ISCAM_HOME)
 DAT=RUN.dat
-CTL=ICCAT
-ARG='bfte/2012/vpa/reported/low'
+CTL=$(ARG)/ICCAT
 ARGSIM=1
 MCFLAG=-mcmc 10000 -mcsave 100 -nosdmcmc
 NR=4
@@ -41,44 +42,38 @@ endif
 # | COPY EXEC AND RUN MODEL
 # |------------------------------------------------------------------------------------|
 # |
-all: $(EXEC) $(EXEC).par
+all:  $(TARGET).par
 
-$(EXEC): $(DIST)
+$(TARGET): $(DIST)
 	cp $(DIST) $@
 
-$(EXEC).par: $(DIST) $(CTL).ctl 
+$(TARGET).par:  $(CTL).ctl $(TARGET)
+	cp $(DIST) $@
 	cd $(ARG); ./$(EXEC) -ind $(DAT) $(ARG)
 
-
-$(DIST):
-	cp $(DIST) $(ARG)/$@
-
-
-$(CTL).ctl: $(DIST) sources/setISCAMFiles.R 
+$(CTL).ctl: sources/setISCAMFiles.R 
 	Rscript sources/setISCAMFiles.R  Inputs/$(ARG) 
 
 # |---------------------------------------------------------------------------------- |
 # | MCMC and MCEVAL
 # |------------------------------------------------------------------------------------|
 # |
-mcmc: $(EXEC) $(CTL).ctl $(EXEC).psv
-	cd $(ARG) & ./$(EXEC) -ind $(DAT) $(ARG) -mceval
-	cp iscam.* $(ARG)/.
+mcmc:  $(TARGET).psv
 
-$(EXEC).psv: $(CTL).ctl
-	cd $(ARG) & ./$(EXEC) -ind $(DAT) $(ARG) $(MCFLAG) 
+$(TARGET).psv: $(CTL).ctl  $(DIST) $(TARGET)
+	cd $(ARG); ./$(EXEC) -ind $(DAT) $(ARG) $(MCFLAG) 
+	cd $(ARG); ./$(EXEC) -ind $(DAT) $(ARG) -mceval
 
-mceval: $(EXEC)
-	cp $(ARG)/$(CTL).psv $(ARG)/$(EXEC).psv
-	cd $(ARG) & ./$(EXEC) -ind $(DAT) $(ARG) -mceval
+cleanmcmc: 
+	rm $(TARGET).psv
 
 # |------------------------------------------------------------------------------------|
 # | RETROSPECTIVE
 # |------------------------------------------------------------------------------------|
 # |
-retro: $(EXEC) $(EXEC).ret1
+retro: $(TARGET) $(TARGET).ret1
 
-$(EXEC).ret1:
+$(TARGET).ret1:
 	@echo $(RUNRETRO) | R --vanilla --slave
 
 RUNRETRO = 'args = paste("-retro",c(1:$(NR),0),"-nox"); \
