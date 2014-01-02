@@ -4,10 +4,13 @@
 *.pdf
 *iscam
 *.aux
-Report/*.blg
-Report/*.bbl
-Report/.dvi
-Report/*.log
+*.blg
+*.bbl
+*.dvi
+*.fls
+*.log
+*.toc
+*.fdb_latexmk
 Report/*.RData
 Report/*.Rhistory
 iscam.*
@@ -15,3 +18,7 @@ bfte/2012/vpa/*
 *.Rhistory
 MakefileToBeModified
 simulation/0*
+simulatedData.Rd
+simulatedData.txt
+sims
+sources/RiSCAM
