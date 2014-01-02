@@ -13,3 +13,4 @@ bfte/2012/vpa/*
 *.Rhistory
 MakefileToBeModified
 simulation/0*
+Report/RData/Info.RData
