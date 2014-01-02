@@ -28,8 +28,9 @@ print(args)
 
 ##### if simulation mode (sim >0) then sim is the seed for the simulation
 
-main.dir <- '/home/metienne/ICCAT/ICCAT-BFT' 
+main.dir <- file.path(Sys.getenv("HOME"),"ICCAT/ICCAT-BFT")
 setwd(main.dir)
+
 
 #directory where data and ctl files have to written, path relative to main directory
 wd <- ''
@@ -112,7 +113,7 @@ f.in = args[1]
 f.in.split <- unlist(strsplit(f.in,'/'))
 dir.out <-f.in.split[2:(length(f.in.split))]
 if(SIM_FLAG)
-  dir.out <- unlist(strsplit(file.path('simulation',formatC(as.numeric(args[2]), digit=3, flag="0")), '/'))
+  dir.out <- unlist(strsplit(file.path('simulation',formatC(as.numeric(args[2]), digit=4, flag="0")), '/'))
 while(!is.null(dir.out)){
   if(! (dir.out[1] %in% dir(file.path(main.dir,wd), full.names=F, recursive=F))){
     dir.create(file.path(main.dir, wd, dir.out[1]))
@@ -187,6 +188,7 @@ if(length(f.pot)>1)
 
     }
   outf<- character(0)
+  
   outf[1] <- paste0(file.path(main.dir, out,'ICCAT.dat'), '\t# Data File Name' )
   outf[2] <- paste0(file.path(main.dir, out,'ICCAT.ctl'), '\t# Control File Name' )
   outf[3] <- paste0(file.path(main.dir, out,'ICCAT.pfc'), '\t# Projection File Name' )

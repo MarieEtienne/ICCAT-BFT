@@ -9,9 +9,10 @@
 ####################################################################################
 
 rm(list=ls())
-res.dir <- "/home/metienne/ICCAT/ICCAT-BFT/bfte/2012/vpa/reported/low/"
-src.dir <- "/home/metienne/ICCAT/ICCAT-BFT/sources"
-report.dir <- "/home/metienne/ICCAT/ICCAT-BFT/Report"
+
+res.dir <- file.path(Sys.getenv("HOME"),"ICCAT/ICCAT-BFTE","bfte/2012/vpa/reported/low/")
+src.dir <- file.path(Sys.getenv("HOME"),"ICCAT/ICCAT-BFTE","sources")
+report.dir <- file.path(Sys.getenv("HOME"),"ICCAT/ICCAT-BFTE","Report")
 
 
 load(file.path(res.dir, "allSims.Rdata"))
