@@ -104,7 +104,7 @@ clean:
 # | simdirs     : is the list of simulation directories to copy material to.
 # | datadone: is a loop for looping over directories
 
-simdirs := $(shell echo 'cat(formatC($(NSTART):($(NSTART)+$(NOSIM)-1), digits=3, flag="0"))' | R --vanilla --slave)
+simdirs := $(shell echo 'cat(formatC($(NSTART):($(NSTART)+$(NOSIM)-1), digits=4, flag="0"))' | R --vanilla --slave)
 createdir:=$(foreach dir,simulation/$(simdirs),$(dir)/createdir)
 datadone:= $(foreach dir,$(simdirs),$(dir)/datadone)
 runsims := $(foreach dir,$(simdirs),$(dir)/runsims)
