@@ -39,6 +39,7 @@ simulationModel<- function(seed)
     h<- 0.9
     R0 <- exp(14.64)
     kappa <- 4*h/(1-h)
+    Rinit=0.9*R0
     
     natSurvivorship <- c(1,exp(-cumsum(Info$natM[1:(nage-sage)])))
     phiE <- sum(natSurvivorship * fa)
@@ -76,7 +77,7 @@ simulationModel<- function(seed)
     ####################################################################################
     noise<- rnorm(nyr-syr+1)
     N<- matrix(NA, ncol=nage-sage+1, nrow=nyr-syr+1)
-    N[1,1]=R0 *exp(noise[1]*tau_R - tau_R^2/2)
+    N[1,1]=Rinit *exp(noise[1]*tau_R - tau_R^2/2)
     
     for( i in 1:(nage-sage))
     {
