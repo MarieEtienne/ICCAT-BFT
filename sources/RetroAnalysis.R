@@ -10,9 +10,9 @@
 
 rm(list=ls())
 
-res.dir <- file.path(Sys.getenv("MAINDIR"),"bfte/2012/vpa/reported/low/")
-src.dir <- file.path(Sys.getenv("MAINDIR"),"sources")
-report.dir <- file.path(Sys.getenv("MAINDIR"),"Report")
+res.dir <- file.path(Sys.getenv("HOME"),"ICCAT/ICCAT-BFT", "bfte/2012/vpa/reported/low/")
+src.dir <- file.path(Sys.getenv("HOME"),"ICCAT/ICCAT-BFT", "sources")
+report.dir <- file.path(Sys.getenv("HOME"),"ICCAT/ICCAT-BFT", "Report")
 
 source(file.path(src.dir, "read.admb.R"))
 ## list the retrospective file available and strores it in retroFilesList.txt
