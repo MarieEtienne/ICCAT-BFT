@@ -112,7 +112,7 @@ f.in = args[1]
 f.in.split <- unlist(strsplit(f.in,'/'))
 dir.out <-f.in.split[2:(length(f.in.split))]
 if(SIM_FLAG)
-  dir.out <- unlist(strsplit(file.path('simulation',formatC(as.numeric(args[2]), digit=3, flag="0")), '/'))
+  dir.out <- unlist(strsplit(file.path('simulation',formatC(as.numeric(args[2]), digit=4, flag="0")), '/'))
 while(!is.null(dir.out)){
   if(! (dir.out[1] %in% dir(file.path(main.dir,wd), full.names=F, recursive=F))){
     dir.create(file.path(main.dir, wd, dir.out[1]))
