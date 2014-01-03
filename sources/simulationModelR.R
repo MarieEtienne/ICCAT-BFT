@@ -24,6 +24,13 @@ simulationModel<- function(seed)
     # inidices q, tau2_I
     # indices tau2_C
     #natM
+    aw <- 1.95e-5
+    bw <- 3.009
+    linf <- 319
+    k <- 0.093
+    t0 <- -0.97
+    m50 <- 4
+    std50 <- 0.8
     rho <- 0.4
     varphi <- 1
     tau_I <- sqrt(rho)*varphi
@@ -32,7 +39,9 @@ simulationModel<- function(seed)
     tau_C <- 0.1
     ft    <-rep(0.2, nyr-syr+1)
     age   <-  sage : nage
-    fa    <- 1/(1+ exp( (m50-age)/std50))
+    la    <- linf * (1- exp(-k*(age-t0)))
+    wa    <- aw *la ^bw
+    fa    <- wa/(1+ exp( (m50-age)/std50))
     sbt   <-rep(NA, nyr-syr+1) 
     surv.timing <- rep(0.5, ngear)
     q <- rep(1e-5, ngear)
@@ -149,7 +158,7 @@ simulationModel<- function(seed)
       fa  =fa,
       sbt =sbt, q=q,
       beta =beta,
-      so = so, R0 =R0,
+      so = so, R0 =R0, Rinit=Rinit,
       h= h
       )
   save(simulatedData, file=file.path(main.dir,out,"simulatedData.Rd"))    

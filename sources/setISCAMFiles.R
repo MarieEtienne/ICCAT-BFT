@@ -81,13 +81,13 @@ ForgotWeight <- 1 #if 1 weight at age are derived from the given relationship no
 ## ------------------------------------------------------------------------- ##',
 ## ival         lb      ub      phz     prior   p1      p2      #parameter   ##
 
-log_R0      <-  c(13,  -5.0,    30,    1,    0,    -5.0,   30.)#log_ro/msy 
-h           <-  c(0.85,   0.2,   0.99,    3,    3,       3,     2)       #steepness/fmsy',)
+log_R0      <-  c(13,  -5.0,    30,    1,    0,    12,   17)#log_ro/msy 
+h           <-  c(0.85,   0.2,   0.99,    3,    3,       14,     2.44)       #steepness/fmsy',)
 log_m       <-  c(-1.47,   -5.0,   0.0,    -1,    1,  -1.469,  0.05)    #log.m',
-log_avgrec  <-  c( 12.5,   -5.0,    20,    1,    0,    -5.0,    20)      #log_avgrec',
-log_recinit <-  c( 12.5,   -5.0,    20,    1,    0,    -5.0,    20)      #log_recinit',
+log_avgrec  <-  c( 12.5,   -5.0,    20,    1,    0,    12,    17)      #log_avgrec',
+log_recinit <-  c( 12.5,   -5.0,    20,    1,    0,    12,    17)      #log_recinit',
 rho         <-  c(0.4, 0.001, 0.999,    -1,    3,    2.5,  2.5)    #rho',
-kappa         <-  c(0.4, 0.001,    12,     3,    4,     2.5, 0.8)    #kappa (precision)',
+kappa         <-  c(0.4, 0.001,    12,     3,    4,     1, 1)    #kappa (precision)',
 #****************************************
 # // parameters for bicubic spline
 #****************************************
