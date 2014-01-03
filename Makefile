@@ -111,7 +111,7 @@ runsims := $(foreach dir,$(simdirs),$(dir)/runsims)
 
 $(datadone):
 	Rscript sources/setISCAMFiles.R  Inputs/$(ARG) $(@D)
-	cp  $(ARG)/$(CTL).[cp]*[!v]   $(EXEC) simulation/$(@D)
+	cp  $(CTL).[cp]*[!v]   $(EXEC) simulation/$(@D)
 	cp $(DIST) simulation/$(@D)
 	-cd simulation/$(@D);./$(EXEC) -ind $(DAT)
 
