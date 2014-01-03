@@ -6,7 +6,7 @@ opts_chunk$set(fig.path='figure/ICCAT-', fig.align='center', fig.show='hold')
 options(replace.assign=TRUE,width=80)
 main.dir <- "/home/metienne/ICCAT/ICCAT-BFT"
 wdsimple       <- "bfte/2012/vpa/reported/low"
-load(file.path(main.dir, 'Report','RDataSave','Info.RData'))
+load(file.path(main.dir, 'Report','RData','Info.RData'))
 setwd(main.dir)
 dir("/iSCAM/src/r-code/R/")
 iSCAMR <- dir("../iSCAM/src/r-code/R/")
@@ -44,6 +44,7 @@ cat(RDataFiles[ns+1])
 
 survey=list()
 gear.list <- unique(iSCAMsurvey$gear)
+pdf(file="ICCAT-Abundance.pdf", with=11, paper="a4r")
 for( i in 1:nit)
 {
     survey[[i]] <- iSCAMsurvey[iSCAMsurvey$gear==gear.list[i],]

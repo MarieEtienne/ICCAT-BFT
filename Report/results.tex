@@ -1,57 +1,35 @@
 
 \subsection{Management parameters}
 \subsubsection{Fishing mortality}
-\begin{alltt}
-\hlfunctioncall{plot}(x = res$yr, y = res$ft[1, ], xlab = \hlstring{"Year"}, ylab = \hlstring{"Fishing mortality"}, type = \hlstring{"b"})
-\end{alltt}
-
-{\centering \includegraphics[width=\maxwidth]{figure/ICCAT-Ft} 
-
-}
 
 
 
 
 
 \subsubsection{Spawning biomass}
-\begin{alltt}
-\hlfunctioncall{plot}(x = res$yrs, y = res$sbt/1000, xlab = \hlstring{"Year"}, ylab = \hlstring{"Spawning \hlfunctioncall{biomass} (tons)"}, 
-    type = \hlstring{"b"})
-\end{alltt}
 
-{\centering \includegraphics[width=\maxwidth]{figure/ICCAT-SBT} 
-
-}
 
 
 
 \subsubsection{Kobe Plot}
-\begin{alltt}
-\hlfunctioncall{plot}(res$Fstatus[1, ] ~ res$Bstatus[1:62], xlab = \hlstring{"B/Bmsy"}, type = \hlstring{"b"}, ylab = \hlstring{"F/Fmsy"}, 
-    xlim = \hlfunctioncall{c}(0, 2), ylim = \hlfunctioncall{c}(0, 2))
-\end{alltt}
 
 {\centering \includegraphics[width=\maxwidth]{figure/ICCAT-KobePlot} 
-
-}
-\begin{alltt}
-\hlfunctioncall{detach}(Info)
-\end{alltt}
-
-{\centering \includegraphics[width=\maxwidth]{figure/ICCAT-RetroSpawning} 
-
 }
 
 
-{\centering \includegraphics[width=\maxwidth]{figure/ICCAT-RetroBmsy} 
+%{\centering \includegraphics[width=\maxwidth]{figure/ICCAT-RetroSpawning} 
 
-}
+%}
+
+
+%{\centering \includegraphics[width=\maxwidth]{figure/ICCAT-RetroBmsy} 
+
+%}
 
 
 
-{\centering \includegraphics[width=\maxwidth]{figure/ICCAT-RetroFmsy} 
-
-}
+%{\centering \includegraphics[width=\maxwidth]{figure/ICCAT-RetroFmsy} 
+%}
 
 \subsection{Monte Carlo approach}
 \subsubsection{Prior specification}
@@ -71,13 +49,20 @@ The same priors have been chosen for $R_{init}$ and $\bar{R}$.
 A beta distribution has been chosen as a prior for the steepness. The parameters of the beta distribution has been chosen so that the mode of the steepness is $0.9$ and the coefficient of variation is 
 $10\%$ which to the distribution specified in equation \ref{eq:priorh}.
 \begin{equation}
-(R_0) \sim \Beta\left(14, 2.44\right)
+(R_0) \sim \beta\left(14, 2.44\right)
 \label{eq:priorh}
 \end{equation}
 
 
 
 \subsubsection{Results}
+\paragraph{Convergence}
+{\centering \includegraphics[width=\maxwidth]{figure/ICCAT-Conv1} 
+{\centering \includegraphics[width=\maxwidth]{figure/ICCAT-Conv2}
+
+\paragraph{Stock Statut}
+{\centering \includegraphics[width=\maxwidth]{figure/ICCAT-PostStatus} 
+}
 
 \subsection{Comparaison with results from stock assesmnent}
 

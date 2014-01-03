@@ -14,13 +14,13 @@
 # |
 
 EXEC=iscam
-ARG=bfte/2012/vpa/reported/low
+ARG=bfte/2012/vpa/inflated/high
 TARGET=$(ARG)/$(EXEC)
 prefix=$(ISCAM_HOME)
 DAT=RUN.dat
 CTL=$(ARG)/ICCAT
 ARGSIM=1
-MCFLAG=-mcmc 10000 -mcsave 100 -nosdmcmc
+MCFLAG=-mcmc 50000 -mcsave 50 -nosdmcmc
 NR=4
 NOSIM  = 1
 NSTART  = 1
