@@ -55,6 +55,28 @@
 
 \subsection{Monte Carlo approach}
 \subsubsection{Prior specification}
+Monte Carlo approach require to specify adequat prior on leading parameters.
+\paragraph{Prior on $R_0$, $R_{init}$ and $\bar{R}$}
+The prior on $\R_0$ is build with the idea of a range between $10^5$ et $10^6$ for the unfished total biomass. $\Phi_E$ being the contribution of a recruit to the total biomass during its life, 
+$B_0=R_0\Phi_E$. $\Phi_E$ depends on the weight at age and the survivorship, both being fixed. Therefore $\R_0$ may be derived and the corresponding value for the logarithm of $R_0$ is in ethe interval $[13.68, 15.98]$. Relaxing this assumption, 
+the prior has been specified as in equation \ref{eq:priorR0}.
+\begin{equation}
+\log(R_0) \sim \mathcal{U}[12, 17] 
+\label{eq:priorR0}
+\end{equation}
+The same priors have been chosen for $R_{init}$ and $\bar{R}$. 
+
+
+\paragraph{Prior for steepness $h$}
+A beta distribution has been chosen as a prior for the steepness. The parameters of the beta distribution has been chosen so that the mode of the steepness is $0.9$ and the coefficient of variation is 
+$10\%$ which to the distribution specified in equation \ref{eq:priorh}.
+\begin{equation}
+(R_0) \sim \Beta\left(14, 2.44\right)
+\label{eq:priorh}
+\end{equation}
+
+
+
 \subsubsection{Results}
 
 \subsection{Comparaison with results from stock assesmnent}
