@@ -1,9 +1,13 @@
-Simulations has been run to check the hability of \iscam at estimating
-the parameters. the value of the parameters chosen to simulate fake dataset are th eone obtained from the first run so that the simulation study examines 
-the capacity of \iscam to reestime parameters in a similar configuration.
+Simulations have been run to check the hability of \iscam at estimating
+the parameters. The value of the parameters is chosen to be realistic in regard of the parameter estimates on BFT east data.
+
 \subsection{Simulation model}
+\iscam proposes a simulation model but in order to fully controll the simulation framework (especially the fishing mortality), a \verb+R+ code has been developped to simulate a stock dynamic according to the model specified in \iscam.
+In \iscam some realistic fishing mortality is derived from the true catch and then used to simulate new catch observation. To avoid this back and force procedure, a simpler version is developped. The fishing mortality is taken constant over year, the value being chosen to avoid stock extinction.
 \subsection{Simulation framework}
-\subsubsection{Paraemeters value}
+
+Thousand datasets have been drawn and the parameters have been reestimated. The simulated value are specified in \ref{tab:simPar}.		
+
 \begin{table}[ht]
 \centering
 \begin{tabular}{ c  p{4cm}  p{8cm} }
@@ -24,6 +28,7 @@ according to the results obtained on BFT \\
 $q_k$ & $10^{-5}$ & Same value for all gear\\
 \multicolumn{3}{c}{\bf Other quantities  of interest (fixed parameters
   or derived from parameters)}\\
+$f$&  0.2  & the  instant fishing mortality, chosen to be constant over year\\
 $\Phi_E$ & $114.99 $ & \\
 $M_a$ & $\left(0.490,0.24, 0.24, 0.24, 0.240,\right.$ $\left. 0.20, 
 0.175 , 0.15, 0.125, 0.10\right)$&\\
@@ -35,28 +40,45 @@ $\beta$ & $1.334484\, 10^{-07}$ & fixed using $\beta=(\kappa -1)/(R_0*\phi_E)$\\
 \hline
 \end{tabular}
 \caption{Leading parameters}
+\label{tab:simPar}
 \end{table}
 
 \subsection{Results on leading parameters}
+
+
 \subsection{Results on management parameters}
-Spécifier le nombre de jeu de données,  le nombre de fois ou on a jete
-la simu car la matrice hessienne n'était pas définie positive.
+When \iscam produces a non definite positive Hessian matrix, the simulation is dropped. It occurs NOMBRENOMBRE on the thousands simulations (corresponding to  NOMBRENOMBRE $\%$).
+
 
 %\begin{figure}
 %  \includegraphics[width=8cm]{R0estimation}
 %  \includegraphics[width=8cm]{tau_Restimation}
 %\end{figure} 
 
-%%\begin{figure}
-%%  \includegraphics[width=8cm]{tau_Iestimation}
-%%  \includegraphics[width=8cm]{varPhiestimation}
-%%\end{figure} 
 
 %%\begin{figure}
 %%  \includegraphics[width=8cm]{SteepnessEstimation}
 %%\end{figure}
 
+%%\begin{figure}
+%%  \includegraphics[width=8cm]{BmsyEstimation}
+%%\end{figure}
 
 
-%Results highly biased, has to check with Steve the simulation model or simulate from R 
+%%\begin{figure}
+%%  \includegraphics[width=8cm]{fmsyEstimation}
+%%\end{figure}
 
+
+%%\begin{figure}
+%%  \includegraphics[width=8cm]{StockStatusEstimation}
+%%\end{figure}
+
+
+%%\begin{figure}
+%%  \includegraphics[width=8cm]{KobeplotEstimation}
+%%\end{figure}
+
+
+
+\subsection{Discussion on simulation results}

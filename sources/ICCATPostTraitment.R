@@ -1,21 +1,13 @@
+main.dir <- file.path(Sys.getenv("HOME"),"ICCAT/ICCAT-BFT")
 
-outdir <- "/home/metienne/ICCAT/ICCAT-BFT/Report/figure"
-library(knitr)
-# set global chunk options
-opts_chunk$set(fig.path='figure/ICCAT-', fig.align='center', fig.show='hold')
-options(replace.assign=TRUE,width=80)
-main.dir <- "/home/metienne/ICCAT/ICCAT-BFT"
-wdsimple       <- "bfte/2012/vpa/reported/low"
+outdir <- file.path(main.dir, "Report/figure")
+wdsimple       <- "bfte/2012/vpa/inflated/high"
 load(file.path(main.dir, 'Report','RData','Info.RData'))
 setwd(main.dir)
-dir("/iSCAM/src/r-code/R/")
 iSCAMR <- dir("../iSCAM/src/r-code/R/")
 for(f in iSCAMR)
  source(paste("../iSCAM/src/r-code/R/", f, sep=""), echo=T)
 attach(Info)
-
-
-
 RDataFiles<- readLines(file.path(main.dir,'Report', 'RDataSave', 'datafile.out'))
 
 
@@ -44,7 +36,7 @@ cat(RDataFiles[ns+1])
 
 survey=list()
 gear.list <- unique(iSCAMsurvey$gear)
-pdf(file="ICCAT-Abundance.pdf", with=11, paper="a4r")
+pdf(file="ICCAT-Abundance.pdf", width=11, width=12, height=8 )
 for( i in 1:nit)
 {
     survey[[i]] <- iSCAMsurvey[iSCAMsurvey$gear==gear.list[i],]
@@ -56,7 +48,7 @@ for( i in 1:nit)
     }
 }
 legend("topleft", legend=paste( Info$surveyName), cex=0.9,col=gear.list, lty=gear.list, )   
-
+dev.off()
 
 
 CAAReformat <- data.frame(NA, ncol=3, nrow=(nage-sage+1)*(nyr-syr+1))
@@ -65,13 +57,15 @@ for( a_ind in sage:nage){
     CAAReformat[(yr_ind-syr)*(nage-sage+1)+a_ind-sage+1, ] <- c(yr_ind, a_ind, CAA[yr_ind-syr+1, a_ind-sage+1])
   }
 }
+
+
+pdf(file="ICCAT-Catch.pdf", width=10, height=8)
 names(CAAReformat)=c("Year", "Age", "Catch")  
 radius <- sqrt( CAAReformat$Catch/ pi ) 
 with(CAAReformat, 
      symbols(Year, Age, circles=radius, inches=0.35, fg="white", bg="red", ylab="Age", xlab="Year")
      )
-
-
+dev.off()
 
 
 gear.list <- unique(compositionCatch[,2])
@@ -95,7 +89,7 @@ legend("topleft", legend=paste("Gear", gear.list), col=gear.list, lty=gear.list)
 
 name.list=c("Comm", Info$surveyName)
 age <- sage:nage
-pdf(file=file.path(outdir,"AgeComposition.pdf"), paper="a4r", onefile=T, width=16)
+pdf(file=file.path(outdir,"AgeComposition.pdf"), onefile=T, width=12)
 par(mfcol=c(2,2))
 for( i in 1:ngear)
   {
@@ -117,7 +111,7 @@ for( i in 1:ngear)
        radius <- sqrt( CAAtmp$Catch/ pi ) 
        radius <- (radius)/max(radius, na.rm=T)
        with(CAAtmp, 
-            symbols(Year, Age, circles=radius, inches=0.1, fg="white", bg=i, ylab="Age", xlab="Year", main =paste("Gear", name.list[i]))
+            symbols(Year, Age, circles=radius, inches=0.1, fg="white", bg=i, ylab="Age", xlab="Year", main =paste("Gear", name.list[gear.list[i]]))
             )
      }
   }
@@ -155,7 +149,7 @@ selectivity[,2:ncol(selectivity)] <- exp(selectivity[,2:ncol(selectivity)])/10
 ngear <- res$ngear
 
 
-pdf(file=file.path(outdir, "Selectivity.pdf"), width=10, paper="a4r")
+pdf(file=file.path(outdir, "ICCAT-Selectivity.pdf"), width=10, paper="a4r")
 par(mfcol=c(1,1))
 for( i in 1:ngear)
 {
@@ -176,14 +170,18 @@ for( i in 1:ngear)
 legend("topleft", legend=paste(name.list[gear.list]), lty=gear.list, col=gear.list)  
 dev.off()
 
+
+
+library(grid)
 library(ggplot2)
-pdf(file=file.path(outdir,"KobePlot.pdf"), width=10)
 p <- ggplot( )+ geom_path(aes(y=res$Fstatus[1,], x=res$Bstatus[1:length(res$yr)], colour=res$yr), arrow=arrow(type="open", length = unit(0.1, "inches")   )) + 
   xlim(range(c(0,res$Bstatus))) + ylim(range(res$Fstatus)) +xlab("SpawningBiomass / Bmsy") + ylab ("F/Fmsy") 
 p
+ggsave(filename=file.path(outdir,"ICCAT-KobePlot.pdf"), width=14, units="cm", height=10)
 dev.off()
 
 
+pdf(file=file.path(outdir,"ICCAT-SelectivityByGear.pdf"), width=10, heigh=14)
 par( oma = c( 0, 0, 3, 0 ), mfcol=c(1,1))
 split.screen(figs=c(3,2))
 ind.scr =1
@@ -192,14 +190,14 @@ for(i in 1:ngear){
   ind = which(compositionCatch[,2]==gear.list[i])
   if(length(ind)>0){
     ind.scr <- ind.scr +1
-    plot(res$age, selectivity[selectivity[,1]==gear.list[i], 2:(nage-sage+2)], "l", col=gear.list[i], lty=gear.list[i], ylim=c(0,1), yla="Selectivity", xlab="Age")
-      for(j in ind)file.path(outdir, "Selectivity.pdf")
+    plot(res$age, selectivity[selectivity[,1]==gear.list[i], 2:(nage-sage+2)], "l", col=gear.list[i], lty=gear.list[i], ylim=c(0,1), yla="Selectivity", xlab="Age", main=name.list[gear.list[i]])
+      for(j in ind)
       points(res$age, compositionCatch[j,3:(nage-sage+3)], col=gear.list[i], cex=0.7, pch=19 )
     }
 }
 mtext("Selectivity at age", outer=TRUE)
 close.screen(all=TRUE)
-
+dev.off()
 
 
 par( oma = c( 2, 2, 0, 0 ), mfcol=c(1,1), mar=c(2, 2, 1, 1))
