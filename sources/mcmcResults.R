@@ -8,7 +8,7 @@ BFTStatus <- data.frame(StockStatus=resmcmc$SSB/resmcmc$bmsy, FStatus=resmcmc$fF
 
 ## Diagnostic Graph
 pdf(file=file.path(main.dir, "Report","Conv1.pdf"), width=10)
-p <- ggplot(BFTStatus, aes(y = StockStatus, x=seq(1,40000,length.out=nrow(BFTStatus))) ) + geom_line() + xlab("Iterations") + ggtitle("MCMC Chains")
+p <- ggplot(BFTStatus, aes(y = StockStatus, x=seq(1,50000,length.out=nrow(BFTStatus))) ) + geom_line() + xlab("Iterations") + ggtitle("MCMC Chains")
 print(p)
 dev.off()
 
