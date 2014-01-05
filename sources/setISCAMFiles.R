@@ -61,7 +61,9 @@ plw   <- 3.009     #power in length-weight allometry
 m50   <- 4     #50% maturity
 std50 <- 0.2*m50  #std at 50% maturity
 
-natMortality <- c(0.49, 0.24, 0.24, 0.24, .24, 0.20,0.175, 0.15, 0.125, 0.1)
+# iscam doesn't deal with varying mortality
+#natMortality <- c(0.49, 0.24, 0.24, 0.24, .24, 0.20,0.175, 0.15, 0.125, 0.1)
+natMortality <- rep(0.23, 10)
 
 
 ##################################################################################
@@ -81,11 +83,11 @@ ForgotWeight <- 1 #if 1 weight at age are derived from the given relationship no
 ## ------------------------------------------------------------------------- ##',
 ## ival         lb      ub      phz     prior   p1      p2      #parameter   ##
 
-log_R0      <-  c(14.64,  -5.0,    30,    1,    0,    12,   17)#log_ro/msy 
+log_R0      <-  c(14.64,  -5.0,    30,    1,    0,    12,   16)#log_ro/msy 
 h           <-  c(0.9,   0.2,   0.99,    3,    3,       14,     2.44)       #steepness/fmsy',)
 log_m       <-  c(-1.47,   -5.0,   0.0,    -1,    1,  -1.469,  0.05)    #log.m',
-log_avgrec  <-  c( 12.5,   -5.0,    20,    1,    0,    12,    17)      #log_avgrec',
-log_recinit <-  c( 12.5,   -5.0,    20,    1,    0,    12,    17)      #log_recinit',
+log_avgrec  <-  c( 12.5,   -5.0,    20,    1,    0,    12,    16)      #log_avgrec',
+log_recinit <-  c( 12.5,   -5.0,    20,    1,    0,    12,    16)      #log_recinit',
 rho         <-  c(0.4, 0.001, 0.999,    -1,    3,    2.5,  2.5)    #rho',
 kappa         <-  c(0.4, 0.001,    12,     3,    4,     1, 1)    #kappa (precision)',
 #****************************************

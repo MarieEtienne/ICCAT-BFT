@@ -32,7 +32,7 @@ simulationModel<- function(seed, para)
     kkappa <- 4*hh/(1-hh)
     Rinit=0.9*R0
     
-  natSurvivorship <- c(1,exp(-cumsum(natM[1:(nage-sage)])))
+  natSurvivorship <- exp(-(natM[1]*seq(0,nage-1,1)+natM[1]/2))
   natSurvivorship[nage] <-   natSurvivorship[nage] /(1-exp(-natM[nage]))
   
     phiE <- sum(natSurvivorship * fa)
