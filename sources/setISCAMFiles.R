@@ -37,7 +37,7 @@ wd <- ''
 SIM_FLAG <- F
 
 #directory to find R code
-src.dir <- file.path(main.dir,wd,'sources')
+src.dir <- file.path(main.dir,'sources')
 freport.out<- file.path(main.dir,'Report','RData','datafile.out') 
 
 if(length(args)>1){
@@ -81,8 +81,8 @@ ForgotWeight <- 1 #if 1 weight at age are derived from the given relationship no
 ## ------------------------------------------------------------------------- ##',
 ## ival         lb      ub      phz     prior   p1      p2      #parameter   ##
 
-log_R0      <-  c(13,  -5.0,    30,    1,    0,    12,   17)#log_ro/msy 
-h           <-  c(0.85,   0.2,   0.99,    3,    3,       14,     2.44)       #steepness/fmsy',)
+log_R0      <-  c(14.64,  -5.0,    30,    1,    0,    12,   17)#log_ro/msy 
+h           <-  c(0.9,   0.2,   0.99,    3,    3,       14,     2.44)       #steepness/fmsy',)
 log_m       <-  c(-1.47,   -5.0,   0.0,    -1,    1,  -1.469,  0.05)    #log.m',
 log_avgrec  <-  c( 12.5,   -5.0,    20,    1,    0,    12,    17)      #log_avgrec',
 log_recinit <-  c( 12.5,   -5.0,    20,    1,    0,    12,    17)      #log_recinit',
@@ -183,9 +183,9 @@ if(length(f.pot)>1)
   save(vpa.dat, file=file.path(main.dir,wd,"vpa.RData"))
   if(SIM_FLAG)
   {
-    simulationModel(simseed)
+    source(file.path(src.dir,"simPar.R"))
+    simulationModel(simseed, para=parSimu)
     source(file.path(src.dir,'writeData4ISCAM.R'))
-
     }
   outf<- character(0)
   
