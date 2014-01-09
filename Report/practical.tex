@@ -24,9 +24,8 @@ specification. The fishing moratility is  driven by the catch for gear
 will be omitted in the sequel since there is no ambiguity.
 
 \paragraph{Mortality}
-The mortality at age is fixed to  the values used for the VPA approach
-described in \cite{tuna2012}.
-
+The mortality at age has first been fixed to  the values used for the VPA approach
+described in \cite{tuna2012}. 
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrrrrrrrrrr}
@@ -37,6 +36,8 @@ Mortality & 0.49 & 0.24 & 0.24 & 0.24 & 0.24 & 0.20 & 0.17 & 0.15 & 0.12 & 0.10 
    \hline
 \end{tabular}
 \end{table}
+But \iscam doesn't really deal with varying mortality (using average mortality in many different places in the the code). Finaly, it has been decided to use a fixed instantaneous mortality rate.
+This parameter won't be estimated and is fixed to 0.23.
 
 
 \paragraph{Selectivity}
@@ -140,7 +141,7 @@ Parameters & Name in \iscam & Set Value & Signification  \\ \hline
  $b_w$ & b &  $3.009$ &Weight at age allometric parameter\\
  $\mu_f$& $\dot{a}$ & $4$ & age for 50\% maturity\\
  $\sigma_f$ & $\dot{\gamma}$ &  0.8 & Standard deviation at 50\% maturity\\
-$\Phi_E$ &  &  115 & incidence function\\
+$\Phi_E$ &  &  $201$& incidence function\\
 \hline
 \end{tabular}
 \caption{The parameters reported in this table are considered as fixed to the specified value}
@@ -177,14 +178,14 @@ $1/\varphi$ & 0.8 &	$[0.001,	12]$ & 	3 & the root of the precision of the total 
 \end{table}
 
 
-\subsection{Monte Carlo approach - Prior specification}
-Monte Carlo approach require to specify adequat prior on leading parameters.
+\subsection{Bayesian approach - Prior specification}
+A Bayesian approach requires to specify adequat prior distributions on leading parameters.
 \paragraph{Prior on $R_0$, $R_{init}$ and $\bar{R}$}
-The prior on $R_0$ is build with the idea of a range between $10^5$ et $10^6$ for the unfished total biomass. $\Phi_E$ being the contribution of a recruit to the total biomass during its life, 
-$B_0=R_0\Phi_E$. $\Phi_E$ depends on the weight at age and the survivorship, both being fixed. Therefore $\R_0$ may be derived and the corresponding value for the logarithm of $R_0$ is in ethe interval $[13.68, 15.98]$. Relaxing this assumption, 
+The prior on $R_0$ is build with the idea of a range between $10^5$ et $10^6$ Tons for the unfished total biomass. $\Phi_E$ being the contribution of a recruit to the total biomass during its life, 
+$B_0=R_0\Phi_E$. $\Phi_E$ depends on the weight at age and the survivorship, both being fixed. Therefore $\R_0$ may be derived and the corresponding value for the logarithm of $R_0$ is in the interval $[12.9, 15.2$. Relaxing this assumption, 
 the prior has been specified as in equation \ref{eq:priorR0}.
 \begin{equation}
-\log(R_0) \sim \mathcal{U}[12, 17] 
+\log(R_0) \sim \mathcal{U}[12, 16] 
 \label{eq:priorR0}
 \end{equation}
 The same priors have been chosen for $R_{init}$ and $\bar{R}$. 
@@ -194,11 +195,18 @@ The same priors have been chosen for $R_{init}$ and $\bar{R}$.
 A beta distribution has been chosen as a prior for the steepness. The parameters of the beta distribution has been chosen so that the mode of the steepness is $0.9$ and the coefficient of variation is 
 $10\%$ which to the distribution specified in equation \ref{eq:priorh}.
 \begin{equation}
-(R_0) \sim \beta\left(14, 2.44\right)
+h \sim \beta\left(14, 2.44\right)
 \label{eq:priorh}
 \end{equation}
 
 
+\paragraph{Prior for the total variance}
+$\varphi^2$ being the total variance, \iscam allows to specify a prior distribution on $1/\varphi$, which is the square root of the total precision.
+The usual choice would be to use a gamma distribution on the precision, which is not allowed. A gamma precision on $1/\varphi$ has been chosen. Parameters have been taken to have vague prior.
+\begin{equation}
+1/\varphi \sim \Gamma\left(0.1, 0.1\right)
+\label{eq:priorphi}
+\end{equation}
 
 \subsection{First run}
 To illustrate the results obtained on BFT East Stock, we focus on one datafile: \verb+Inputs/bfte/2012/vpa/inflated/high/bfte2012.d1+
@@ -219,16 +227,16 @@ To illustrate the results obtained on BFT East Stock, we focus on one datafile: 
 \begin{tabular}{p{2.1cm}p{4cm}p{4cm}p{4cm}}
   \hline
 Parameters & Inital value & Reported value & ICCAT 2012  report  \\ \hline
- $\log{R_0}$ & $13$  &  $14.63$ & \\
- $h$ & $0.85$ & $0.95$  &\\
-$log(\bar{R})$& $12.5$ & $14.29$ \\
-$R_{init}$ & $12.5$ & $14.42$\\
+ $\log{R_0}$ & $13$  &  $14.75$ & \\
+ $h$ & $0.85$ & $0.934$  &\\
+$log(\bar{R})$& $12.5$ & $14.38$ \\
+$R_{init}$ & $12.5$ & $15.22$\\
 $\rho$ & $0.4$ &  $0.4$ & 	\\
-$1/\varphi$ & $1.25$ & $1.017$ &\\
-$log(B_msy)$ &  &$18.71$ & \\
-$(f_msy)$ &  &$0.153$ & \\
-$log(B_{2011})$ &  &$19.44$ & \\
-$(f_{2011})$ &   &$0.047$ & \\
+$1/\varphi$ & $1.25$ & $1.09$ &\\
+$log(B_msy)$ &  &$18.81$ & \\
+$(f_msy)$ &  &$0.14$ & \\
+$log(B_{2011})$ &  &$19.72$ & \\
+$(f_{2011})$ &   &$0.037$ & \\
 \hline
 \end{tabular}
 \caption{Initial values and range for main paramaters.}

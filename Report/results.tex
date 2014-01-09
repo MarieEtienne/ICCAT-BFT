@@ -2,46 +2,73 @@
 \subsection{Maximum likelihood approach}
 Report the MLE for R0, Rinit h BMSY,FMSY B[2011]/BMSY, F[2011]/FMSY for each scenario
 \begin{table}
- 
+ \begin{tabular}{p{2.1cm}p{4cm}p{4cm}p{4cm}}
+  \hline
+Parameters & Inflated & Reported & ICCAT 2012  report  \\ \hline
+ $\log{R_0}$ &  $14.75$ &  $14.65$\\
+ $h$  & $0.934$  & $0.937$\\
+$log(\bar{R})$&  $14.38$  & $14.28$\\
+$R_{init}$ &  $15.22$ & $15.31$\\
+$\rho$ & $0.4$ &  $0.4$ & 	\\
+$1/\varphi$  & $1.09$ &$1.09$ \\
+$log(B_msy)$ &   $18.81$ &   $18.68$\\
+$(f_msy)$   &$0.144$ & $0.146$\\
+$log(B_{2011})$   &$19.72$   &$19.62$\\
+$(f_{2011})$ &   $0.037$ &  $0.037$ \\
+\end{tabular}
 \end{table}
 
 
 
+\begin{figure}
+ \begin{subfigure}[b]{\textwidth}
+  \includegraphics[width=\maxwidth]{figure/ICCAT-InflatedKobePlot} 
+  \caption{Inflated Catch}
+  \end{subfigure}
+ \begin{subfigure}[b]{\textwidth}
+  \includegraphics[width=\maxwidth]{figure/ICCAT-ReportedKobePlot} 
+	\caption{Reported Catch}
+  \end{subfigure}
+\caption{Kobe plot for the two scenarios}
+\end{figure}
 
-{\centering \includegraphics[width=\maxwidth]{figure/ICCAT-KobePlot} 
-}
 
 \subsection{Retrospective analysis}
-A retrospective analysis has been run on the data set corresponding to inflated-high  catch scenario, droping up to 8 years.
-Figure 
+Retrospective analyses have been run on the two dataset corresponding to inflated catch or reported catch, droping 
+ droping up to 8 years.Figure \ref{fig:RetroAnalysis}
+ presents the evolution of the total biomass and table \ref{fig:retrobmsy} presents the evolution of the $B_{MSY}$ estimates when droping the laste years.
+ 
 
 
-\begin{figure}
-\begin{subfigure}[b]{\textwidth}
-\includegraphics[width=\maxwidth]{figure/ICCAT-SBTRetro}  
-\caption{Estimation of the stock biomass with retrospective analysis}
-\end{subfigure}
-\begin{subfigure}[b]{\textwidth}
-\includegraphics[width=\maxwidth]{figure/ICCAT-BmsyEvolRetro}  
-\caption{Evolution of the estimated value for $B_{MSY}$ according to the last year in the retrospective analysis}
-\end{subfigure}
+\begin{figure}[htbp]
+ \begin{subfigure}[b]{\textwidth}
+  \includegraphics[width=\maxwidth]{figure/ICCAT-InflatedSBTRetro} 
+  \caption{Inflated Catch}
+  \end{subfigure}
+ \begin{subfigure}[b]{\textwidth}
+  \includegraphics[width=\maxwidth]{figure/ICCAT-ReportedSBTRetro} 
+	\caption{Reported Catch}
+  \end{subfigure}
 \caption{Retrospective analysis, droping 1 to 8 years}
+\label{fig:RetroAnalysis}
 \end{figure}
 
 
 
-\subsection{Monte Carlo approach}
-
+\subsection{Bayesian analysis}
+A Bayesian is possible with \iscam. 50000 iterations of a Metropolis Hastings algorithm have been performed. 
+A burn in period of 25000 iterations is used, one iteration every fifty being saved.  
 \paragraph{Convergence}
+The convergence of the algorithm may be  visually checked using figure \ref{fig:mcmcdiag}. 
 
 \begin{figure}[htbp]
  \begin{subfigure}[b]{0.45\textwidth}
- \includegraphics[width=\textwidth]{figure/ICCAT-Conv1}
+ \includegraphics[width=\textwidth]{figure/ICCAT-InflatedConv1}
   \caption{Stock status at the last year}
                 \label{fig:mcmcstock}
   \end{subfigure}
  \begin{subfigure}[b]{0.45\textwidth} 
- \includegraphics[width=\textwidth]{figure/ICCAT-Conv2}
+ \includegraphics[width=\textwidth]{figure/ICCAT-InflatedConv2}
 \caption{Fishing status at the last year}
                 \label{fig:mcmcfish}
   \end{subfigure}
@@ -50,6 +77,39 @@ Figure
  \end{figure}
 
 \paragraph{Stock Statut}
-{\centering \includegraphics[width=\maxwidth]{figure/ICCAT-PostStatus} 
-}
+The posterior density of the leading parameters are illustrated in figures \ref{fig:mcmcpost}, the prior being defined in equation \ref{eq:priorR0} to \ref{eq:priorphi}. 
 
+\begin{figure}[htbp]
+ \begin{subfigure}[b]{0.45\textwidth}
+ \includegraphics[width=\textwidth]{figure/ICCAT-InflatedpostRho}
+  \caption{Posterior density for the logarithm of the recruitment in unfished conditions}
+                \label{fig:mcmcrho}
+  \end{subfigure}
+ \begin{subfigure}[b]{0.45\textwidth} 
+ \includegraphics[width=\textwidth]{figure/ICCAT-Inflatedposth}
+\caption{Posterior density for the steepness}
+                \label{fig:mcmch}
+  \end{subfigure}
+  \caption{Posterior distribution for the recruitment in unfished condition and the steepness. The blue lines represent the prior distribution}
+  \label{fig:mcmcpost}
+ \end{figure}
+
+The posterior distribution on the steepness is vague, which means that the data are not very informative. 
+
+ One of the quantity of main interest is the current  stock status. 
+ Figure \ref{fig:postKobe} presents the uncertainty for the stae of the stock in 2011.
+ For both scenario (reported or inflated catch).
+\begin{figure}[htbp]
+ \begin{subfigure}[b]{0.45\textwidth}
+ \includegraphics[width=\textwidth]{figure/ICCAT-InflatedPostKobe}
+  \caption{Inflated Catch}
+  \end{subfigure}
+ \begin{subfigure}[b]{0.45\textwidth} 
+ \includegraphics[width=\textwidth]{figure/ICCAT-ReportedPostKobe}
+\caption{Reported Catch}
+  \end{subfigure}
+  \caption{Posterior distribution for the recruitment in unfished condition and the steepness. The blue lines represent the prior distribution}
+  \label{fig:postKobe}
+ \end{figure}
+ 
+ 
