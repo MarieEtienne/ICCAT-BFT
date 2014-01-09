@@ -23,7 +23,7 @@
 ##              args should be the name of the subdirectory containig vpa data    ##
 ####################################################################################
 args <- commandArgs(trailingOnly = TRUE)
-#args <-c('Inputs/bfte/2012/vpa/reported/low' )
+args <-c('Inputs/bfte/2012/vpa/inflated/high' )
 print(args)
 
 ##### if simulation mode (sim >0) then sim is the seed for the simulation
@@ -171,6 +171,7 @@ if(length(f.pot)>1)
   close.connection(con.out)
   
   Info  <- list(linf = linf, k =k, t0 = t0,
+                nage = nage, sage = sage,
                 sclw = sclw, plw = plw,
                 m50 = m50,  std50 = std50, 
                 syr=syr, nyr=nyr, sage=sage, nage=nage,
