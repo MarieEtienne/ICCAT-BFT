@@ -78,7 +78,7 @@ $(TARGET).ret1:
 
 RUNRETRO = 'args = paste("-retro",c(1:$(NR),0),"-nox"); \
             sapply(args,\
-            function(a){ cmd=paste("cd $(ARG) & ./$(EXEC)","-ind $(DAT) $(ARG)",a);\
+            function(a){ cmd=paste("cd $(ARG) ; ./$(EXEC)","-ind $(DAT) $(ARG)",a);\
                         system(cmd)})'
 
 # |------------------------------------------------------------------------------------|
@@ -86,10 +86,11 @@ RUNRETRO = 'args = paste("-retro",c(1:$(NR),0),"-nox"); \
 # |------------------------------------------------------------------------------------|
 # |
 dust:
-	cd $(ARG) & rm -f *.log *.rpt *.htp admodel.* variance *.bar *.mcm
+	cd $(ARG); rm -f *.log *.rpt *.htp admodel.* variance *.bar *.mcm
 
 clean:
-	cd $(ARG) & rm -rf iscam.* admodel.* variance eigv.rpt fmin.log $(EXEC) variance *.ret[0-9]*
+	cd $(ARG); rm -rf  iscam.* admodel.* variance eigv.rpt fmin.log $(EXEC) variance *.ret[0-9]*
+	rm -rf $(CTL).ctl
 
 
 # |------------------------------------------------------------------------------------|
