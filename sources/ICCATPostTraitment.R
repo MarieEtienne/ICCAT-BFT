@@ -173,10 +173,11 @@ dev.off()
 
 library(grid)
 library(ggplot2)
-p <- ggplot( )+ geom_path(aes(y=res$Fstatus[1,], x=res$Bstatus[1:length(res$yr)], colour=res$yr), arrow=arrow(type="open", length = unit(0.1, "inches")   )) + 
-  xlim(range(c(0,res$Bstatus))) + ylim(range(res$Fstatus)) +xlab("SpawningBiomass / Bmsy") + ylab ("F/Fmsy") 
+d <- res[[2]]
+p <- ggplot( )+ geom_path(aes(y=d$Fstatus[1,], x=d$Bstatus[1:length(d$yr)], colour=d$yr), arrow=arrow(type="open", length = unit(0.1, "inches")   )) + 
+  xlim(range(c(0,d$Bstatus))) + ylim(range(d$Fstatus)) +xlab("SpawningBiomass / Bmsy") + ylab ("F/Fmsy") + ylim(c(0,2.025)) + clim(c(0,6))
 p
-ggsave(filename=file.path(outdir,"ICCAT-KobePlot.pdf"), width=14, units="cm", height=10)
+ggsave(filename=file.path(outdir,"ICCAT-ReportedKobePlot.pdf"), width=14, units="cm", height=10)
 
 
 pdf(file=file.path(outdir,"ICCAT-SelectivityByGear.pdf"), width=10, heigh=14)

@@ -8,9 +8,8 @@
 ##                                                                                ##
 ####################################################################################
 
-rm(list=ls())
 library(ggplot2)
-res.dir <- file.path(Sys.getenv("HOME"),"ICCAT/ICCAT-BFT", "bfte/2012/vpa/inflated/high/")
+res.dir <- file.path(Sys.getenv("HOME"),"ICCAT/ICCAT-BFT", "bfte/2012/vpa/reported/high/")
 src.dir <- file.path(Sys.getenv("HOME"),"ICCAT/ICCAT-BFT", "sources")
 report.dir <- file.path(Sys.getenv("HOME"),"ICCAT/ICCAT-BFT", "Report")
 
@@ -43,7 +42,7 @@ ndf <- data.frame(x=fullYears$yr, y=log(fullYears$sbt[1:length(fullYears$yr)]))
 palette(color <- c('#ece7f2', '#d0d1e6', '#a6bddb', '#74a9cf', '#3690c0', '#0570b0','#045a8d', '#023858'))
                   
 a <- ggplot() + geom_line(ndf, mapping=(aes(x=x, y=y)), color=1)+ 
-  xlab("Years") + ylab("Biomass in numbers (log)") + ggtitle("Spawning Biomass")
+  xlab("Years") + ylab("Biomass  (log)") + ggtitle("Spawning Biomass") + ylim(c(18.5, 21))
 ind <- 1
 lapply(retroResults, function(d){
   #a data frame for predictors and response
@@ -51,7 +50,7 @@ lapply(retroResults, function(d){
   ind <<- ind + 1
   a<<- a+geom_line(ndf, mapping=(aes(x=x, y=y)), color = ind)
 } )
-ggsave (filename=file.path(report.dir, "figure", "ICCAT-SBTRetro.pdf"), units="cm", width=14, height=8)
+ggsave (filename=file.path(report.dir, "figure", "ICCAT-ReportedSBTRetro.pdf"), units="cm", width=14, height=8) 
 
 ######################################################################
 ##   Bmsy variation                                               ##
