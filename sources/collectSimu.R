@@ -10,21 +10,20 @@
 ##  The purpose of this code is to go in each simulation subdirectories           ##                                                                              ##
 ##              to coellect simutaion results and store them in allSims.Rdata     ##
 ####################################################################################
-args <- commandArgs(trailingOnly = TRUE)
-args <- "test"
 main.dir= file.path(Sys.getenv("HOME"), "ICCAT/ICCAT-BFT")
+
 setwd(main.dir)
 source(file.path(main.dir,'sources','read.admb.R'))
 
-
 dn<-dir("simulation",pattern="^[[:digit:]]")
-sims <- lapply(dn,function(d){setwd(file.path(main.dir,"simulation",d))
-                              print(d)
+sims <- lapply(1:length(dn),function(d){
+			      print(d)
+                              setwd(file.path(main.dir,"simulation",dn[d]))
                               if(file.exists('iscam.cor'))
                               {
                                 A<-read.rep("iscam.rep")
                                 load("simulatedData.Rd")
-                                list(Fmsy=A$fmsy,MSY=A$msy,Bmsy=A$bmsy,
+                                p<-list(Fmsy=A$fmsy,MSY=A$msy,Bmsy=A$bmsy,
                                     Bo = A$bo, 
                                      varphi=A$varphi, simvarphi=simulatedData$varphi,
                                      rho=A$rho, simvrho=simulatedData$varrho,
@@ -35,11 +34,10 @@ sims <- lapply(dn,function(d){setwd(file.path(main.dir,"simulation",d))
                                      h=A$steepness, simh = simulatedData$h,
                                     ro=A$ro, simro = simulatedData$R0,
                                      rinit=A$rinit, 
-                                     simrinit=0.9* simulatedData$R0)
-                                     #simrinit=simulatedData$Rinit)
+                                     simrinit=simulatedData$Rinit)
                                 }else
                                 {
-                                  list(Fmsy=NA,MSY=NA,Bmsy=NA,
+                                  p<- list(Fmsy=NA,MSY=NA,Bmsy=NA,
                                        Bo = NA, 
                                        ro=NA, simro = NA,
                                        varphi=NA, simvarphi=NA,
@@ -49,10 +47,14 @@ sims <- lapply(dn,function(d){setwd(file.path(main.dir,"simulation",d))
                                        tau_R=NA,  simtau_R=NA,
                                        q=rep(NA, length(A$q)), simq=NA,
                                        h=NA, simh = NA,
-                                       ro=NA, simro = NA) 
+                                       ro=NA, simro = NA,
+				       rinit=NA, simrinit=NA) 
                                 }  
                               setwd("..")
-}
-)
-       save(sims,file=file.path(paste(args[1],"allSims.Rdata")))
+
+	return(p)
+
+			      
+})
+       save(sims,file=file.path(main.dir,"allSims.Rdata"))
 

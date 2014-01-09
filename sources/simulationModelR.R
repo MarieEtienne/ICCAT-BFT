@@ -32,7 +32,7 @@ simulationModel<- function(seed, para)
     kkappa <- 4*hh/(1-hh)
     Rinit=0.9*R0
     
-  natSurvivorship <- c(1,exp(-cumsum(natM[1:(nage-sage)])))
+  natSurvivorship <- exp(-(natM[1]*seq(0,nage-1,1)+natM[1]/2))
   natSurvivorship[nage] <-   natSurvivorship[nage] /(1-exp(-natM[nage]))
   
     phiE <- sum(natSurvivorship * fa)
@@ -146,7 +146,7 @@ simulationModel<- function(seed, para)
       sbt =sbt, q=q,
       beta =bbeta,
       so = so, R0 =R0, Rinit=Rinit,
-      h= h
+      h= hh
       )
   save(simulatedData, file=file.path(main.dir,out,"simulatedData.Rd"))    
   detach(para)

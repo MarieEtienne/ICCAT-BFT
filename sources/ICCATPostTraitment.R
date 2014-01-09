@@ -1,5 +1,6 @@
 main.dir <- file.path(Sys.getenv("HOME"),"ICCAT/ICCAT-BFT")
-
+palette(c("black", "red", "green3", "blue", "cyan", "magenta", "yellow", 
+          "gray"))
 outdir <- file.path(main.dir, "Report/figure")
 wdsimple       <- "bfte/2012/vpa/inflated/high"
 load(file.path(main.dir, 'Report','RData','Info.RData'))
@@ -118,7 +119,7 @@ for( i in 1:ngear)
 dev.off()
 
 
-natM
+
 
 
 
@@ -139,8 +140,6 @@ res      <- read.admb(ifile=file.path(main.dir, wdsimple,'ICCAT'))
 
 
 
-ns <- grep("## File used as entry", RDataFiles)
-cat(RDataFiles[ns+1])
 selectivity <- res$log_sel
 gear.list=unique(selectivity[,1])
 ind <- c(1,which(diff(selectivity[,1])!=0)+1)
@@ -178,7 +177,6 @@ p <- ggplot( )+ geom_path(aes(y=res$Fstatus[1,], x=res$Bstatus[1:length(res$yr)]
   xlim(range(c(0,res$Bstatus))) + ylim(range(res$Fstatus)) +xlab("SpawningBiomass / Bmsy") + ylab ("F/Fmsy") 
 p
 ggsave(filename=file.path(outdir,"ICCAT-KobePlot.pdf"), width=14, units="cm", height=10)
-dev.off()
 
 
 pdf(file=file.path(outdir,"ICCAT-SelectivityByGear.pdf"), width=10, heigh=14)
@@ -242,18 +240,33 @@ close.screen(all.screens=T)
 
 
 
-#print(res$A)
-#print(res$Ahat)
-#print(res$A_nu)
+### collect results for all scenarios
+l.files <- c(file.path(main.dir,"bfte/2012/vpa/inflated/high"),
+       file.path(main.dir,"bfte/2012/vpa/reported/high") )
+
+nFiles=length(l.files)
+res <- list()
+for(l in 1:nFiles)
+{  res[[l]]      <- read.admb(ifile=file.path(l.files[l],'ICCAT'))
+}
 
 
+resTable <- list()
+outpar <- names(res[[1]])
+for( oo in outpar)
+{
+  resTable[[oo]]<-unlist(lapply(res, function(d) {(d[[oo]])}))
+}
 
-print(res$fmsy)
-print(res$msy)
-print(res$bmsy)
-print(res$bo)
-print(res$ro)
-print(res$q)
+resTable[,1] <-unlist(lapply(res, function(d) {(log(d$ro))}))
+resTable[,2] <-unlist(lapply(res, function(d) {((d$steepness))}))
+resTable[,3] <-unlist(lapply(res, function(d) {(d$fmsy)}))
+resTable[,4] <-unlist(lapply(res, function(d) {(d$msy)}))
+resTable[,5] <-unlist(lapply(res, function(d) {(d$bmsy)}))
+resTable[,6] <-unlist(lapply(res, function(d) {((d$Bstatus[length(d$yr)]))}))
+resTable[,7] <-unlist(lapply(res, function(d) {((d$Fstatus[1,length(d$yr)]))}))
+
+
 
 
 
