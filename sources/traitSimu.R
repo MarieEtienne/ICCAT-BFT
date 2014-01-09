@@ -10,56 +10,70 @@
 
 rm(list=ls())
 
-res.dir <- file.path(Sys.getenv("HOME"),"ICCAT/ICCAT-BFTE","bfte/2012/vpa/reported/low/")
-src.dir <- file.path(Sys.getenv("HOME"),"ICCAT/ICCAT-BFTE","sources")
-report.dir <- file.path(Sys.getenv("HOME"),"ICCAT/ICCAT-BFTE","Report")
+main.dir <- file.path(Sys.getenv("HOME"),"ICCAT/ICCAT-BFT")
+res.dir <- file.path(main.dir,"bfte/2012/vpa/inflated/high")
+src.dir <- file.path(main.dir,"sources")
+report.dir <- file.path(main.dir,"Report")
 
 
-load(file.path(res.dir, "allSims.Rdata"))
-load(file.path(report.dir, "sim.RData"))
+load(file.path(main.dir, "allSims.Rdata"))
+load(file.path(report.dir, "RData", "Info.RData"))
 ## 
 
 simPar <- readLines(file.path(res.dir,"ICCAT.psc"))
 sel.sim <- read.table(file.path(res.dir,"ICCAT.psc"), skip=1, nrows=as.numeric(simPar[1]))
-yr <- sims[[1]]$yr
-syr <- yr[1]
-nyr <- yr[length(yr)]
-age <- sims[[1]]$age
-sage <- age[1]
-nage<- age[length(age)]
 
-ngear <- sims[[1]]$ngear
+syr <- Info$syr
+nyr <- Info$nyr
+yr <- syr:nyr
 
-#### Selectivity estimation
+sage <- Info$sage
+nage<- Info$nage
+age <- sage:nage
+ngear <- Info$ngear
 
-par(mfcol=c(1,3))
-plot(x=sage:nage,y=exp(sel.sim[1,]),xlim=c(0,10), ylim=c(0,3), xlab="Age", ylab="Selectivity", col=1, lwd=2, type="b" )
-sel<- lapply(sims,
-             function(d) { tmp<- as.matrix(d$log_sel[seq(1,ngear*(nyr-syr+1), (nyr-syr+1)), 2:(nage+1)], 
-                                           byrow=T, ncol=nage-sage+1);
-                           lines(sage:nage, exp(d$log_sel[1,2:11]), col=2)
-                           tmp
-             }
-             )
-plot(x=sage:nage,y=exp(sel.sim[2,]),xlim=c(0,10), ylim=c(0,3), xlab="Age", ylab="Selectivity", col=1, lwd=2, type="b" )
-for( i in 1:length(sel))
-  lines(x=sage:nage,y=exp(sel[[i]][2,]), col=2)
+nSim <- length(sims)
+nClasses <- 20
 
-plot(x=sage:nage,y=exp(sel.sim[3,]),xlim=c(0,10), ylim=c(0,3), xlab="Age", ylab="Selectivity", col=1, lwd=2, type="b" )
-for( i in 1:length(sel))
-  lines(x=sage:nage,y=exp(sel[[i]][3,]), col=2)
 
-sigma=sqrt(sim_rho)*sim_varphi
-tau=sqrt(1-sim_rho)*sim_varphi
+lro_simro <- unlist(lapply(sims, function(d) log(d$ro/d$simro) ))
+p <- quantile(lro_simro, probs=seq(0,1, 1/nClasses) )
+hist(lro_simro, main="R0", xlim=range(p), breaks=p)
+abline(v=0, col=2)
+ind.90 <- which( lro_simro<p[length(p)-1] & lro_simro>p[2])
+hist(lro_simro[ind.90], main="R0", xlim=range(lro_simro[ind.90]))
+abline(v=0, col=2)
 
-hist(log(unlist(lapply(sims, function(d) d$ro))), main="R0")
-abline(v=log_R0[1], col=2)
+library(ggplot2)
+plotRes <- function(nameP, sims, logScale=F, excl =0.1)
+{
+  prov <- readSimRes(nameP=nameP, namePsim=paste("sim", nameP,sep=""), sims=sims, logScale=logScale)
+  qu <- quantile(prov, probs=c(excl/2, 1 - excl/2))
+  ind <- which( prov<qu[2] & prov>qu[1])
+  prov.df <- data.frame(x=prov[ind])
+  p <- ggplot(prov.df)+geom_histogram( aes(x=x))+ geom_vline(aes(xintercept=0, col="red")) + xlab(nameP)
+  print(p)
+  ggsave(filename=file.path(report.dir, "figure", paste("sim",nameP,".pdf",sep="")), width=10, height=10)
+}
 
-hist(log(unlist(lapply(sims, function(d) d$rbar))), main="Rbar")
-abline(v=log_avgrec[1], col=2)
 
-hist((unlist(lapply(sims, function(d) d$sigma))), main="sigma")
-abline(v=sigma, col=2)
+
+
+plotRes('rinit', sims=sims, logScale=T)
+plotRes(nameP='ro', sims=sims, logScale=T)
+plotRes('h', sims=sims, logScale=F)
+
+
+
+
+plotRes(nameP='ro', sims, logScale=T)
+p <- quantile(lrbar_simrbar, probs=seq(0,1, 1/nClasses) )
+hist(lrbar_simrbar, main="R0", xlim=range(p), breaks=p)
+abline(v=0, col=2)
+ind.90 <- which( lrbar_simrbar<p[length(p)-1] & lrbar_simrbar>p[2])
+hist(lrbar_simrbar[ind.90], main="R0", xlim=range(lrbar_simrbar[ind.90]))
+abline(v=0, col=2)
+
 
 hist(log(unlist(lapply(sims, function(d) d$ro))), main="R0")
 abline(v=log_R0[1], col=2)

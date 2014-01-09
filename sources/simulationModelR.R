@@ -146,7 +146,7 @@ simulationModel<- function(seed, para)
       sbt =sbt, q=q,
       beta =bbeta,
       so = so, R0 =R0, Rinit=Rinit,
-      h= h
+      h= hh
       )
   save(simulatedData, file=file.path(main.dir,out,"simulatedData.Rd"))    
   detach(para)

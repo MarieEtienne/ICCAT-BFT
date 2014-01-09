@@ -35,3 +35,30 @@ sellogistic <- function(age, mu_a=6, sigma_a=2)
   return(1 / (1 + exp( -(age-mu_a)/sigma_a) ))
 }
 
+
+readSimRes <- function(nameP, namePsim=NULL, sims, logScale=F)
+{
+   if(!is.null(namePsim))
+  {
+     res <- unlist(lapply(sims, function(d) d[[nameP]]) )
+     res.sim <- unlist(lapply(sims, function(d) d[[namePsim]]) )
+  }else
+  {
+    res <- unlist(lapply(sims, function(d) d[[nameP]]) )
+  }
+     
+  if(logScale)
+    {
+    if(is.null(namePsim))
+      res <- log(res)
+    else
+      res <- log(res/res.sim)
+    } else
+    {
+      if(!is.null(namePsim))
+        res <- res - res.sim
+    }
+  return(res)
+}
+  
+
