@@ -44,10 +44,30 @@ $\beta$ & $4.84\, 10^{-08}$ & fixed using $\beta=(\kappa -1)/(R_0*\phi_E)$\\
 \end{table}
 
 \subsection{Results on leading parameters}
-
-
-\subsection{Results on management parameters}
 When \iscam produces a non definite positive Hessian matrix, the simulation is dropped. It occurs NOMBRENOMBRE on the thousands simulations (corresponding to  NOMBRENOMBRE $\%$).
+
+
+\begin{table}[ht]
+\begin{center}
+\begin{tabular}{rrrrrrrrr}
+  \hline
+ & ro & rinit & varphi & tau\_I & tau\_R & MSY & Fmsy & Bmsy \\ 
+  \hline
+0\% & 14.43 & 9.09 & 0.94 & 0.59 & 0.73 & 16.89 & 0.08 & 18.45 \\ 
+  1\% & 14.54 & 12.13 & 1.01 & 0.64 & 0.78 & 17.00 & 0.13 & 18.56 \\ 
+  2.5\% & 14.59 & 12.50 & 1.03 & 0.65 & 0.80 & 17.05 & 0.13 & 18.60 \\ 
+  5\% & 14.63 & 12.67 & 1.05 & 0.67 & 0.82 & 17.09 & 0.14 & 18.64 \\ 
+  50\% & 14.84 & 14.04 & 1.20 & 0.76 & 0.93 & 17.30 & 0.15 & 18.86 \\ 
+  97.5\% & 15.19 & 17.73 & 1.45 & 0.92 & 1.13 & 17.64 & 0.15 & 19.21 \\ 
+  99\% & 15.28 & 18.68 & 1.51 & 0.96 & 1.17 & 17.70 & 0.15 & 19.32 \\ 
+  100\% & 29.99 & 19.99 & 1.67 & 1.05 & 1.29 & 32.08 & 0.16 & 34.31 \\ 
+   \hline
+\end{tabular}
+\end{center}
+\caption{Empirical quantiles obtained by reestimation on simulated data for the main parameters}
+\end{table}
+
+
 
 
 %\begin{figure}
