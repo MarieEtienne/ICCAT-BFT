@@ -25,7 +25,7 @@ outf[count:(count<-(count+4))] <- c(
   '## _____________________________ ##',
   '##',
   '## n_tac  length of catch vector.')
-TAC <- seq(0,30000, 2000)
+TAC <- seq(0,30,5)*1e6
 outf[count<- count+1] <- length(TAC)
 outf[count<- count+1]<- '## tac vector (mt)'
 outf[count<- count+1] <- paste(TAC, collapse="\t")
