@@ -136,21 +136,37 @@
 
 \maketitle
 \tableofcontents
+\clearpage
 
 \section{Introduction}
 
-Recall the aim of this project and the requested task, add in appendix
-the contract
+The work reported in this document aims at 
+\begin{enumerate}
+ \item examining the opportunity of using a statistical catch at age for Bluefin tuna stock evaluation,
+ \item higlighhting the structure and the assumptions of the chosen statistical model (\iscam developped by S. Martell \cite{Martell12})
+ \item running a simulation study for evaluating the quality of the estimation procedure,
+  \item producing operationnal codes for running a stock evaluation on Bluefin Tuna east stock with a statistical catch at age model,
+  \item comparing the results with the results presented in previous stock assesment
+  \end{enumerate}
+  
+The report is split in five main sections. The first section describes the model proposed in \iscam. The second section described briefly the data used  for this test.
+Section three presents the practical choice made to run \iscam on this dataset. The simulation study is presented in section \ref{sec:simulation}.
+The complete results are developped in the last main section. The discussion sums up the main result and highlights the strength and the weakness of \iscam.
+All the codes used to produce this work are freely available on \url{https://github.com/MarieEtienne/ICCAT-BFT}
 
 \section{Description of the main aspects of \iscam }
 \input{iscam.tex}
 
+\clearpage\clearpage
+
 \section{Description of Bluefin Tuna data}
 \input{data.tex}
 
+\clearpage
 \section{Practical aspects of running \iscam on Bluefin Tuna data}
 \input{practical.tex}
 
+\clearpage
 \section{Simulations study}
 \label{sec:simulation}
 \input{simulation.tex}
@@ -159,11 +175,22 @@ the contract
 \label{sec:results}
 \input{results}
 
-\newpage
-\appendix
-The following appendix aim at giving some basic information to use the code produced during the analysis presented in this report.
-\input{appendix.tex}
-TO BE COMPLETED
+\section{Discussion}
+\label{sec:concl}
+
+The results obtained with \iscam are consistent with the results described in \cite{tuna2012} and obtained using a virtual population analysis.
+
+Furthermore, as \iscam used the stock recruitment relationship in the last phase of estimation, the recruitment may be almost freely estimated as in a VPA approach. 
+
+
+Some of the parameters have to be fixed and can't be estimated with the data available for this study.
+\iscam may be more finely tuned using more expertise on the studied stock; this expertise may be included as a prior for example.
+Furthermore, the mortality is a key parameter and has been chosen constant throughout ages, but recent development of \iscam should allow to use a mortality rate varying with age and produce results closer from the previous stock assesment.
+\iscam also proposes some prediction of the evolution of the stock according to fixed TAC policy. This code to use this possibility of \iscam has been developped but has not been presnted here.
+
+%The following appendix aim at giving some basic information to use the code produced during the analysis presented in this report.
+%\input{appendix.tex}
+%\appendix
 \bibliographystyle{apalike}
 \bibliography{biblio}
 

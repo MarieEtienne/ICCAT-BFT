@@ -3,10 +3,42 @@ the parameters. The value of the parameters is chosen to be realistic in regard 
 
 \subsection{Simulation model}
 \iscam proposes a simulation model but in order to fully controll the simulation framework (especially the fishing mortality), a \verb+R+ code has been developped to simulate a stock dynamic according to the model specified in \iscam.
-In \iscam some realistic fishing mortality is derived from the true catch and then used to simulate new catch observation. To avoid this back and force procedure, a simpler version is developped. The fishing mortality is taken constant over year, the value being chosen to avoid stock extinction.
-\subsection{Simulation framework}
+In \iscam some realistic fishing mortality is derived from the true catch and then used to simulate new catch observation. 
+To avoid this back and forth procedure, a simpler version is developped: 
+the fishing mortality is taken constant over year, the value being chosen to avoid stock extinction.
 
-Thousand datasets have been drawn and the parameters have been reestimated. The simulated value are specified in \ref{tab:simPar}.		
+
+\subsection{Simulation framework}
+The purpose of this section is to investigate the possibility for \iscam to reestimate the actual parameters. The value of the parameters have been chosen to be similar to the estimates obtained for the first run.
+But the strength of the information contained in the data is obviously a key point, therefore in order to investigate the amount of noise \iscam is able to handle, different scenario have been studied.
+
+The total variance observed on the BFTE data is estimated to $1.16$ and the proportion of the process error is set to $0.4$ which corresponds to $0.68$ for the standard deviation of the observation errors and $0.83$ for the process errors. 
+This situation is worse than scenario 9 in terms of information in the data. This situation is investigated in scenario 10.
+
+The remaining parameters used for this simulation study  are specified in \ref{tab:simPar}.		
+
+\begin{table}[htbp]
+
+\begin{center}
+\begin{tabular}[t]{lllllll}
+Scenario & Process error & Obs. error & $\tau_R$ & $\tau_I$ & Total Precision & Portion of variance $\rho$ \\ \hline
+1 & low & low & 0.1 & 0.1 & 50 & 0.5\\
+2 & low & med & 0.1 & 0.2 & 20 & 0.8 \\ 
+3 & low & high & 0.1 & 0.5 & 3.84 & 0.96 \\ 
+4 & med & low & 0.2 & 0.1 & 20 & 0.2\\
+5 & med & med & 0.2 & 0.2 & 12.5 & 0.5 \\ 
+6 & med & high & 0.2 & 0.5 & 3.45 & 0.86 \\ 
+7 & high & low & 0.5 & 0.1 & 3.84 & 0.04\\
+8 & high & med & 0.5 & 0.2 & 3.45 & 0.14 \\ 
+9 & high & high & 0.5 & 0.5 & 2 & 0.5 \\ 
+10 & BFTE & BFTE & 0.83 & 0.68 & 0.86 & 0.4\\ 
+\end{tabular}
+\end{center}
+\caption{Summary of the considered scenarios in term of variance errors for the simulatio }
+\end{table}
+
+
+For every scenario 600 datasets have been drawn and the parameters have been reestimated. When \iscam produces a non definite positive Hessian matrix, the simulation is dropped, but this case never happens within our simulation framework.
 
 \begin{table}[ht]
 \centering
@@ -17,10 +49,6 @@ Name & Value & Notes \\
 \multicolumn{3}{c}{\bf Parameters be estimated}\\
 $R_0$ & $exp(14.64)$ & \\
 $h$ & $0.9$ & \\
-$\rho$ & 0.4 & \\
-$\varphi$ & 1 & \\
-$\tau_R$ & $0.774=\sqrt{1-\rho} * \varphi$ & \\
-$\tau_I$ & $0.632=\sqrt{\rho} * \varphi$ & \\
 $\tau_C$&0.1 & This parametere is fixed in \iscam not estimated\\
 $\tau_A$ & 0.1 & \\
 $v_{k,a}$&  see \ref{res:seltable}  & the  selectivity table  is taken
@@ -43,21 +71,28 @@ $\beta$ & $4.84\, 10^{-08}$ & fixed using $\beta=(\kappa -1)/(R_0*\phi_E)$\\
 \label{tab:simPar}
 \end{table}
 
+
+
 \subsection{Results on leading parameters}
-When \iscam produces a non definite positive Hessian matrix, the simulation is dropped. It occurs NOMBRENOMBRE on the thousands simulations (corresponding to  NOMBRENOMBRE $\%$).
+\subsubsection{Scenario 10 - BFTE like parameters value}
+
+
+Table \ref{tab:quant} sums up the resstimated values through the obtained quantiles. The extremal results are very far from the simulated values 
+but the extremal behaviour is very uncommon.   Removing only the 2  most extremals percents of the estimations produce  robust estimates .
 
 
 \begin{table}[ht]
 \begin{center}
 \begin{tabular}{rrrrrrrrr}
   \hline
- & ro & rinit & varphi & tau\_I & tau\_R & MSY & Fmsy & Bmsy \\ 
+ & $log(R_0)$ & $\log(R_{init})$ & $\varphi$ & $\tau_I$ & $\tau_R$ & $MSY$ & $Fmsy$ & $Bmsy$ \\ 
   \hline
 0\% & 14.43 & 9.09 & 0.94 & 0.59 & 0.73 & 16.89 & 0.08 & 18.45 \\ 
   1\% & 14.54 & 12.13 & 1.01 & 0.64 & 0.78 & 17.00 & 0.13 & 18.56 \\ 
   2.5\% & 14.59 & 12.50 & 1.03 & 0.65 & 0.80 & 17.05 & 0.13 & 18.60 \\ 
   5\% & 14.63 & 12.67 & 1.05 & 0.67 & 0.82 & 17.09 & 0.14 & 18.64 \\ 
   50\% & 14.84 & 14.04 & 1.20 & 0.76 & 0.93 & 17.30 & 0.15 & 18.86 \\ 
+  95\% & 15.09 & 15.98 & 1.39 & 0.88 & 1.07 & 17.54 & 0.15 & 19.13 \\ 
   97.5\% & 15.19 & 17.73 & 1.45 & 0.92 & 1.13 & 17.64 & 0.15 & 19.21 \\ 
   99\% & 15.28 & 18.68 & 1.51 & 0.96 & 1.17 & 17.70 & 0.15 & 19.32 \\ 
   100\% & 29.99 & 19.99 & 1.67 & 1.05 & 1.29 & 32.08 & 0.16 & 34.31 \\ 
@@ -65,40 +100,39 @@ When \iscam produces a non definite positive Hessian matrix, the simulation is d
 \end{tabular}
 \end{center}
 \caption{Empirical quantiles obtained by reestimation on simulated data for the main parameters}
+\label{tab:quant}
 \end{table}
 
 
-
-
-%\begin{figure}
-%  \includegraphics[width=8cm]{R0estimation}
-%  \includegraphics[width=8cm]{tau_Restimation}
-%\end{figure} 
-
-
-%%\begin{figure}
-%%  \includegraphics[width=8cm]{SteepnessEstimation}
-%%\end{figure}
-
-%%\begin{figure}
-%%  \includegraphics[width=8cm]{BmsyEstimation}
-%%\end{figure}
-
-
-%%\begin{figure}
-%%  \includegraphics[width=8cm]{fmsyEstimation}
-%%\end{figure}
-
-
-%%\begin{figure}
-%%  \includegraphics[width=8cm]{StockStatusEstimation}
-%%\end{figure}
-
-
-%%\begin{figure}
-%%  \includegraphics[width=8cm]{KobeplotEstimation}
-%%\end{figure}
+The reestimated values are realistically closed from the simulated values, but \iscam seems to produce systematically biased estimates. The figures \ref{fig:sim} illustrates the bias in the reestimation.
+ \begin{figure}
+  \begin{subfigure}[b]{\textwidth}
+	\begin{subfigure}[b]{0.45\textwidth}
+	\includegraphics[width=0.9\textwidth]{figure/ICCAT-simrinit}
+	\caption{ Histogram of the reestimation of the initial recruitment $log(R_{init})$ }
+	\end{subfigure}\hfill
+	\begin{subfigure}[b]{0.45\textwidth}
+	\includegraphics[width=0.9\textwidth]{figure/ICCAT-simro}
+	\caption{ Histogram of the reestimation of unifshed recruitment $log(R_0)$}
+	\end{subfigure}
+  \end{subfigure}
+  \begin{subfigure}[b]{\textwidth}
+\begin{subfigure}[b]{0.45\textwidth}
+  \includegraphics[width=0.9\textwidth]{figure/ICCAT-simh}
+  \caption{ Histogram of the reestimation of the steepness $h$ }
+ \end{subfigure}\hfill
+ \begin{subfigure}[b]{0.45\textwidth}
+  \includegraphics[width=0.9\textwidth]{figure/simvarphi}
+  \caption{ Histogram of the reestimation of the total variance $\varphi$}
+ \end{subfigure}
+  \end{subfigure}
+ \caption{Summary of the reestimated values. The red lines is the true value used for the simulation. The 5 most extremal percent have been droped.}
+ \end{figure} 
 
 
 
+\subsection{
 \subsection{Discussion on simulation results}
+The estimation procedure proposed in \iscam seems to systematically under estimate the initial recruitment  and to over estimate the recruitment in unfished conditions, the total variance and the steepness.
+This may arrise from the fact that the simulated model used an actual stock recruitment relationship but \iscam used a two step procedure. It first estimates the recruitment as random effects centred on a parametre $\bar{R}$ with a a variance $\tau_R$. In a second phase, a SR relationship is adjusted using the estimated recruitment and the same variance is used to control the deviation from the stock recruitment model.
+Therefore $\tau_R$ is used to represent two different kind of deviations and may produce biased estimation.

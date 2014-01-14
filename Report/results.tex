@@ -1,22 +1,51 @@
-
 \subsection{Maximum likelihood approach}
-Report the MLE for R0, Rinit h BMSY,FMSY B[2011]/BMSY, F[2011]/FMSY for each scenario
+This section reports the Maximum likelihood estimates obtained using \iscam. Table \ref{table:mleRinit} presents the value and when available compare whith the values reported in 
+\cite{tuna2102} asumming thta the firts year in not in the unfished state.
+
 \begin{table}
  \begin{tabular}{p{2.1cm}p{4cm}p{4cm}p{4cm}}
   \hline
-Parameters & Inflated & Reported & ICCAT 2012  report  \\ \hline
- $\log{R_0}$ &  $14.75$ &  $14.65$\\
- $h$  & $0.934$  & $0.937$\\
-$log(\bar{R})$&  $14.38$  & $14.28$\\
-$R_{init}$ &  $15.22$ & $15.31$\\
-$\rho$ & $0.4$ &  $0.4$ & 	\\
-$1/\varphi$  & $1.09$ &$1.09$ \\
-$log(B_msy)$ &   $18.81$ &   $18.68$\\
-$(f_msy)$   &$0.144$ & $0.146$\\
-$log(B_{2011})$   &$19.72$   &$19.62$\\
-$(f_{2011})$ &   $0.037$ &  $0.037$ \\
+Parameters & Inflated - $R_{init}\ne R_0$  & Reported $R_{init}\ne R_0$ & ICCAT 2012  report  \\ \hline
+$\log{R_0}$ &  $14.75 \quad [14.57, 15.00]$ &  $14.65\quad[14.48, 14.88]$\\
+$\log(R_{init})$ &  $15.22\quad [14.04, 16.20]$ & $15.31\quad[14.05, 16.37]$ & $[14.5, 15.6]$\\
+$\log{R_min}$ &  $log(R_{2007})=13.0$ &  $log(R_{2007})=12.9$ & $13.8$\\
+$log(\bar{R})$&  $14.38\quad [ 13.97,14.81]$  & $14.28\quad[13.88, 14.71]$\\
+$h$  & $0.934\quad [0.82, 0.97]$  & $0.937\quad[0.82, 0.97]$\\ 
+$\rho$ & $0.4$ &  $0.4$ & 	\\ 
+$1/\varphi$  & $1.09\quad[1.06, 1.52]$ &$1.09\quad[1.01, 1.5]$ \\
+$log(B_msy)$ &   $18.81\quad[18.66, 19.11]$ &   $18.68\quad[18.53,18.99]$\\
+$(f_msy)$   &$0.144\quad [0.12, 0.15]$  & $0.146\quad[0.12, 0.15]$\\
+$log(B_{2011})$   &$19.72\quad[19.24, 19.89]$   &$19.62\quad[19.15, 19.84]$\\
+$SSB_{2011}/SSB_{max}$   & $0.4$   &$0.33$ \\
+$(f_{2011})$ &   $0.037\quad[0.022, 0.06]$ &  $0.037\quad[0.024, 0.07]$ \\ \hline\hline
+& Inflated - $R_{init} = R_0$  & Reported $R_{init}=  R_0$ &   \\ \hline
+$\log{R_0}$ &  $14.89\quad [14.76, 15.17]$   & $14.86\quad [14.69, 15.09]$  \\
+$\log(R_{init})$ & NA  & NA &\\
+$\log{R_{min}$ &  $13.15$ & $13.05$ & \\
+$log(\bar{R})$&  $14.35\quad [13.98, 14.96]$  & $14.24\quad[13.87, 14.83]$\\
+$h$  & $0.92\quad [0.75, 0.95]$ & $0.91\quad[0.78, 0.96]$\\ 
+$\rho$ &    $0.4$ & $0.4$	\\ 
+$1/\varphi$  & $1.08\quad [0.97 ,1.48]$ & $1.08\quad[0.94, 1.47]$\\
+$log(B_msy)$ &  $18.98\quad [18.85, 19.35]$ & $18.94\quad[18.77,19.23] $\\
+$(f_msy)$   & $0.14\quad [0.11, 0.15]$ & $0.14\quad[0.11, 0.15]$\\
+$log(B_{2011})$   & $19.72\quad[19.29, 20.06]$ & $19.63\quad[19.21, 19.84]$\\
+$SSB_{2011}/SSB_{max}$   &  $0.54$   & $0.51$ \\
+$(f_{2011})$ & $0.036\quad[0.019, 0.058]$  &   $0.039\quad[0.025, 0.059]$ \\ \hline\hline
 \end{tabular}
+\caption{Estimated values for the main parameters. The $90\%$ credibility interval specified are obtained within the Bayesian framework}
+\label{[table:mleRinit}
 \end{table}
+
+
+In \cite{tuna2012} the logarithm of the initial recruitment is reported to vary between $14.5$ and $15.6$ depending on the scenarios considered.
+The logarithm of the minimum recruitment is evaluated to $13.8$. The spawning biomass is reported to range 150 000 tons to 300 000 tons and the 
+current biomass is evaluetd to 0.96 of the maximal spawning biomass.
+
+\iscam seems to estimate similar recruitment but to produce different spawning biomass. This may arrise from the difference in the naturalmortality.
+The current \iscam version doesn't allow to specify mortality at age and therefore the mortality has been chosen constant. 
+This may explain the difference observed between the two approaches. This development of \iscam is in progress and should be soon avalaible.
+
+
 
 
 
@@ -32,13 +61,33 @@ $(f_{2011})$ &   $0.037$ &  $0.037$ \\
 \caption{Kobe plot for the two scenarios}
 \end{figure}
 
+Figure \ref{fig:recruits} exhibits important changes in the recruitments with very high recruitment levels in the 1990 and a decrease during the last years. The very last years have been droped dur to well known difficulties to estimate the last recruitments.
+
+\begin{figure}
+ \begin{subfigure}[b]{0.45\textwidth}
+  \includegraphics[width=\maxwidth]{figure/Spawning} 
+  \caption{Spawning biomass evolution}
+  \end{subfigure}\hfill
+ \begin{subfigure}[b]{0.45\textwidth}
+  \includegraphics[width=\maxwidth]{figure/Recruits} 
+	\caption{Recruitment evolution}
+  \end{subfigure}
+\caption{The evolution of the spawning biomass and of the number of recruits.
+The black line (resp the red line) corresponds to the inflated catch assuming $R_{init}=R_0$ (resp $R_{init}\ne R_0$).   
+The green line (resp the blue line) corresponds to the reported catch assuming $R_{init}=R_0$ (resp $R_{init}\ne R_0$). }
+\label{fig:recruits}
+\end{figure}
+
+
+
 
 \subsection{Retrospective analysis}
 Retrospective analyses have been run on the two dataset corresponding to inflated catch or reported catch, droping 
- droping up to 8 years.Figure \ref{fig:RetroAnalysis}
- presents the evolution of the total biomass and table \ref{fig:retrobmsy} presents the evolution of the $B_{MSY}$ estimates when droping the laste years.
- 
-
+ droping up to 8 years. Figure \ref{fig:RetroAnalysis}
+ presents the evolution of the total biomass. this figure is consitent with the last stock assesment.
+ When estimating the stock level using data until 2003, the trend is a constant decrease over the last years. 
+ The last years (between 2003 and 2010) explain the recovery of the stocks. 
+ The current trend seems to prove an increase of the spawning biomass, whatever scenario is used.
 
 \begin{figure}[htbp]
  \begin{subfigure}[b]{\textwidth}
@@ -56,10 +105,10 @@ Retrospective analyses have been run on the two dataset corresponding to inflate
 
 
 \subsection{Bayesian analysis}
-A Bayesian is possible with \iscam. 50000 iterations of a Metropolis Hastings algorithm have been performed. 
-A burn in period of 25000 iterations is used, one iteration every fifty being saved.  
+A Bayesian approach is possible with \iscam. 50000 iterations of a Metropolis Hastings algorithm have been performed. 
+A burn in period of 25000 iterations is used, one iteration every twenty being saved.  
 \paragraph{Convergence}
-The convergence of the algorithm may be  visually checked using figure \ref{fig:mcmcdiag}. 
+The convergence of the algorithm has been  visually checked using figure \ref{fig:mcmcdiag}. 
 
 \begin{figure}[htbp]
  \begin{subfigure}[b]{0.45\textwidth}
@@ -77,38 +126,98 @@ The convergence of the algorithm may be  visually checked using figure \ref{fig:
  \end{figure}
 
 \paragraph{Stock Statut}
-The posterior density of the leading parameters are illustrated in figures \ref{fig:mcmcpost}, the prior being defined in equation \ref{eq:priorR0} to \ref{eq:priorphi}. 
+The posterior density for the leading parameters are illustrated in figures \ref{fig:postR0} to \ref{fig:posth},
+the prior have been defined in equation \ref{eq:priorR0} to \ref{eq:priorphi}.
+
 
 \begin{figure}[htbp]
  \begin{subfigure}[b]{0.45\textwidth}
- \includegraphics[width=\textwidth]{figure/ICCAT-InflatedpostRho}
-  \caption{Posterior density for the logarithm of the recruitment in unfished conditions}
-                \label{fig:mcmcrho}
-  \end{subfigure}
+ \includegraphics[width=\textwidth]{figure/inflatedhigh-R0-postRO}
+  \caption{Inflated Catch - $R_{init}=R_0$}
+  \end{subfigure} \hfill
  \begin{subfigure}[b]{0.45\textwidth} 
- \includegraphics[width=\textwidth]{figure/ICCAT-Inflatedposth}
-\caption{Posterior density for the steepness}
-                \label{fig:mcmch}
+ \includegraphics[width=\textwidth]{figure/inflatedhigh-Rinit-postRO}
+  \caption{Inflated Catch - $R_{init}\ne R_0$}
   \end{subfigure}
-  \caption{Posterior distribution for the recruitment in unfished condition and the steepness. The blue lines represent the prior distribution}
-  \label{fig:mcmcpost}
+ \begin{subfigure}[b]{0.45\textwidth}
+ \includegraphics[width=\textwidth]{figure/reportedhigh-R0-postRO}
+  \caption{Reported Catch - $R_{init}=R_0$}
+  \end{subfigure} \hfill
+ \begin{subfigure}[b]{0.45\textwidth} 
+ \includegraphics[width=\textwidth]{figure/reportedhigh-Rinit-postRO}
+  \caption{Reported Catch - $R_{init}\ne R_0$}
+  \end{subfigure}
+  \caption{Posterior distribution for the recruitment in unfished conditions $R_0$. The purple line represents the prior distribution.}
+  \label{fig:postR0}
  \end{figure}
 
-The posterior distribution on the steepness is vague, which means that the data are not very informative. 
+ The posterior density on $\R_{init}$ when $R_{init}$ is assumed to be equal to $R_0$ are not presented, since $R_{init}$ is not actually defined in this case. (\iscam produces value of $R_{init}$ sampled from the prior distribution).
+ The posterior density of $R_{init}$ is quite broad, the 90$\%$ credibility interval correspond to a number of recruits from 1 million to 10 millions.
+ While the corresponding $90\%$ interval for $R_0$ give a range of 2.1million and up to 3.2 millions of recruits at the unfished state.
+ Every scenario exhibits a very high level of recruitment between 1990 and 2005. This exceptionnal  level has also been reported in \cite{tuna2012}.
+ 
+ \begin{figure}[htbp]
+ \begin{subfigure}[b]{0.45\textwidth} 
+ \includegraphics[width=\textwidth]{figure/inflatedhigh-Rinit-postRinit}
+  \caption{Inflated Catch - $R_{init}\ne R_0$}
+  \end{subfigure} \hfill
+ \begin{subfigure}[b]{0.45\textwidth} 
+ \includegraphics[width=\textwidth]{figure/reportedhigh-Rinit-postRinit}
+  \caption{Reported Catch - $R_{init}\ne R_0$}
+  \end{subfigure}
+  \caption{Posterior distribution for the initial recruitment $R_{init}$. The purple line represents the prior distribution.}
+  \label{fig:postRinit}
+ \end{figure}
+ 
+ 
+ 
+ 
+ \begin{figure}[htbp]
+ \begin{subfigure}[b]{0.45\textwidth}
+ \includegraphics[width=\textwidth]{figure/inflatedhigh-R0-posth}
+  \caption{Inflated Catch - $R_{init}=R_0$}
+  \end{subfigure} \hfill
+ \begin{subfigure}[b]{0.45\textwidth} 
+ \includegraphics[width=\textwidth]{figure/inflatedhigh-Rinit-posth}
+  \caption{Inflated Catch - $R_{init}\ne R_0$}
+  \end{subfigure}
+ \begin{subfigure}[b]{0.45\textwidth}
+ \includegraphics[width=\textwidth]{figure/reportedhigh-R0-posth}
+  \caption{Reported Catch - $R_{init}=R_0$}
+  \end{subfigure} \hfill
+ \begin{subfigure}[b]{0.45\textwidth} 
+ \includegraphics[width=\textwidth]{figure/reportedhigh-Rinit-posth}
+  \caption{Reported Catch - $R_{init}\ne R_0$}
+  \end{subfigure}
+  \caption{Posterior distribution for the steepness, $h$. The purple line represents the prior distribution.}
+  \label{fig:posth}
+ \end{figure}
+ 
+
+Whatever scenario is used, the posterior distribution on the steepness is vague.  The posterior is very similar to the prior. The difficulty of estimating the steepness is well known. This parameteris also a key parameter in the dynamic of the stock.
+
 
  One of the quantity of main interest is the current  stock status. 
- Figure \ref{fig:postKobe} presents the uncertainty for the stae of the stock in 2011.
+ Figure \ref{fig:postKobe} presents the uncertainty for the state of the stock in 2011.
  For both scenario (reported or inflated catch).
 \begin{figure}[htbp]
  \begin{subfigure}[b]{0.45\textwidth}
- \includegraphics[width=\textwidth]{figure/ICCAT-InflatedPostKobe}
-  \caption{Inflated Catch}
-  \end{subfigure}
+ \includegraphics[width=\textwidth]{figure/inflatedhigh-R0-Kobe}
+  \caption{Inflated Catch - $R_{init}=R_0$}
+  \end{subfigure} \hfill
  \begin{subfigure}[b]{0.45\textwidth} 
- \includegraphics[width=\textwidth]{figure/ICCAT-ReportedPostKobe}
-\caption{Reported Catch}
+ \includegraphics[width=\textwidth]{figure/inflatedhigh-Rinit-Kobe}
+  \caption{Inflated Catch - $R_{init}\ne R_0$}
   \end{subfigure}
-  \caption{Posterior distribution for the recruitment in unfished condition and the steepness. The blue lines represent the prior distribution}
+ \begin{subfigure}[b]{0.45\textwidth}
+ \includegraphics[width=\textwidth]{figure/reportedhigh-R0-Kobe}
+  \caption{Reported Catch - $R_{init}=R_0$}
+  \end{subfigure} \hfill
+ \begin{subfigure}[b]{0.45\textwidth} 
+ \includegraphics[width=\textwidth]{figure/reportedhigh-Rinit-Kobe}
+  \caption{Reported Catch - $R_{init}\ne R_0$}
+  \end{subfigure}
+  \caption{Posterior Kobe plot, assuming $R_{init}=R_0$, or not, considering both inflated or reported catch.}
   \label{fig:postKobe}
  \end{figure}
  
