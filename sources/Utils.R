@@ -38,13 +38,14 @@ sellogistic <- function(age, mu_a=6, sigma_a=2)
 
 readSimRes <- function(nameP, namePsim=NULL, sims, logScale=F)
 {
+  print(nameP)
    if(!is.null(namePsim))
   {
-     res <- unlist(lapply(sims, function(d) d[[nameP]]) )
+     res <- unlist(lapply(sims, function(d){  d[[nameP]] }) )
      res.sim <- unlist(lapply(sims, function(d) d[[namePsim]]) )
   }else
   {
-    res <- unlist(lapply(sims, function(d) d[[nameP]]) )
+    res <- unlist(lapply(sims, function(d) d[[nameP]] ) )
   }
      
   if(logScale)

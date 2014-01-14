@@ -17,6 +17,7 @@ simulationModel<- function(seed, para)
   attach(para)
   if(seed>0) set.seed(seed)
   
+  varphi <- sqrt(1/totalPrec)
   age   =  sage : nage
   tau_I = sqrt(rrho)*varphi 
   tau_R = sqrt(1-rrho)*varphi
@@ -30,7 +31,7 @@ simulationModel<- function(seed, para)
   surv.timing <- rep(0.5, ngear)
   
     kkappa <- 4*hh/(1-hh)
-    Rinit=0.9*R0
+    Rinit=R0
     
   natSurvivorship <- exp(-(natM[1]*seq(0,nage-1,1)+natM[1]/2))
   natSurvivorship[nage] <-   natSurvivorship[nage] /(1-exp(-natM[nage]))

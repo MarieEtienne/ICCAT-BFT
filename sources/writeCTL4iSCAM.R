@@ -122,7 +122,7 @@ outf[count<- count+1] <- paste0('\t', 0.4,'\t# 3  -std in observed catches in fi
 outf[count<- count+1] <- paste0('\t',0.2,'\t# 4  -std in observed catches in last phase.')
 
 outf[(count+1):(count<- count+11)] <- c(
-  '\t0\t# 5  -Assume unfished in first year (0=FALSE, 1=TRUE)',
+  '\t1\t# 5  -Assume unfished in first year (0=FALSE, 1=TRUE)',
   '\t0.00\t# 6  -Minimum proportion to consider in age-proportions for dmvlogistic',
   '\t0.30\t# 7  -Mean fishing mortality for regularizing the estimates of Ft',
   '\t0.2\t# 8  -std in mean fishing mortality in first phase',
