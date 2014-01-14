@@ -15,7 +15,7 @@ res.dir <- file.path(main.dir,"bfte/2012/vpa/inflated/high")
 src.dir <- file.path(main.dir,"sources")
 report.dir <- file.path(main.dir,"Report")
 
-
+source(file.path(src.dir,'Utils.R'))
 load(file.path(main.dir, "allSims.Rdata"))
 load(file.path(report.dir, "RData", "Info.RData"))
 ## 
@@ -45,13 +45,17 @@ hist(lro_simro[ind.90], main="R0", xlim=range(lro_simro[ind.90]))
 abline(v=0, col=2)
 
 library(ggplot2)
-plotRes <- function(nameP, sims, logScale=F, excl =0.1)
+plotRes <- function(nameP, sims, logScale=F, excl =0.1, x.lim=NULL)
 {
-  prov <- readSimRes(nameP=nameP, namePsim=paste("sim", nameP,sep=""), sims=sims, logScale=logScale)
+  prov <- readSimRes(nameP=nameP, sims=sims, logScale=logScale)
+  provsim <- readSimRes(nameP=paste('sim',nameP, sep=''), sims=sims, logScale=logScale)
   qu <- quantile(prov, probs=c(excl/2, 1 - excl/2))
   ind <- which( prov<qu[2] & prov>qu[1])
-  prov.df <- data.frame(x=prov[ind])
-  p <- ggplot(prov.df)+geom_histogram( aes(x=x))+ geom_vline(aes(xintercept=0, col="red")) + xlab(nameP)
+  prov.df <- data.frame(x=prov[ind], xsim=provsim[ind])
+  p <- ggplot(prov.df)+geom_histogram( aes(x=x))+ geom_vline(aes(xintercept=xsim, col="red")) + xlab(nameP)
+  if(!x.lim)
+    p <- ggplot(prov.df)+geom_histogram( aes(x=x))+ geom_vline(aes(xintercept=xsim, col="red")) + xlab(nameP) + xlim(x.lim)
+  
   print(p)
   ggsave(filename=file.path(report.dir, "figure", paste("sim",nameP,".pdf",sep="")), width=10, height=10)
 }
@@ -60,9 +64,9 @@ plotRes <- function(nameP, sims, logScale=F, excl =0.1)
 
 
 plotRes('rinit', sims=sims, logScale=T)
-plotRes(nameP='ro', sims=sims, logScale=T)
+plotRes('ro', sims=sims, logScale=T)
 plotRes('h', sims=sims, logScale=F)
-
+plotRes('tau_R', sims=sims, logScale=F)
 
 
 
