@@ -20,7 +20,7 @@ prefix=$(ISCAM_HOME)
 DAT=RUN.dat
 CTL=$(ARG)/ICCAT
 ARGSIM=1
-MCFLAG=-mcmc 50000 -mcsave 50 -nosdmcmc
+MCFLAG=-mcmc 50000 -mcsave 20 -nosdmcmc
 NR=4
 NOSIM  = 1
 NSTART  = 1
@@ -112,7 +112,6 @@ runsims := $(foreach dir,$(simdirs),$(dir)/runsims)
 
 $(datadone):
 	Rscript sources/setISCAMFiles.R  Inputs/$(ARG) $(@D)
-	cp  $(CTL).[cp]*[!v]   $(DIST) simulation/$(@D)
 	cp $(DIST) simulation/$(@D)
 	-cd simulation/$(@D);./$(EXEC) -ind $(DAT)
 

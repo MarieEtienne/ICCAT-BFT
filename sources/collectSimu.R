@@ -17,8 +17,8 @@ source(file.path(main.dir,'sources','read.admb.R'))
 
 dn<-dir("simulation",pattern="^[[:digit:]]")
 sims <- lapply(1:length(dn),function(d){
-			      print(d)
                               setwd(file.path(main.dir,"simulation",dn[d]))
+			      print(d)
                               if(file.exists('iscam.cor'))
                               {
                                 A<-read.rep("iscam.rep")
@@ -35,24 +35,26 @@ sims <- lapply(1:length(dn),function(d){
                                     ro=A$ro, simro = simulatedData$R0,
                                      rinit=A$rinit, 
                                      simrinit=simulatedData$Rinit)
+				     return(p)
+
                                 }else
                                 {
-                                  p<- list(Fmsy=NA,MSY=NA,Bmsy=NA,
-                                       Bo = NA, 
-                                       ro=NA, simro = NA,
-                                       varphi=NA, simvarphi=NA,
-                                       rho=NA, simvrho=NA,
-                                       tau_I=NA,  simtau_I=NA,
-                                       tau_A=rep(NA, length(A$age_tau2)), simtau_A=NA,
-                                       tau_R=NA,  simtau_R=NA,
-                                       q=rep(NA, length(A$q)), simq=NA,
-                                       h=NA, simh = NA,
-                                       ro=NA, simro = NA,
-				       rinit=NA, simrinit=NA) 
+                                 # p<- list(Fmsy=NA,MSY=NA,Bmsy=NA,
+                                 #      Bo = NA, 
+                                 #      ro=NA, simro = NA,
+                                 #      varphi=NA, simvarphi=NA,
+                                 #      rho=NA, simvrho=NA,
+                                 #      tau_I=NA,  simtau_I=NA,
+                                 #      tau_A=rep(NA, length(A$age_tau2)), simtau_A=NA,
+                                 #      tau_R=NA,  simtau_R=NA,
+                                 #      q=rep(NA, length(A$q)), simq=NA,
+                                 #      h=NA, simh = NA,
+                                 #      ro=NA, simro = NA,
+				 #      rinit=NA, simrinit=NA) 
+				 return(NULL)
                                 }  
                               setwd("..")
 
-	return(p)
 
 			      
 })

@@ -23,7 +23,7 @@
 ##              args should be the name of the subdirectory containig vpa data    ##
 ####################################################################################
 args <- commandArgs(trailingOnly = TRUE)
-args <-c('Inputs/bfte/2012/vpa/inflated/high' )
+#args <-c('Inputs/bfte/2012/vpa/inflated/high' )
 print(args)
 
 ##### if simulation mode (sim >0) then sim is the seed for the simulation
@@ -89,7 +89,7 @@ log_m       <-  c(-1.47,   -5.0,   0.0,    -1,    1,  -1.469,  0.05)    #log.m',
 log_avgrec  <-  c( 12.5,   -5.0,    20,    1,    0,    12,    16)      #log_avgrec',
 log_recinit <-  c( 12.5,   -5.0,    20,    1,    0,    12,    16)      #log_recinit',
 rho         <-  c(0.4, 0.001, 0.999,    -1,    3,    2.5,  2.5)    #rho',
-kappa         <-  c(0.4, 0.001,    12,     3,    4,     1, 1)    #kappa (precision)',
+kappa         <-  c(10, 0.001,    100,     3,    4,     1, 1)    #kappa (precision)',
 #****************************************
 # // parameters for bicubic spline
 #****************************************
@@ -197,7 +197,7 @@ if(length(f.pot)>1)
   outf[3] <- paste0(file.path(main.dir, out,'ICCAT.pfc'), '\t# Projection File Name' )
   outf[4] <- paste0(file.path(main.dir, out,'ICCAT.psc'), '\t# Simualtion File Name' )
   
-  con.out = file(description=file.path(main.dir, wd,'RUN.dat'), open="w")
+  con.out = file(description=file.path(main.dir, out,'RUN.dat'), open="w")
   writeLines(outf, con=con.out,  sep='\n' ) 
   close.connection(con.out)
   detach(vpa.dat)
