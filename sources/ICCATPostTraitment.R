@@ -1,10 +1,26 @@
-main.dir <- file.path(Sys.getenv("HOME"),"ICCAT/ICCAT-BFT")
+####################################################################################
+##                                                                                ##
+##   Post treatment on MLE results obtained using iscam on bfte data              ##
+##   Authors: Marie-Pierre Etienne marie.etienne@agroparistech.fr                 ##
+##   Date: Aug. 10,  2013                                                         ##
+##   Date: Jan,  11 2014                                                          ##
+##                                                                                ##
+##                                                                                ##
+####################################################################################
+
+main.dir= file.path(Sys.getenv("HOME"), "ICCAT/ICCAT-BFT")
+## rep where to find mcmc outputs
+rep<-unlist(lapply(c(file.path('bfte/2012/vpa','inflated'),file.path('bfte/2012/vpa','reported')),
+                   function(d) {file.path(d, c("high-R0", "high-Rinit"))}))
+repNames <- lapply(strsplit(rep, "/"), function(d) {paste(d[4], d[5], sep="")})
+
 palette(c("black", "red", "green3", "blue", "cyan", "magenta", "yellow", 
           "gray"))
+
 outdir <- file.path(main.dir, "Report/figure")
-wdsimple       <- "bfte/2012/vpa/inflated/high"
 load(file.path(main.dir, 'Report','RData','Info.RData'))
 setwd(main.dir)
+
 iSCAMR <- dir("../iSCAM/src/r-code/R/")
 for(f in iSCAMR)
  source(paste("../iSCAM/src/r-code/R/", f, sep=""), echo=T)
@@ -12,31 +28,15 @@ attach(Info)
 RDataFiles<- readLines(file.path(main.dir,'Report', 'RDataSave', 'datafile.out'))
 
 
-
-ns <- grep("## SELECTIVITY PARAMETERS Columns for gear", RDataFiles)
-cat(RDataFiles[ns])
-cat(RDataFiles[ns+1])
-cat(RDataFiles[ns+2])
+nFiles=length(rep)
+res      <- lapply(rep, function(d){read.admb(ifile=file.path(d,'ICCAT'))})
 
 
-
-cat(RDataFiles[ns+5])
-
-
-
-cat(RDataFiles[ns+3])
-cat(RDataFiles[ns+4])
-
-
-
-ns <- grep("## Survey timing ", RDataFiles)
-cat(RDataFiles[ns])
-cat(RDataFiles[ns+1])
 
 
 
 survey=list()
-gear.list <- unique(iSCAMsurvey$gear)
+gear.names <- Info$surveySpecification[,8]
 pdf(file="ICCAT-Abundance.pdf", width=11, width=12, height=8 )
 for( i in 1:nit)
 {
@@ -84,7 +84,7 @@ for( i in 1:na_gear)
     lines(selectivity[[i]]~age,  lty=gear.list[i], col=gear.list[i])
   }
 }
-legend("topleft", legend=paste("Gear", gear.list), col=gear.list, lty=gear.list)     
+legend("topleft", legend=Info$surveyName, col=gear.list, lty=gear.list)     
 
 
 
@@ -123,62 +123,63 @@ dev.off()
 
 
 
-      cat('linf  = ',  linf,'\n') 
-      cat('k  = ',  k,'\n') 
-      cat('to  = ',  t0,'\n') 
-      cat(' sclw =', sclw,'#1.95e-5 #scaler in length-weight allometry')
-      cat('plw = ', plw ,' #power in length-weight allometry')
-      cat('m50 = ', m50, '#50% maturity')
-      cat('std50 = ', std50, '#std at 50% maturity');
 
 
+selectivity <- lapply(res, function(d) {d$log_sel})
+gear.list=lapply(selectivity, function(d) {unique(d[,1])})
+selectivity <- lapply(selectivity, function(d) { d[ c(1,which(diff(d[,1])!=0)+1), ]})
+selectivity <- lapply(selectivity, function(d) { 
+  r <- cbind(d[,1],exp(d[,2:ncol(d)])/10)
+  return(r)
+})
+ngear <- lapply(res, function(d) {d$ngear})
 
-src.dir <- "/home/metienne/ICCAT/ICCAT-BFT/sources"
-setwd(src.dir)
-ok <- source('read.admb.R')
-res      <- read.admb(ifile=file.path(main.dir, wdsimple,'ICCAT'))
-
-
-
-selectivity <- res$log_sel
-gear.list=unique(selectivity[,1])
-ind <- c(1,which(diff(selectivity[,1])!=0)+1)
-selectivity <- selectivity[ind,]
-selectivity[,2:ncol(selectivity)] <- exp(selectivity[,2:ncol(selectivity)])/10
-ngear <- res$ngear
-
-
-pdf(file=file.path(outdir, "ICCAT-Selectivity.pdf"), width=10, paper="a4r")
-par(mfcol=c(1,1))
-for( i in 1:ngear)
+l<-1
+lapply(selectivity, function(d)
 {
-  if(i==1){
-    plot(res$age, selectivity[selectivity[,1]==gear.list[i], 2:(nage-sage+2)], "l", col=gear.list[i], lty=gear.list[i], ylim=c(0,1), yla="Selectivity", xlab="Age")
-    ind = which(compositionCatch[,2]==gear.list[i])
-    if(length(ind)>0)
-      points(res$age, apply(compositionCatch[ind,],2, mean)[3:(nage-sage+3)], col=gear.list[i], cex=0.7, pch=19 )
+  ng<- nrow(d)
+  #pdf(file=file.path(outdir, paste("ICCAT-Selectivity-", repNames[i]",.pdf", sep="")), width=10, paper="a4r")
+  for( i in 1:ng)
+  {
+    if(i==1){
+      plot(sage:nage, d[d[,1]==gear.list[[l]][i], 2:(nage-sage+2)], "l", col=gear.list[[l]][i],
+           lty=gear.list[[l]][i], ylim=c(0,1), yla="Selectivity", xlab="Age")
+      ind = which(compositionCatch[,2]==gear.list[[l]][i])
+      if(length(ind)>0)
+        points(sage:nage, apply(compositionCatch[ind,],2, mean)[3:(nage-sage+3)], 
+               col=gear.list[[l]][i], cex=0.7, pch=19 )
   }
   else{
-    lines(res$age, selectivity[selectivity[,1]==gear.list[i], 2:(nage-sage+2)], "l", col=gear.list[i], lty=gear.list[i])
-    ind = which(compositionCatch[,2]==gear.list[i])
+    lines(sage:nage, d[d[,1]==gear.list[[l]][i], 2:(nage-sage+2)], "l",
+          col=gear.list[[l]][i], lty=gear.list[[l]][i])
+    ind = which(compositionCatch[,2]==gear.list[[l]][i])
      if(length(ind)>0)
-       points(res$age, apply(compositionCatch[ind,],2, mean)[3:(nage-sage+3)], col=gear.list[i], cex=0.7, pch=19 )
+       points(sage:nage, apply(compositionCatch[ind,],2, mean)[3:(nage-sage+3)], 
+              col=gear.list[[l]][i], cex=0.7, pch=19 )
   }
-  
-}
-legend("topleft", legend=paste(name.list[gear.list]), lty=gear.list, col=gear.list)  
+  }
+legend("topleft", legend=paste(Info$surveyName), lty=gear.list[[l]], col=gear.list[[l]])  
+l<<-l+1
+  })
+
 dev.off()
 
 
 
 library(grid)
 library(ggplot2)
-d <- res[[2]]
-p <- ggplot( )+ geom_path(aes(y=d$Fstatus[1,], x=d$Bstatus[1:length(d$yr)], colour=d$yr), arrow=arrow(type="open", length = unit(0.1, "inches")   )) + 
-  xlim(range(c(0,d$Bstatus))) + ylim(range(d$Fstatus)) +xlab("SpawningBiomass / Bmsy") + ylab ("F/Fmsy") + ylim(c(0,2.025)) + clim(c(0,6))
-p
-ggsave(filename=file.path(outdir,"ICCAT-ReportedKobePlot.pdf"), width=14, units="cm", height=10)
-
+i <- 1
+lapply(res, function(d){
+  nyr <- length(d$yr)
+  df <- data.frame(Fstatus=d$Fstatus[1,], Bstatus =  d$Bstatus[1:nyr], Year=d$yr)
+  p<- ggplot()  + xlab("SpawningBiomass / Bmsy") + ylab ("F/Fmsy") + ylim(c(0,2.025)) + 
+    xlim(c(0,5.5)) +  geom_path(data=df, aes(y=Fstatus, x=Bstatus, col=Year), arrow=arrow(type="open", length = unit(0.1, "inches")   )) +
+    geom_vline(aes(xintercept=1)) + geom_hline(aes(yintercept=1))
+print(p)
+ggsave(filename=file.path(outdir,paste("ICCAT-KobePlot", repNames[i],".pdf", sep="")), width=14, units="cm", height=10)
+  i  <<- i+1
+}
+)
 
 pdf(file=file.path(outdir,"ICCAT-SelectivityByGear.pdf"), width=10, heigh=14)
 par( oma = c( 0, 0, 3, 0 ), mfcol=c(1,1))
@@ -242,128 +243,48 @@ close.screen(all.screens=T)
 
 
 ### collect results for all scenarios
-l.files <- c(file.path(main.dir,"bfte/2012/vpa/inflated/high"),
-       file.path(main.dir,"bfte/2012/vpa/reported/high") )
 
-nFiles=length(l.files)
-res <- list()
-for(l in 1:nFiles)
-{  res[[l]]      <- read.admb(ifile=file.path(l.files[l],'ICCAT'))
+resTable <- matrix(NA, ncol=nFiles, nrow=7)
+resTable[1,] <-unlist(lapply(res, function(d) {(log(d$ro))}))
+resTable[2,] <-unlist(lapply(res, function(d) {((d$steepness))}))
+resTable[3,] <-unlist(lapply(res, function(d) {(d$fmsy)}))
+resTable[4,] <-unlist(lapply(res, function(d) {(d$msy)}))
+resTable[5,] <-unlist(lapply(res, function(d) {(d$bmsy)}))
+resTable[6,] <-unlist(lapply(res, function(d) {((d$Bstatus[length(d$yr)]))}))
+resTable[7,] <-unlist(lapply(res, function(d) {((d$Fstatus[1,length(d$yr)]))}))
+resTable <-cbind(Name=c("logRO", "h", "fmsy", "msy", "bmsy", "Bstatus", "Fstatus"),as.data.frame(resTable))
+colnames(resTable)[2:(nFiles+1)]=repNames
+xtable(resTable, digits=4)
+
+
+
+i <- 1
+p<- ggplot()  + xlab("Years") + ylab ("recruits") + ylim(c(0,6.1e6)) 
+lapply(res, function(d){
+  nyr <- length(d$yrs)
+  df <- data.frame(rt=d$rt[1:(nyr-4)], yr=d$yrs[1:(nyr-4)])
+  p <<-   p +geom_line(data=df, aes(y=rt, x=yr), col=i) 
+  i  <<- i+1
 }
+       )
+print(p+ scale_color_manual(labels=unlist(namesRep),  values=1:nFiles))
+ggsave(filename=file.path(outdir,paste("Recruits.pdf", sep="")), width=14, units="cm", height=10)
 
 
-resTable <- list()
-outpar <- names(res[[1]])
-for( oo in outpar)
-{
-  resTable[[oo]]<-unlist(lapply(res, function(d) {(d[[oo]])}))
+i <- 1
+p<- ggplot()  + xlab("Years") + ylab ("Spawning biomass") + ylim(c(0,6e8)) 
+lapply(res, function(d){
+  nyr <- length(d$yrs)
+  df <- data.frame(sbt=d$sbt[1:(nyr)], yr=d$yrs[1:(nyr)])
+  p <<-   p +geom_line(data=df, aes(y=sbt, x=yr), col=i) 
+  i  <<- i+1
 }
-
-resTable[,1] <-unlist(lapply(res, function(d) {(log(d$ro))}))
-resTable[,2] <-unlist(lapply(res, function(d) {((d$steepness))}))
-resTable[,3] <-unlist(lapply(res, function(d) {(d$fmsy)}))
-resTable[,4] <-unlist(lapply(res, function(d) {(d$msy)}))
-resTable[,5] <-unlist(lapply(res, function(d) {(d$bmsy)}))
-resTable[,6] <-unlist(lapply(res, function(d) {((d$Bstatus[length(d$yr)]))}))
-resTable[,7] <-unlist(lapply(res, function(d) {((d$Fstatus[1,length(d$yr)]))}))
-
-
-
-
-
-print(res$steepness)
-
-
-
-plot(x=res$yr, y=res$ft[1,],  xlab="Year",  ylab="Fishing mortality", type="b")
-
-
-
-plot(x=res$yrs,y=res$sbt/1000,  xlab="Year", ylab="Spawning biomass (tons)", type="b")
-
-
-
-plot(res$Fstatus[1,]~res$Bstatus[1:62],  xlab="B/Bmsy", type="b", ylab="F/Fmsy", xlim=c(0,2), ylim=c(0,2))
-
+       )
+print(p+ scale_color_manual(labels=unlist(namesRep),  values=1:nFiles))
+ggsave(filename=file.path(outdir,paste("Spawning.pdf", sep="")), width=14, units="cm", height=10)
 
 
 detach(Info)
-
-
-
-####################################################################################
-##                                                                                ##
-##   exploits results from retrospectiv analysis                                 ##
-##   Authors: Marie-Pierre Etienne marie.etienne@agroparistech.fr                 ##
-##   Date: Aug. 2,  2013                                                         ##
-##   Date: Aug,  23 2013                                                         ##
-##                                                                                ##
-##                                                                                ##
-####################################################################################
-
-res.dir <- "/home/metienne/ICCAT/ICCAT-BFT/bfte/2012/vpa/reported/lowSave/"
-src.dir <- "/home/metienne/ICCAT/ICCAT-BFT/sources"
-report.dir <- "/home/metienne/ICCAT/ICCAT-BFT/Report"
-
-source(file.path(src.dir, "read.admb.R"))
-## list the retrospective file available and strores it in retroFilesList.txt
-system(paste("ls", res.dir, "| grep ret > retroFilesList.txt")) 
-
-fullYears <- read.rep(file.path(res.dir,"ICCAT.rep"))
-             
-retroFiles <- readLines("retroFilesList.txt")
-nretro     <- length(retroFiles)
-
-retroResults <- lapply(retroFiles, function(d){
-                    tmp <- read.rep(file.path(res.dir,d))
-                    list(yr=tmp$yr, sbt=tmp$sbt, bmsy=tmp$bmsy,
-                         fmsy=tmp$fmsy, R0=tmp$ro)
-                    })
-
-
-
-######################################################################
-##   Spawning biomass graph                                         ##
-######################################################################
-
-y.lim=range(sapply(retroResults, function(d) range(log(d$sbt)) ), log(fullYears$sbt))
-par(mfcol=c(1,1))
-plot(fullYears$yr, log(fullYears$sbt[1:length(fullYears$yr)]), main="Spawning Biomass",
-     xlab="Years", ylab="Biomass in numbers", type="b", 
-     ylim=y.lim) 
-des1 <- lapply(retroResults, function(d){
-  lines(d$yr, log(d$sbt[1:length(d$yr)]), col=2)
-})  
-
-
-
-######################################################################
-##   Bmsy variation                                               ##
-######################################################################
-
-y.lim=range(sapply(retroResults, function(d) range(log(d$bmsy)) ), log(fullYears$bmsy))
-nmaxyr<- length(fullYears$yr)
-
-plot(x=0, y=log(fullYears$bmsy),  xlim=c(0,nretro), pch=19, col=2,
-     ylim=y.lim, xlab="Number of droped Years", ylab="Bmsy (log)", 
-     main="Variation of Bmsy over retrospective analysis")
-des2 <- lapply(retroResults, function(d){
-  points(x=nmaxyr-length(d$yr)+1, y=log(d$bmsy), col=2, pch=19)
-})  
-
-
-
-######################################################################
-##   Fmsy variation                                               ##
-######################################################################
-
-y.lim=range(sapply(retroResults, function(d) range((d$fmsy)) ), (fullYears$fmsy))
-plot(x=0, y=(fullYears$fmsy),  xlim=c(0,nretro), pch=19, col=2,
-     ylim=y.lim, xlab="Number of droped Years", ylab="Fmsy ", 
-     main="Variation of Fmsy over retrospective analysis")
-des3 <- lapply(retroResults, function(d){
-  points(x=nmaxyr-length(d$yr)+1, y=(d$fmsy), col=2, pch=19)
-})  
 
 
 

@@ -1,35 +1,125 @@
-# post treatment mcmc run
-dir <-c('bfte/2012/vpa/reported/high')
-main.dir= file.path(Sys.getenv("HOME"), "ICCAT/ICCAT-BFT")
-setwd(file.path(main.dir, dir))
+####################################################################################
+##                                                                                ##
+##   Post treatment on mcmc runs obtained using iscam on bfte data                ##
+##   Authors: Marie-Pierre Etienne marie.etienne@agroparistech.fr                 ##
+##   Date: Aug. 10,  2013                                                         ##
+##   Date: Jan,  11 2014                                                          ##
+##                                                                                ##
+##                                                                                ##
+####################################################################################
 
-resmcmc=read.table("ICCAT.mcmc",header=TRUE)
-resmcmc <- resmcmc[round(nrow(resmcmc)/2):nrow(resmcmc),]
-BFTStatus <- data.frame(StockStatus=resmcmc$SSB/resmcmc$bmsy, FStatus=resmcmc$fFinal/resmcmc$fmsy)
+
+main.dir= file.path(Sys.getenv("HOME"), "ICCAT/ICCAT-BFT")
+## rep where to find mcmc outputs
+rep<-unlist(lapply(c(file.path('bfte/2012/vpa','inflated'),file.path('bfte/2012/vpa','reported')),
+                               function(d) {file.path(d, c("high-R0", "high-Rinit"))})
+                   )
+namesRep <- lapply(strsplit(rep, "/"), function(d) {paste(d[4], d[5], sep="")})
+
+resmcmc <- lapply(rep, function(d){read.table(file.path(d,"ICCAT.mcmc"),header=TRUE)})
+#removing burn in period
+resmcmc <- lapply(resmcmc, function(d){d[(ceiling(nrow(d)/2)+1):nrow(d),]})
+
+BFTStatus <- lapply(resmcmc, function(d){
+    data.frame(StockStatus=d$SSB/d$bmsy, FStatus=d$fFinal/d$fmsy)
+})
+
 
 ## Diagnostic Graph
-p <- ggplot(BFTStatus, aes(y = StockStatus, x=seq(25001,50000,length.out=nrow(BFTStatus))) ) + geom_line() + xlab("Iterations") + ggtitle("MCMC Chains")
-print(p)
-ggsave(file=file.path(main.dir, "Report","InflatedConv1.pdf"),width=14, units="cm", height=10)
+i<- 1
+p <- lapply(BFTStatus, function(d){
+  ggplot(d, aes(y = StockStatus, x=seq(25001,50000,length.out=length(StockStatus))) ) + geom_line() +
+     xlab("Iterations")
+  ggsave(file=file.path(main.dir, "Report/figure",paste(namesRep[i], "-ConvSS.pdf", sep="")),width=14, units="cm", height=10)
+  i<<-i+1
+  }
+            )
 
-p <- ggplot(BFTStatus, aes(y = FStatus, x=seq(25001,50000,length.out=nrow(BFTStatus))) )+  geom_line() +xlab("Iterations") + ggtitle("MCMC Chains")
-print(p)
-ggsave(file=file.path(main.dir, "Report","InflatedConv2.pdf"),width=14, units="cm", height=10)
+i<- 1
+p <- lapply(BFTStatus, function(d){
+  ggplot(d, aes(y = FStatus, x=seq(25001,50000,length.out=length(FStatus))) ) + geom_line() +
+    xlab("Iterations")
+  ggsave(file=file.path(main.dir, "Report/figure",paste(namesRep[i], "-ConvFS.pdf", sep="")),width=14, units="cm", height=10)
+  i<<-i+1
+}
+)            
+
+i<- 1
+p <- lapply(BFTStatus, function(d){
+  ggplot(d,  aes(x = StockStatus, y = FStatus)) +
+    geom_point() + xlim(0, 3.5) + ylim(0, 1.5) +    
+    geom_vline(xintercept = 1) + 
+    geom_hline(aes(yintercept=1)) + 
+    stat_density2d(aes(fill = ..level..), geom="polygon")
+    ggsave(file=file.path(main.dir, "Report/figure",paste(namesRep[i], "-Kobe.pdf", sep="")),width=14, units="cm", height=10)
+  i<<-i+1
+}
+            )            
+
+            
+i<- 1
+p <- lapply(resmcmc, function(d){
+  m <- ggplot( d, aes(x = log.ro)) + geom_histogram(aes(y = ..density..), binwidth=0.05) +
+    geom_density()
+  prior<-data.frame(x=seq(12,16,length.out=100), y=rep(1/4, 100))
+  m <- m + geom_hline(aes(yintercept=0.25), col=6) + xlab("log(R0)")  + xlim(c(13.5,16)) 
+  print(m)
+  ggsave(file=file.path(main.dir, "Report/figure",paste(namesRep[i], "-postRO.pdf", sep="")),width=14, units="cm", height=10)
+  i<<-i+1
+}
+            )            
+
+i<- 1
+p <- lapply(resmcmc, function(d){
+  m <- ggplot( d, aes(x = log.rinit)) + geom_histogram(aes(y = ..density..), binwidth=0.1) +
+    xlim(c(13,17)) +  geom_density()
+  prior<-data.frame(x=seq(12,16,length.out=100), y=rep(1/4, 100))
+  m <- m + geom_hline(aes(yintercept=0.25), col=6) + xlab("log(Rinit)")
+  print(m)
+  ggsave(file=file.path(main.dir, "Report/figure",paste(namesRep[i], "-postRinit.pdf", sep="")),width=14, units="cm", height=10)
+  i<<-i+1
+}
+            )            
 
 
-m <- ggplot(BFTStatus, aes(x = StockStatus, y = FStatus)) +
-  geom_point() + xlim(0, 3.5) + ylim(0, 1.5) +    geom_vline(xintercept = 1) + geom_hline(aes(yintercept=1))
-print(m +  stat_density2d(aes(fill = ..level..), geom="polygon"))
-ggsave(file=file.path(main.dir, "Report","figure", "ICCAT-ReportedPostKobe.pdf"),width=14, units="cm", height=14)
 
-post<- data.frame(log.ro= resmcmc$log.ro, log.h=resmcmc$log.h)
-m <- ggplot( post, aes(x = log.ro)) + geom_histogram(aes(y = ..density..), binwidth=0.05) + geom_density() 
-prior<-data.frame(x=seq(12,16,length.out=100), y=rep(1/4, 100))
-m + geom_hline(aes(yintercept=0.25), col=6) + xlab("log(R0)")
-ggsave(file=file.path(main.dir, "Report","figure", "ICCAT-InflatedpostRho.pdf"),width=14, units="cm", height=14)
 
-m <- ggplot( post, aes(x = log.h ))+ geom_histogram(aes(y = ..density..), binwidth=0.01) + geom_density() 
-m + geom_line(aes(x=seq(0,1,length.out=length(post$log.h)), 
-                  y=dbeta(seq(0,1,length.out=length(post$log.h)),shape1=14, shape2=2.44)), col=6) + xlim(c(0.7,1)) +
-                    xlab("h")
-ggsave(file=file.path(main.dir, "Report","figure", "ICCAT-Inflatedposth.pdf"),width=14, units="cm", height=14)
+
+i<- 1
+p <- lapply(resmcmc, function(d){
+  l <-length(d$log.h)
+  df1 <- data.frame(x1=seq(0,1,length.out=l),
+                   y1=dbeta(seq(0,1,length.out=l),shape1=14, shape2=2.44)
+                   )
+  m <- ggplot( d, aes(x = (log.h))) + geom_histogram(aes(y = ..density..), binwidth=0.05) +  geom_density()
+  m <- m + geom_line(data=df1, aes( x=x1,y=y1), col=6) + xlim(c(0.7,1)) +
+                         xlab("h")    
+  print(m)
+  ggsave(file=file.path(main.dir, "Report/figure",paste(namesRep[i], "-posth.pdf", sep="")),width=14, units="cm", height=10)
+  i<<-i+1
+}
+            )            
+
+
+
+#Credibility interval
+i<-1
+CI <- lapply(resmcmc, function(d){
+li <- names(d)
+cat("+++++++++++++++++++++++++++++", rep[[i]],"+++++++++++++++++++++++++++++++++++++\n")
+  li <- li[c(1:7, 9, 11, 12, 13)]
+  lapply(li,function(ds) {
+    
+    cat(ds, "\n")
+    q <- quantile(d[[ds]], probs=c(0,0.01,0.05,0.5,0.95,0.99,1))
+    print(q)
+    cat("**\n")
+  })
+i<<-i+1
+})
+
+
+### decision table
+
+  nRuns    <- nFiles
+  TACprobs <- NULL
