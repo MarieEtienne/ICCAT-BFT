@@ -14,7 +14,7 @@ rep<-unlist(lapply(c(file.path('bfte/2012/vpa','inflated'),file.path('bfte/2012/
                    function(d) {file.path(d, c("high-R0", "high-Rinit"))}))
 repNames <- lapply(strsplit(rep, "/"), function(d) {paste(d[4], d[5], sep="")})
 
-palette(c("black", "red", "green3", "blue", "cyan", "magenta", "yellow", 
+palette(c("black", "red", "green3", "blue4", "maroon4", "magenta", "orangered", 
           "gray"))
 
 outdir <- file.path(main.dir, "Report/figure")
@@ -30,7 +30,8 @@ RDataFiles<- readLines(file.path(main.dir,'Report', 'RDataSave', 'datafile.out')
 
 nFiles=length(rep)
 res      <- lapply(rep, function(d){read.admb(ifile=file.path(d,'ICCAT'))})
-
+## reading bug in abundance index 
+##last index is split on 2 lines 
 
 
 
@@ -87,12 +88,12 @@ for( i in 1:na_gear)
 legend("topleft", legend=Info$surveyName, col=gear.list, lty=gear.list)     
 
 
-
+ng <- ngear[[1]]
 name.list=c("Comm", Info$surveyName)
 age <- sage:nage
 pdf(file=file.path(outdir,"AgeComposition.pdf"), onefile=T, width=12)
 par(mfcol=c(2,2))
-for( i in 1:ngear)
+for( i in 1:ng)
   {
     ind <- which(compositionCatch[,2]==gear.list[i])
    if(length(ind)>3)
@@ -185,7 +186,7 @@ pdf(file=file.path(outdir,"ICCAT-SelectivityByGear.pdf"), width=10, heigh=14)
 par( oma = c( 0, 0, 3, 0 ), mfcol=c(1,1))
 split.screen(figs=c(3,2))
 ind.scr =1
-for(i in 1:ngear){
+for(i in 1:ng){
   screen(ind.scr)
   ind = which(compositionCatch[,2]==gear.list[i])
   if(length(ind)>0){
@@ -203,7 +204,7 @@ dev.off()
 par( oma = c( 2, 2, 0, 0 ), mfcol=c(1,1), mar=c(2, 2, 1, 1))
 split.screen(figs=c(3,2))
 ind.scr =1
-for(i in 1:ngear){
+for(i in 1:ng){
   screen(ind.scr)
   ind = which(compositionCatch[,2]==gear.list[i] & compositionCatch[,1]<=1980)
   if(length(ind)>0){
@@ -224,7 +225,7 @@ close.screen(all.screens=T)
 par( oma = c( 2, 2, 0, 0 ), mfcol=c(1,1), mar=c(2, 2, 1, 1))
 split.screen(figs=c(3,2))
 ind.scr =1
-for(i in 1:ngear){
+for(i in 1:ng){
   screen(ind.scr)
   ind = which(compositionCatch[,2]==gear.list[i] & compositionCatch[,1]>=1980)
   if(length(ind)>0){
@@ -248,9 +249,9 @@ resTable <- matrix(NA, ncol=nFiles, nrow=7)
 resTable[1,] <-unlist(lapply(res, function(d) {(log(d$ro))}))
 resTable[2,] <-unlist(lapply(res, function(d) {((d$steepness))}))
 resTable[3,] <-unlist(lapply(res, function(d) {(d$fmsy)}))
-resTable[4,] <-unlist(lapply(res, function(d) {(d$msy)}))
-resTable[5,] <-unlist(lapply(res, function(d) {(d$bmsy)}))
-resTable[6,] <-unlist(lapply(res, function(d) {((d$Bstatus[length(d$yr)]))}))
+resTable[4,] <-unlist(lapply(res, function(d) {log(d$msy)}))
+resTable[5,] <-unlist(lapply(res, function(d) {log(d$bmsy)}))
+resTable[6,] <-unlist(lapply(res, function(d) {(log(d$Bstatus[length(d$yr)]))}))
 resTable[7,] <-unlist(lapply(res, function(d) {((d$Fstatus[1,length(d$yr)]))}))
 resTable <-cbind(Name=c("logRO", "h", "fmsy", "msy", "bmsy", "Bstatus", "Fstatus"),as.data.frame(resTable))
 colnames(resTable)[2:(nFiles+1)]=repNames
@@ -287,4 +288,99 @@ ggsave(filename=file.path(outdir,paste("Spawning.pdf", sep="")), width=14, units
 detach(Info)
 
 
+j=1
+g.names <- gear.names
+lapply(res,
+       function(d){
+         yr <- d$yr
+         p <- ggplot()+ xlim(range(yr))
+         i=1
+         prov <-   data.frame(pit = d$pit[i,], it=d$it[i,], iyr=d$iyr[i,], gear=rep(g.names[1], length(d$it[i,]) ) )
+         norm<- max(prov$it, na.rm=T)
+         prov$pit <- prov$pit /norm
+         prov$it <- prov$it /norm
+         df <-   prov
+        ## bug in reading abundance, last line split on 2 lines
+         for(i in 2:(ng-1))
+           {
+           prov <-   data.frame(pit = d$pit[i,], it=d$it[i,], iyr=d$iyr[i,], gear=rep(g.names[i], length(d$it[i,]) ) )
+           if(i==(ng-1) )
+             {
+             prov2 <- data.frame(pit = d$pit[i+1,], 
+                                 it=d$it[i+1,], iyr=d$iyr[i+1,], 
+                                 gear=rep(g.names[i], length(d$it[i,]) ) )
+             prov <- rbind(prov, prov2)
+             }
+           norm<- max(prov$it, na.rm=T)
+           prov$pit <- prov$pit /norm
+           prov$it <- prov$it /norm
+           df <- rbind(df, prov)
+           }
+         p <-ggplot() + geom_line(data=df,aes( x=iyr, y=it, col=gear)) +
+           geom_line(data=df,aes(x=iyr, y=pit, col=gear), linetype="dotted", lwd=2 ) 
+         print(p)
+         print(file.path(outdir, paste(repNames[[j]], "Abundance.pdf", sep='')))
+         ggsave(file.path(outdir, paste(repNames[[j]], "Abundance.pdf", sep='')), width=15, height=10, units="cm")
+         j <<- j+1
+         
+       }      
+)
 
+
+
+
+j=1
+g.names <- gear.names
+lapply(res,
+       function(d){
+         yr <- d$yr
+         p <- ggplot()+ xlim(range(yr))
+         i=1
+         prov <-   data.frame(pit = d$pit[i,], it=d$it[i,], iyr=d$iyr[i,], gear=rep(g.names[1], length(d$it[i,]) ) )
+         norm<- max(prov$it, na.rm=T)
+         prov$pit <- prov$pit /norm
+         prov$it <- prov$it /norm
+         df <-   prov
+         ## bug in reading abundance, last line split on 2 lines
+         for(i in 2:(ng-1))
+         {
+           prov <-   data.frame(pit = d$pit[i,], it=d$it[i,], iyr=d$iyr[i,], gear=rep(g.names[i], length(d$it[i,]) ) )
+           if(i==(ng-1) )
+           {
+             prov2 <- data.frame(pit = d$pit[i+1,], 
+                                 it=d$it[i+1,], iyr=d$iyr[i+1,], 
+                                 gear=rep(g.names[i], length(d$it[i,]) ) )
+             prov <- rbind(prov, prov2)
+           }
+           norm<- max(prov$it, na.rm=T)
+           prov$pit <- prov$pit /norm
+           prov$it <- prov$it /norm
+           df <- rbind(df, prov)
+         }
+         p <-ggplot() + geom_line(data=df,aes( x=iyr, y=it, col=gear)) +
+           geom_line(data=df,aes(x=iyr, y=pit, col=gear), linetype="dotted", lwd=2 ) 
+         print(p)
+         print(file.path(outdir, paste(repNames[[j]], "Abundance.pdf", sep='')))
+         ggsave(file.path(outdir, paste(repNames[[j]], "Abundance.pdf", sep='')), width=15, height=10, units="cm")
+         j <<- j+1
+         
+       }      
+       )
+
+
+
+
+
+j=1
+lapply(res,
+       function(d){
+         yr <- d$yr
+         p <- ggplot()+ xlim(range(yr))
+         df <-   data.frame(ct = d$ct[1,], obs_ct=d$obs_ct[1,], yr=d$yr)
+         p <-ggplot() + geom_line(data=df,aes( x=yr, y=ct)) +
+           geom_line(data=df,aes(x=yr, y=obs_ct), linetype="dotted", lwd=2 ) 
+         print(p)
+         ggsave(file.path(outdir, paste(repNames[[j]], "Catch.pdf", sep='')), width=15, height=10, units="cm")
+         j <<- j+1
+       }      
+       )

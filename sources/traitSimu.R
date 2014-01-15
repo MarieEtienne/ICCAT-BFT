@@ -46,7 +46,7 @@ plotRes <- function(nameP, sims, logScale=F, excl =0.1, x.lim=NULL)
   ind <- which( prov<qu[2] & prov>qu[1])
   prov.df <- data.frame(x=prov[ind], xsim=provsim[ind])
   p <- ggplot(prov.df)+geom_histogram( aes(x=x))+ geom_vline(aes(xintercept=xsim, col="red")) + xlab(nameP)
-  if(!x.lim)
+  if(!is.null(x.lim))
     p <- ggplot(prov.df)+geom_histogram( aes(x=x))+ geom_vline(aes(xintercept=xsim, col="red")) + xlab(nameP) + xlim(x.lim)
   
   print(p)
@@ -62,7 +62,7 @@ lapply(parToRead, function(d) {sim.res[[d]] <<- readSimRes(nameP=d,  sims=sims)}
 
 
 
-plotRes('rinit', sims=sims, logScale=T)
+plotRes('rinit', sims=sims, logScale=T, )
 
 plotRes(nameP='ro', sims=sims, logScale=T)
 plotRes('h', sims=sims, logScale=F)
