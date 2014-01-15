@@ -1,10 +1,9 @@
-This section  sums up the principle  aspects of iSCAM used  on Bluefin
-Tuna population dynamic data.
+This section  sums up the principle  aspects of \iscam used  on BFTE.
 \subsection{Latent process Level}
 \subsubsection{Population model}
-\iscam is an age structured model.  Fish population is splitted into age classes from
+\iscam is an age structured model.  Fish population is split into age classes from
 age $sage$ to age $nage$. Let us denote by $\Nt = (N_{1,t}, \ldots, N_{A,t})$ the number
-of individuals in every classe age $a$ ($a\in [1,A]$) on year $t$ ($t\in [1;T]$).
+of individuals in every class age $a$ ($a\in [1,A]$) in year $t$ ($t\in [1;T]$).
 
 \begin{gather}
   % \mbox{Initial state of the population}\\
@@ -13,7 +12,7 @@ of individuals in every classe age $a$ ($a\in [1,A]$) on year $t$ ($t\in [1;T]$)
     \begin{array}{l}
       R_t, \quad a=1\\
       N_{a-1,t-1} \exp(-Z_{t-1, a-1}), \quad a\in [2;A-1]\\
-      N_{a-1,t-1} \exp(-Z_{t-1, a-1}) + N_{a,t-1} \exp(-Z_{t-1, a}), \quad a\in [2;A-1],\\
+      N_{a-1,t-1} \exp(-Z_{t-1, a-1}) + N_{a,t-1} \exp(-Z_{t-1, a}), \quad a=A,\\
     \end{array}  \right. \\
 \end{gather}
  where $Z_{a,t}$  stands for the total  mortality rate at age  $a$ in
@@ -29,25 +28,29 @@ R_t= \frac{s_0 B_{t-1}}{1+\beta B_{t-1}} \exp{\epsilon^R_t}, \\
 \label{eq:iscamBev}
 \end{gather} 
 
-\iscam assumes a stock recruitment relationship, Beverton and Holt
-(BH) or Ricker (R) model may be used which links the mature biomass at
-time $t$ $B_t$and the recruitment at time $t+1$. The presented work used the BH model. 
-There is slight trick in \iscam, since this relation ship is estimated
-in the latest phase of the estimation process. During the first estimation phases the recruitment
+\iscam assumes a stock recruitment relationship which links the mature biomass at
+time $t$ $B_t$ and the recruitment at time $t+1$. The two options for this stock recruitment model are  Beverton and Holt
+(BH) or Ricker (R) model. The presented work used the BH model.  \\
+
+To circumvent estimation issues, \iscam uses a trick and  during the first estimation phases, the recruitment
 model is specified by the following equation:
 \begin{gather}
 \label{eq:iscamRec}  R_t =\bar{R}e^{\omega_t},
 \end{gather}
 where  $\omega_t\overset{i.i.d}{\sim}  \mathcal{N}(0,  \tau^2_R)$  and
-$\bar{R}$ is the average recruitment. This
-approach  of the  early  phases is  very  close to  the  VPA from  the
+$\bar{R}$ is the average recruitment. 
+
+This
+approach  in the  early  phases is  close to  the  VPA from  the
 recruitment  point  of  view,  since   it  doesn't  assume  any  stock
 recruitment relationship. 
 
 
-Special attention is recquired for the first year of the study. The recruitment parameter $R_{init}$ during this first year has to be estimated.
+During the last phase, the  BH relationship is estimated. Turning off this estimation is possible and would allow to base management evaluation strategies on an average annual recruitment.
+
+
+Special attention is required for the first year of the study. The recruitment parameter $R_{init}$ during this first year has to be estimated.
 If the stock is considered in unfished condition, then $R_{init}$ is assumed to be equal to $R_0$, otherwise $R_{init}$ is specifically estimated. 
-The approach developped for BFT has chosen not to consider first year in unifshed conditions.
 
 \begin{gather}
 \mbox{Definition of mature biomass}\\
@@ -55,15 +58,15 @@ B_t= \sum_{a=1}^A N_{t,a} f_a,
 \end{gather} 
 $f_a$ being the fertility at age $a$. 
 
-$f_a$ doesn't depend  on year $t$, fertility at  age is considred
-  as fixed over year
+$f_a$ doesn't depend  on year $t$, fertility at  age is considered
+  as fixed over years
 
   
   
 \begin{gather}
-  \mbox{Definition of total mortality rate ate age}\\
+  \mbox{Definition of the total mortality rate ate age}\\
   Z_{t,a}= M_a + \sum_{k=1}^K F_{k,t} v_{k, t,a}, \quad \mbox{gear }k,
-  \mbox{class }a, \mbox{year }t.   \\
+  \mbox{class }a, \mbox{ at year }t.   \\
 \end{gather} 
 In  the  BFT  data  available  there is  only  one  time  series  for
  catch (catch are  not split among different  gears), considering that
@@ -77,10 +80,10 @@ commercial fisheries equals one, the previous expression may be simplified as~:
 \end{gather} 
 
 where $F_t$ is the instantaneous  fishing mortality and $v_{1,t,a}$ is
-the vulnerability for gear $1$, in year $t$ for age classe a.
+the vulnerability for gear $1$, in year $t$ for age class a.
 
-The weight at age is derived from an allometric relationship betwenn length and weight, and from the von Bertalanffy growth equation to link age class and length.
-The fertility at age is asumed to follow a logistic function whose parameters $\mu_{mat 50\%}$ and $\sigma_{mat 50\%}$ 
+The weight at age is derived from an allometric relationship between length and weight, and from the von Bertalanffy growth equation to link age class and length.
+The fertility at age is assumed to follow a logistic function with parameters $\mu_{mat 50\%}$ and $\sigma_{mat 50\%}$ 
 \begin{gather}
   \mbox{Life trait specification}\\
 l_a = l_\infty \left( 1- \exp{\left(-k\left( a - t_0\right)\right)}\right) \\
@@ -96,10 +99,10 @@ f_a = w_a \frac{1}{1+\exp{ \left(\frac{\mu_f - a}{\sigma_f}\right)}}\\
 selectivity/vulnerability. The vulnerability  may either be completely
 specified by the user, or when  age composition data are available the
 vulnerability may be  inferred. In the latter case,  different form of
-selectvity curve may be specified:  for example the selectivity may be
+selectivity curves may be specified:  for example the selectivity may be
 chosen as a logistic function of age, or even, with a more flexible approach, using B-spline.  The B-splines
-functions may  even model a  variation accross years. In  this work,
-only logistic or simple Bspline has been used to circumvent estimation issues.
+functions may  even model a  variation across years. In  this work,
+only logistic or simple Bspline has been used to circumvent estimation issues and avoid over-parametrization.
 
 
 \subsection{Observation Level}
@@ -108,7 +111,7 @@ only logistic or simple Bspline has been used to circumvent estimation issues.
 Following  \cite{Schnute+95}, \iscam  uses by  default a  multivariate
 logistic  function  for  age  composition data.  It  is  assumed  that
 $p_{atk}$ which is the  proportion of fish of age $a$  in year $t$ for
-gear $k$ is drawn from the following distribution (gear $k$ is omitted
+gear $k$, is drawn from the following distribution (gear $k$ is omitted
 for clarity) which is defined thanks to a latent variable $X_{at}$
 \begin{gather}
 \epsilon^{A}_{at} \overset{i.i.d}{\sim} \mathcal{N}(0,\tau^2_A)\nonumber \\ 
@@ -116,9 +119,10 @@ X_{at}       =       \log{\mu_{at}}       +       \epsilon_{at}^A       -
 \frac{1}{A}\sum_{a=1}^A\left(\log{\mu_{at}} + \epsilon_{at}^A \right) \nonumber \\
 e^{X_{at}} = \frac{\mu_{at}e^{\epsilon_{at}^A}}{ \left(\prod_{a=1}^A \mu_{at}e^{\epsilon_{at}^A}\right) ^{1/A}}\nonumber\\
 p_{at} = \frac{e^{X_{at}} } {\sum_{a=1}^A e^{X_{at}} }\\
+\label{equa:multivar}
 \end{gather}
 The multivariate logistic distribution  avoids the drawback of a very high
-precision when using a classical multinomiale distribution.
+precision when using a classical multinomial distribution.
 
 \subsubsection{Abundance indices}
 The total vulnerable biomass at year $t$ for gear $k$ is defined by
@@ -151,10 +155,10 @@ C_{t} = \hat{C}_{t} \exp{\epsilon_{t}^C}, \quad \epsilon_{t}\overset{i.i.d}{\sim
 \subsection{Summary of the symbols in \iscam}
 
 Table  \ref{tab:parameters}  and  \ref{tab:symbols}  recall  the  main
-symbol used in this report and give their corresponding name in \iscam
-description available  in \cite{Martell11}. Some of  the names have
-been changed to unify the notation  standards. When the name is commun
-to this paper and \iscam users Guide, nothing is specified.
+symbols used in this report and give their corresponding name in \iscam. Further 
+description is available  in \cite{Martell11}. Some of  the names have
+been changed to unify the notation  standards. When the name is shared by this
+ this paper and \iscam users Guide, nothing is specified.
 
 
 \begin{table}[ht]
@@ -164,7 +168,7 @@ to this paper and \iscam users Guide, nothing is specified.
 Parameters & Name in \iscam & Signification \\ 
   \hline
 $\tau_C$& $\sigma_C$ & Standard deviation in observed catch - This parameter is not estimated but set to a given value\\
-$\tau_A$ & $\tau$,  mentionned only through its estimation  on page 21
+$\tau_A$ & $\tau$,  mentioned only through its estimation  on page 21
 of \cite{Martell12} & standard deviation in the multivariate logistic function \\
 $v_{k,a}$& &vulnerability for gear $k$ at age $a$\\
 $R_0$ && Recruitment in unfished conditions\\
@@ -191,28 +195,28 @@ errors\\
 Name & Name in \iscam & Signification \\ 
   \hline
 $A$ & & last class age\\
-$\kappa=4h / (1-h)$ & & Good year compensation ratio for BH\\
+$\kappa=4h / (1-h)$ & & Goodyear compensation ratio for BH\\
 $s_0= \kappa/\Phi_E$ & & BH relationship\\
 $\beta=(\kappa-1) / (R_0 \Phi_E)$ &&BH relationship\\
 $\epsilon_t^R$ & $\delta_t$& recruitment errors\\
 $\epsilon_{t,a}^A$ & $\eta_{t,a}$& errors in the multivariate logistic \\
 $\epsilon_{k,t}^I$ & $\epsilon_{k,t}$& residuals in abundance survey\\
 $\epsilon_t^C$ & $\eta_{k,t}$& residuals in catch data\\
-$\bar{R}$ &  &Average recruitment  used in  firt estimation  phases as
-mentionned in equation \ref{eq:iscamRec}\\
-$B_t$ & &Spawning biomass in numbers \\
+$\bar{R}$ &  &Average recruitment  used in  first estimation  phases as
+mentioned in equation \ref{eq:iscamRec}\\
+$B_t$ & &Spawning biomass \\
 $N_{a,t}$&& Number of individuals of age a in year t\\
 $f_a$ && fecundity at age $a$\\
-$M_a$ && instantaneous mortality at age $a$\\
+$M_a$ && instantaneous mortality rate at age $a$\\
 $F_{k,t}, F_{t}$&& Instantaneous fishing mortality  for gear k in year
 t, since  there is only one  commercial gear considered, index  $k$ is
 mostly omitted\\
 $Z_{a,t}$& &Instantaneous total mortality for age a in year t\\ 
 $X_{a,t}$&   not  named   in  \iscam&   Quantities  involved   in  the
 multivariate logistic\\
-$\mu_{a,t}$ &  & unormalized proportion at age\\
+$\mu_{a,t}$ &  & unnormalized proportion at age\\
 & $\widehat{p_{a,t}}=\mu_{a,t}/\sum_a \mu_{a,t}$& proportion at age\\
-$p_{a,t}$& & Observed proprotion at age\\
+$p_{a,t}$& & Observed proportion at age\\
 $V_{k,t}$& & Total vulnerable biomass for gear k in year t\\
 ${w}_{a}$& &Weight at age a\\
    \hline

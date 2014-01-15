@@ -1,4 +1,4 @@
-The first section  aims at expliciting the choices made  to run \iscam
+The first section  aims at clarifying the choices made  to run \iscam
 on BFT  data. The second section  shows the estimation of  the leading
 parameters in  order to  justify the  simulation framework  develop in
 section \ref{sec:simulation}. The detailed  complete results are given
@@ -16,16 +16,15 @@ Beverton-Holt model is used for recruitment.
 
 
 To account for the total commercial catch (only one time series) and
-for the seven abundance indices,  eight gears have been declared. Gear
-one corresponds  to commercial fisheries,  gear 2 to 8  corresponds to
-the seven  abundance indices, each  gear having its  one vulnerability
-specification. The fishing moratility is  driven by the catch for gear
+for the six abundance indices considered,  seven gears have been declared. Gear
+one corresponds  to commercial fisheries,  gears 2 to 7  correspond to
+the six  abundance indices, each  gear having its  one vulnerability
+specification. The fishing mortality is  driven by the catch for gear
 1 and  therefore $F_{k,t}=0$ for  $k \geq  2$. For clarity,  index $k$
 will be omitted in the sequel since there is no ambiguity.
 
-\paragraph{Mortality}
-The mortality at age has first been fixed to  the values used for the VPA approach
-described in \cite{tuna2012}. 
+\paragraph{Mortality rate}
+In \cite{tuna2012}, the mortality rate is defined by 
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrrrrrrrrrr}
@@ -36,12 +35,15 @@ Mortality & 0.49 & 0.24 & 0.24 & 0.24 & 0.24 & 0.20 & 0.17 & 0.15 & 0.12 & 0.10 
    \hline
 \end{tabular}
 \end{table}
-But \iscam doesn't really deal with varying mortality (using average mortality in many different places in the the code). Finaly, it has been decided to use a fixed instantaneous mortality rate.
+
+
+But \iscam doesn't allow to use  instantaneous mortality at age whereas  it is possible to use a time varying mortality, using a random walk centered on a given value.
+Because of the well known difficulty for estimating the natural mortality rate, it has been decided to use a fixed instantaneous mortality rate.
 This parameter won't be estimated and is fixed to 0.23.
 
 
 \paragraph{Selectivity}
-As mentionned in \cite{Martell12},	 \iscam allows to specify different form for the
+As mentioned in \cite{Martell12},	 \iscam allows to specify different form for the
 selectivity/vulnerability.  When age composition data are available,
 choice has been made to model  the selectivity using Bspline curves or
 logistic function.  The selectivity has  been chosen to  stay constant
@@ -71,11 +73,11 @@ assure the convergence of the optimization algorithm and the obtention of a defi
 \end{table}
 
 
-Gear  $4$ corresponds  to the  Norvegian Purse  seine abundance  index
+Gear  $4$ corresponds  to the  Norwegian Purse  seine abundance  index
 which is documented  to focus  only on  last age  class. Since  it is  not possible  to
 specify $0$ vulnerability for some  age (due to a log transformation),
 the selectivity curve  has been set to a logistic  function with fixed
-parameters, the parameters being chosen to micmic the desired behavior.
+parameters, the parameters being chosen to mimic the desired behavior.
 
 
 \paragraph{Abundance indices}
@@ -96,8 +98,8 @@ V^{N}_{k,t}=\sum_{a=1}^A N_{t,a} e^{-\lambda_{k,t} Z_{t,a}} v_{k,a},
 \end{gather}
  
  
- The value of $\lambda_{k,t}$ are taken constant over years. Six of them are specified as average indice along the year in the stock assesment,
-the last is assumed to happen one month after the start of the year. To micmic those choices, the timing parameters $\lambda$ are equal to 0.5 for six of the seven indices, the last one is set to $1/12$. Those choices are sum up in table \ref{table:timing} 
+ The value of $\lambda_{k,t}$ are taken constant over years. Five of them are specified as average indices along the year in the stock assessment,
+the last one is assumed to occur one month after the start of the year. To mimic those choices, the timing parameters $\lambda$ are equal to 0.5 for five of the six indices, the last one is set to $1/12$. Those choices are sum up in table \ref{table:timing} 
  
  \begin{table}[ht]
 \centering
@@ -111,7 +113,6 @@ the last is assumed to happen one month after the start of the year. To micmic t
 5 & \verb+JP_LL2+ & Number & 1/12 \\
 6 & \verb+SP_BB1+ & Biomass & 0.5\\
 7 & \verb+SP_BB2+ & Biomass &0.5 \\
-8 & \verb+SP_BB3+ & Biomass &0.5\\
 \hline
 \end{tabular}
 \caption{Choice for the type and the timing of abundance indices}
@@ -121,12 +122,12 @@ the last is assumed to happen one month after the start of the year. To micmic t
 
 
 \paragraph{Recruitment}
-The estimation of the recruitment parameters in \iscam  is split into two steps. In early phases, the recruitment is assumed to be stock independant using formula 
-to follow equation \ref{eq:iscamRec} and to be stock independant. In the last phases, a stock recruitment relationship is used as specified 
+The estimation of the recruitment parameters in \iscam  is split into two steps. In early phases, the recruitment is assumed to be stock independent using formula 
+\ref{eq:iscamRec}. In the last phases, a stock recruitment relationship is used as specified 
 in equation \ref{eq:iscamBev}. 
 
 \paragraph{Life trait history}
-The parameters regarding the life trait history are not estimated and are treated as fixed when running \iscam. Actually, there is some possibility to use weight at age data to estimate  the weight at age relatioship, but trying to use this option leads to unconsistent results.
+The parameters regarding the life trait history are not estimated and are treated as fixed when running \iscam. Actually, there is some possibility to use weight at age data to estimate  the weight at age relationship, but trying to use this option leads to inconsistent results.
 The values of the concerned parameters have been fixed according to \cite{tuna2012} and are summarized in table \ref{table:lifetraits}.
 
 \begin{table}[ht]
@@ -155,8 +156,8 @@ $\Phi_E$ &  &  $201$& incidence function\\
 
 \subsubsection{Initial values for estimated parameters}
 
-The leading parameters are given in table \ref{tab:parameters}. \iscam recquires to give initial values for some parameters to start the optimization algorithm.
-Since the role of the recruitment differs between first phases and the last ones, it is also required to give initial values for $\R_{init}$ and $\overline{R}$.
+The leading parameters are given in table \ref{tab:parameters}. \iscam requires to provide initial values to the parameters to start the optimization algorithm.
+Since the role of the recruitment differs between first phases and the last ones, it is also required to give initial values for $R_{init}$ and $\overline{R}$.
 The proportion of the total variance allocated to the error in the observation process is not estimated and is set to $\rho=0.4$.
 
 \begin{table}[ht]
@@ -166,23 +167,23 @@ The proportion of the total variance allocated to the error in the observation p
 Parameters & Initial Value & interval & Phase & Signification  \\ \hline
  $\log{R_0}$ & 13  & $[-5,30]$ & 1 & Logarithm of recruitment (numbers) in unfished conditions\\
  $h$ & $0.85$ & $[0.2, 0.99]$ & 3 &  Steepness \\
-$\log{\bar{m}}$ & $-1.47$ & $[-5,0]$ &-1 & Logarithm of the average natural mortality\\
+$\log{\bar{m}}$ & $-1.47$ & $[-5,0]$ &-1 & Logarithm of the average natural mortality rate\\
 $\bar{R}$& 12.5	& $[-5,	20]$ &	1	 & Logarithm of the average recruitment\\
 $R_{init}$ & 12.5&	$[-5,	20]$ &	1	 & Logarithm of the initial recruitment\\
 $\rho$ & 0.4	& $[0.001,0.999]$ & -1 & proportion of the total variance for the observation process \\
 $1/\varphi$ & 0.8 &	$[0.001,	12]$ & 	3 & the root of the precision of the total error \\
 \hline
 \end{tabular}
-\caption{Initial values and range for main paramaters. The estimation phase is also given.}
+\caption{Initial values and range for main parameters. The estimation phase is also given.}
 \label{table:initial}
 \end{table}
 
 
 \subsection{Bayesian approach - Prior specification}
-A Bayesian approach requires to specify adequat prior distributions on leading parameters.
+A Bayesian approach requires to specify adequate prior distributions on leading parameters.
 \paragraph{Prior on $R_0$, $R_{init}$ and $\bar{R}$}
 The prior on $R_0$ is build with the idea of a range between $10^5$ et $10^6$ Tons for the unfished total biomass. $\Phi_E$ being the contribution of a recruit to the total biomass during its life, 
-$B_0=R_0\Phi_E$. $\Phi_E$ depends on the weight at age and the survivorship, both being fixed. Therefore $\R_0$ may be derived and the corresponding value for the logarithm of $R_0$ is in the interval $[12.9, 15.2$. Relaxing this assumption, 
+$B_0=R_0\Phi_E$. $\Phi_E$ depends on the weight at age and the survivorship, both being fixed. Therefore $R_0$ may be derived and the corresponding value for the logarithm of $R_0$ is in the interval $[12.9, 15.2$. Relaxing this assumption, 
 the prior has been specified as in equation \ref{eq:priorR0}.
 \begin{equation}
 \log(R_0) \sim \mathcal{U}[12, 16] 
@@ -193,7 +194,7 @@ The same priors have been chosen for $R_{init}$ and $\bar{R}$.
 
 \paragraph{Prior for steepness $h$}
 A beta distribution has been chosen as a prior for the steepness. The parameters of the beta distribution has been chosen so that the mode of the steepness is $0.9$ and the coefficient of variation is 
-$10\%$ which to the distribution specified in equation \ref{eq:priorh}.
+$10\%$. This consideration leads to the specification in \ref{eq:priorh}.
 \begin{equation}
 h \sim \beta\left(14, 2.44\right)
 \label{eq:priorh}
@@ -201,32 +202,38 @@ h \sim \beta\left(14, 2.44\right)
 
 
 \paragraph{Prior for the total variance}
-$\varphi^2$ being the total variance, \iscam allows to specify a prior distribution on $1/\varphi$, which is the square root of the total precision.
-The usual choice would be to use a gamma distribution on the precision, which is not allowed. A gamma precision on $1/\varphi$ has been chosen. Parameters have been taken to have vague prior.
+$\varphi^2$ being the total variance, \iscam allows to specify a prior distribution on $1/\varphi^2$ using classically a gamma distribution. The parameters of this gamma distribution has been chosen so that to define a vague prior.
 \begin{equation}
 1/\varphi \sim \Gamma\left(0.1, 0.1\right)
 \label{eq:priorphi}
 \end{equation}
 
 \subsection{First run}
-To illustrate the results obtained on BFT East Stock, we focus on one datafile: \verb+Inputs/bfte/2012/vpa/inflated/high/bfte2012.d1+
+To illustrate the results obtained on BFT East Stock, we focus on one datafile: 
 
+\verb+Inputs/bfte/2012/vpa/inflated/high/bfte2012.d1+
 
-{\centering \includegraphics[width=\maxwidth]{figure/ICCAT-Selectivity} 
+\begin{center}
+ \begin{figure}[bt]
+ \includegraphics[width=0.9\maxwidth]{figure/ICCAT-Selectivity}
+ \caption{Estimated selectivity. The additional points represents the average empirical proportion at ages}
+\label{fig:sel1}
+\end{figure}
+ \begin{figure}[bt]
+ \includegraphics[width=0.9\maxwidth]{figure/ICCAT-SelectivityByGear} 
+\caption{Estimated selectivity and the empirical proportion at ages.}
+\label{fig:sel2}
+\end{figure}
 
-}
+\end{center}
 
-
-
-{\centering \includegraphics[width=\maxwidth]{figure/ICCAT-SelectivityByGear} 
-}
-
+Figure \ref{fig:sel1} seems to present a good coherence between the empirical proportion at ages and the estimated vulnerability. Unfortunately figure \ref{fig:sel2} highlights the large variability around the average behavior.
 
 \begin{table}[ht]
 \centering
 \begin{tabular}{p{2.1cm}p{4cm}p{4cm}}
   \hline
-Parameters & Inital value & Reported value   \\ \hline
+Parameters & Initial value & Reported value   \\ \hline
  $\log{R_0}$ & $13$  &  $14.75$  \\
  $h$ & $0.85$ & $0.934$  \\
 $log(\bar{R})$& $12.5$ & $14.38$ \\
@@ -239,7 +246,7 @@ $log(B_{2011})$ &  &$19.72$ \\
 $(f_{2011})$ &   &$0.037$  \\
 \hline
 \end{tabular}
-\caption{Initial values and range for main paramaters.}
+\caption{Initial values and range for main parameters.}
 \label{table:estimation}
 \end{table}
 

@@ -1,16 +1,16 @@
-Simulations have been run to check the hability of \iscam at estimating
-the parameters. The value of the parameters is chosen to be realistic in regard of the parameter estimates on BFT east data.
+Simulations have been run to check the ability of \iscam at estimating
+the parameters. The values of the parameters are chosen to be realistic in regard of the parameter estimates on BFTE data.
 
 \subsection{Simulation model}
-\iscam proposes a simulation model but in order to fully controll the simulation framework (especially the fishing mortality), a \verb+R+ code has been developped to simulate a stock dynamic according to the model specified in \iscam.
-In \iscam some realistic fishing mortality is derived from the true catch and then used to simulate new catch observation. 
-To avoid this back and forth procedure, a simpler version is developped: 
+\iscam proposes a simulation model but in order to fully control the simulation framework (especially the fishing mortality), a \verb+R+ code has been developed to simulate a stock dynamic according to the model specified in \iscam.
+In \iscam some realistic fishing mortality rate is derived from the true catch and then used to simulate new catch observation. 
+To avoid this back and forth procedure, a simpler version is developed: 
 the fishing mortality is taken constant over year, the value being chosen to avoid stock extinction.
 
 
 \subsection{Simulation framework}
 The purpose of this section is to investigate the possibility for \iscam to reestimate the actual parameters. The value of the parameters have been chosen to be similar to the estimates obtained for the first run.
-But the strength of the information contained in the data is obviously a key point, therefore in order to investigate the amount of noise \iscam is able to handle, different scenario have been studied.
+But the strength of the information contained in the data is obviously a key point, therefore in order to investigate the amount of noise \iscam is able to handle, nine different scenario have been studied from a very precise one up to a very poorly informative situation..
 
 The total variance observed on the BFTE data is estimated to $1.16$ and the proportion of the process error is set to $0.4$ which corresponds to $0.68$ for the standard deviation of the observation errors and $0.83$ for the process errors. 
 This situation is worse than scenario 9 in terms of information in the data. This situation is investigated in scenario 10.
@@ -34,11 +34,11 @@ Scenario & Process error & Obs. error & $\tau_R$ & $\tau_I$ & Total Precision & 
 10 & BFTE & BFTE & 0.83 & 0.68 & 0.86 & 0.4\\ 
 \end{tabular}
 \end{center}
-\caption{Summary of the considered scenarios in term of variance errors for the simulatio }
+\caption{Summary of the considered scenarios in term of variance errors for the simulation }
 \end{table}
 
 
-For every scenario 600 datasets have been drawn and the parameters have been reestimated. When \iscam produces a non definite positive Hessian matrix, the simulation is dropped, but this case never happens within our simulation framework.
+For every scenario 600 datasets have been drawn and the parameters have been re-estimated. When \iscam produces a non definite positive Hessian matrix, the simulation is dropped, but this case never happens within our simulation framework.
 
 \begin{table}[ht]
 \centering
@@ -49,7 +49,7 @@ Name & Value & Notes \\
 \multicolumn{3}{c}{\bf Parameters be estimated}\\
 $R_0$ & $exp(14.64)$ & \\
 $h$ & $0.9$ & \\
-$\tau_C$&0.1 & This parametere is fixed in \iscam not estimated\\
+$\tau_C$&0.1 & This parameter is fixed in \iscam not estimated\\
 $\tau_A$ & 0.1 & \\
 $v_{k,a}$&  see \ref{res:seltable}  & the  selectivity table  is taken
 according to the results obtained on BFT \\
@@ -74,18 +74,127 @@ $\beta$ & $4.84\, 10^{-08}$ & fixed using $\beta=(\kappa -1)/(R_0*\phi_E)$\\
 
 
 \subsection{Results on leading parameters}
-\subsubsection{Scenario 10 - BFTE like parameters value}
+\subsection{Comparison of the results for the different scenarios}
+The results on the different simulation studies for the nine first scenarios considered prove that the model and the estimation procedure produce reasonably good results when the total variance is low. As expected, increasing the total variance increases the variability of the estimates but more surprisingly also produces bias estimates.
+
+When the total variance increases, the recruitment in unfished conditions tends to be overestimated. Conversely the initial recruitment is underestimated. The steepness also tends to be overestimated when the data are too noisy.
+The consequence of such behavior is to over estimate the resilience of the stock and to produce higher values for $B_{MSY}$.
 
 
-Table \ref{tab:quant} sums up the resstimated values through the obtained quantiles. The extremal results are very far from the simulated values 
-but the extremal behaviour is very uncommon.   Removing only the 2  most extremals percents of the estimations produce  robust estimates .
+
+
+\begin{figure}
+  \begin{subfigure}[b]{\textwidth}
+	\begin{subfigure}[b]{0.3\textwidth}
+	\includegraphics[width=0.9\textwidth]{figure/Scenario1ro}
+	\caption{ Scenario 1}
+	\end{subfigure}\hfill
+	\begin{subfigure}[b]{0.3\textwidth}
+	\includegraphics[width=0.9\textwidth]{figure/Scenario2ro}
+	\caption{ Scenario 2}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.3\textwidth}
+	\includegraphics[width=0.9\textwidth]{figure/Scenario3ro}
+	\caption{ Scenario 3}
+	\end{subfigure}
+  \end{subfigure}
+  \begin{subfigure}[b]{\textwidth}
+	\begin{subfigure}[b]{0.3\textwidth}
+	\includegraphics[width=0.9\textwidth]{figure/Scenario4ro}
+	\caption{ Scenario 4}
+	\end{subfigure}\hfill
+	\begin{subfigure}[b]{0.3\textwidth}
+	\includegraphics[width=0.9\textwidth]{figure/Scenario5ro}
+	\caption{ Scenario 5}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.3\textwidth}
+	\includegraphics[width=0.9\textwidth]{figure/Scenario6ro}
+	\caption{ Scenario 6}
+	\end{subfigure}
+	\end{subfigure}
+  \begin{subfigure}[b]{\textwidth}
+	\begin{subfigure}[b]{0.3\textwidth}
+	\includegraphics[width=0.9\textwidth]{figure/Scenario7ro}
+	\caption{ Scenario 7}
+	\end{subfigure}\hfill
+	\begin{subfigure}[b]{0.3\textwidth}
+	\includegraphics[width=0.9\textwidth]{figure/Scenario8ro}
+	\caption{ Scenario 8}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.3\textwidth}
+	\includegraphics[width=0.9\textwidth]{figure/Scenario9ro}
+	\caption{ Scenario 9}
+	\end{subfigure}
+  \end{subfigure}
+  \caption{Reestimation for $R_0$ for the 9 considered scenarios. The red line represents the value used for the simulation.}
+\label{fig:Scenarior0}
+\end{figure} 
+
+
+
+
+
+\begin{figure}
+  \begin{subfigure}[b]{\textwidth}
+	\begin{subfigure}[b]{0.3\textwidth}
+	\includegraphics[width=0.9\textwidth]{figure/Scenario1h}
+	\caption{ Scenario 1}
+	\end{subfigure}\hfill
+	\begin{subfigure}[b]{0.3\textwidth}
+	\includegraphics[width=0.9\textwidth]{figure/Scenario2h}
+	\caption{ Scenario 2}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.3\textwidth}
+	\includegraphics[width=0.9\textwidth]{figure/Scenario3h}
+	\caption{ Scenario 3}
+	\end{subfigure}
+  \end{subfigure}
+  \begin{subfigure}[b]{\textwidth}
+	\begin{subfigure}[b]{0.3\textwidth}
+	\includegraphics[width=0.9\textwidth]{figure/Scenario4h}
+	\caption{ Scenario 4}
+	\end{subfigure}\hfill
+	\begin{subfigure}[b]{0.3\textwidth}
+	\includegraphics[width=0.9\textwidth]{figure/Scenario5h}
+	\caption{ Scenario 5}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.3\textwidth}
+	\includegraphics[width=0.9\textwidth]{figure/Scenario6h}
+	\caption{ Scenario 6}
+	\end{subfigure}
+	\end{subfigure}
+  \begin{subfigure}[b]{\textwidth}
+	\begin{subfigure}[b]{0.3\textwidth}
+	\includegraphics[width=0.9\textwidth]{figure/Scenario7h}
+	\caption{ Scenario 7}
+	\end{subfigure}\hfill
+	\begin{subfigure}[b]{0.3\textwidth}
+	\includegraphics[width=0.9\textwidth]{figure/Scenario8h}
+	\caption{ Scenario 8}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.3\textwidth}
+	\includegraphics[width=0.9\textwidth]{figure/Scenario9h}
+	\caption{ Scenario 9}
+	\end{subfigure}
+  \end{subfigure}
+  \caption{Reestimation for the steepness $h$ for the 9 considered scenarios. The red line represents the value used for the simulation.}
+\label{fig:Scenarioh}
+\end{figure} 
+
+
+The figures are not presented here, but there is also a systematic slight positive bias in the estimation of the total variance and therefore $\tau_I$ and $\tau_R$ tend to be slightly  overestimated.
+
+\subsubsection{Focus on Scenario 10 - BFTE like parameters value}
+This section focus on the results obtained under scenario 10, chosen to be comparable to the BFTE datasets. 
+
+Table \ref{tab:quant} sums up the reestimated values through the obtained quantiles.The obtained distribution show heavy tails but removing only the 2  most extremal percents of the estimations produce  better estimates.
 
 
 \begin{table}[ht]
 \begin{center}
 \begin{tabular}{rrrrrrrrr}
   \hline
- & $log(R_0)$ & $\log(R_{init})$ & $\varphi$ & $\tau_I$ & $\tau_R$ & $MSY$ & $Fmsy$ & $Bmsy$ \\ 
+ & $log(R_0)$ & $\log(R_{init})$ & $\varphi$ & $\tau_I$ & $\tau_R$ & $\log{MSY}$ & $Fmsy$ & $\log{Bmsy}$ \\ 
   \hline
 0\% & 14.43 & 9.09 & 0.94 & 0.59 & 0.73 & 16.89 & 0.08 & 18.45 \\ 
   1\% & 14.54 & 12.13 & 1.01 & 0.64 & 0.78 & 17.00 & 0.13 & 18.56 \\ 
@@ -99,40 +208,58 @@ but the extremal behaviour is very uncommon.   Removing only the 2  most extrema
    \hline
 \end{tabular}
 \end{center}
-\caption{Empirical quantiles obtained by reestimation on simulated data for the main parameters}
+\caption{Empirical quantiles obtained by reestimation on simulated data for the main parameters.$MSY$ and $B_{msy}$ are expressed in Kg, $R_0$ and $R_{init}$ are expressed in numbers.}
 \label{tab:quant}
 \end{table}
 
 
-The reestimated values are realistically closed from the simulated values, but \iscam seems to produce systematically biased estimates. The figures \ref{fig:sim} illustrates the bias in the reestimation.
- \begin{figure}
+
+
+The figures \ref{fig:sim} illustrates the bias in the reestimation. There is an important bias on the initial recruitment and on the steepness.
+The total variance is also overestimated.
+
+
+\begin{figure}
   \begin{subfigure}[b]{\textwidth}
 	\begin{subfigure}[b]{0.45\textwidth}
-	\includegraphics[width=0.9\textwidth]{figure/ICCAT-simrinit}
+	\includegraphics[width=0.9\textwidth]{figure/Scenario10rinit}
 	\caption{ Histogram of the reestimation of the initial recruitment $log(R_{init})$ }
 	\end{subfigure}\hfill
 	\begin{subfigure}[b]{0.45\textwidth}
-	\includegraphics[width=0.9\textwidth]{figure/ICCAT-simro}
-	\caption{ Histogram of the reestimation of unifshed recruitment $log(R_0)$}
+	\includegraphics[width=0.9\textwidth]{figure/Scenario10ro}
+	\caption{ Histogram of the reestimation of unfished recruitment $log(R_0)$}
 	\end{subfigure}
   \end{subfigure}
   \begin{subfigure}[b]{\textwidth}
 \begin{subfigure}[b]{0.45\textwidth}
-  \includegraphics[width=0.9\textwidth]{figure/ICCAT-simh}
+  \includegraphics[width=0.9\textwidth]{figure/Scenario10h}
   \caption{ Histogram of the reestimation of the steepness $h$ }
  \end{subfigure}\hfill
  \begin{subfigure}[b]{0.45\textwidth}
-  \includegraphics[width=0.9\textwidth]{figure/simvarphi}
+  \includegraphics[width=0.9\textwidth]{figure/Scenario10varphi}
   \caption{ Histogram of the reestimation of the total variance $\varphi$}
  \end{subfigure}
   \end{subfigure}
- \caption{Summary of the reestimated values. The red lines is the true value used for the simulation. The 5 most extremal percent have been droped.}
+ \caption{Summary of the reestimated values. The red lines is the true value used for the simulation. The 5 most extremal percents have been dropped.}
+\label{fig:sim}
+\end{figure} 
+
+
+
+\subsection{Effect of parameter $\tau_A$}
+The proportion at age are assumed to follow a multivariate logistic distribution which has been shown \cite{Schnute+95} to be more flexible than the classical multinomial distribution. The $\tau_A$ parameter of this distribution is not really  intuitive. It is important to have some clues on how the expected proportion at age are closed to the empirical proportions at age according to this parameter. A very simple simulation has been used to investigate this relationship. Using notation presents in \ref{equa:multivar}, figure \ref{fig:tau_A} presents the largest absolute difference between the expected proportion $\mu_a$ and the observed proportion for different value of $\tau_A$. Because $\mu_a$ are probabilities, the difference is bounded by $1$. 
+
+Only very small values of $\tau_a$ produces precise realization of the multivariate logistic distribution. 
+\begin{figure}
+\includegraphics[width=0.6\textwidth]{figure/MultivarLogistic}
+ \caption{Largest absolute difference between expected proportion at age $p_a$ and the realization of a multivariate logistic distribution $MV(p_a, \tau_A)$ centered on $p_a$ with  standard deviation $\tau_A$. }
+ \label{fig:tau_A}
  \end{figure} 
 
+ \subsection{Conclusion on simulation results}
+The estimation procedure proposed in \iscam behaves reasonably well for small standard deviation in the abundance indices but produces highly biased estimates (and not only inaccurate estimates) when the quality of the abundance indices decrease. Especially it tends to overestimate the steepness and underestimate the  initial recruitment, leading to optimistic predictions on the resilience of the stock.
+
+Unfortunately, \iscam estimates a high level of uncertainty on the BFTE abundance indices, which mean that the estimates and the prediction have to be carefully considered since the abundance indices seem to be very inaccurate. 
 
 
-\subsection{
-\subsection{Discussion on simulation results}
-The estimation procedure proposed in \iscam seems to systematically under estimate the initial recruitment  and to over estimate the recruitment in unfished conditions, the total variance and the steepness.
-This may arrise from the fact that the simulated model used an actual stock recruitment relationship but \iscam used a two step procedure. It first estimates the recruitment as random effects centred on a parametre $\bar{R}$ with a a variance $\tau_R$. In a second phase, a SR relationship is adjusted using the estimated recruitment and the same variance is used to control the deviation from the stock recruitment model.
-Therefore $\tau_R$ is used to represent two different kind of deviations and may produce biased estimation.
+

@@ -1,6 +1,6 @@
-The presented  work ocus on  Bluefin Tuna  east stock data.  There are
+As requested, the presented  work focus on  BFTE data.  There are
 seven abundance indices and the total commercial catch available. 
-
+This section describes the available data and the way they have been included in the model.
 
 
 
@@ -11,36 +11,37 @@ Seven abundance indices are available.   the oldest one starts in year
 1950,  the last  indices considered  stop in  2011. Three  indices are
 assumed to be proportional to  the total number of tuna (\verb+SM_TP+,
 \verb+LL_JP1+,  \verb+LL_JP2+),  the four  others  are  assumed to  be
-proportionnal to the total biomass (expressed as weight).
+proportional to the total biomass (expressed as weight).
 
 \begin{center}
-  \begin{figure}
+  \begin{figure}[tb]
   \includegraphics[width=\maxwidth]{figure/ICCAT-Abundance} 
   \caption{Scaled abundance indices }
   \end{figure}
 \end{center}
 
-We focus only on the six first abundance indices and ignore the indice \verb+SP_BB3+. 
+We focus only on the six first abundance indices and ignore the index \verb+SP_BB3+. 
 This last one holds only for a short period of time and lead to very poor estimation which produces numerical instability. 
 
 
 
 \subsection{Available catch}
 The  total catch  in  numbers  are given  from  1950  to 2011.  Figure
-\ref{fig:TotCatch} illsutrates the evolution of the ctach across years.
+\ref{fig:TotCatch} illustrates the evolution of the catch across years.
 \begin{center}
-  \begin{figure}
+  \begin{figure}[bt]
   \includegraphics[width=\maxwidth]{figure/ICCAT-Catch} 
-  \caption{Catch  splitted by  age over  the whole  period. Area  of red
-  circles is proportionnal to the Catch}
+  \caption{  Catch  split by  age over  the whole  period. Area  of red
+  circles is proportional to the catch}
   \label{fig:TotCatch}
   \end{figure}
 \end{center}
-
+It would appear on figure \ref{fig:TotCatch}, that there are possibly numerous different periods with very different vulnerability at age, 1950-1955, 1956-1975,  1976-1982 or so, 1983-1990, 1991-1995, and 1996-present. The selectivity should be allowed to vary over time. In order to avoid over-parametrization and to keep the model simple in this first approach, the selectivity has been chosen  constant over years.
+  
 \subsection{Data on Selectivity}
 Catch at age  data are available for the commercial  fisheries and for
 six of the seven abundance  indices. It is specified that \verb+NW_PS+
-is proportionnal to last age class (more than 10 years old tuna).
+is proportional to last age class (more than 10 years old tuna).
 
 
 
@@ -49,13 +50,33 @@ is proportionnal to last age class (more than 10 years old tuna).
 
 To investigate the  change in selectivity, we can  look at composition
 of the catch per gear and per year
-  \begin{figure}
-  \includegraphics[width=\maxwidth]{figure/ICCAT-AgeComp1} 
-  \includegraphics[width=\maxwidth]{figure/ICCAT-AgeComp2} 
-  \caption{Catch splitted by age and gear over the whole period. Area of the
-	circles is proportionnal to the Catch}
+  \begin{figure}[bt]
+  \begin{subfigure}[b]{0.9\textwidth}
+  \begin{subfigure}[b]{0.45\textwidth}
+   \includegraphics[width=0.9\maxwidth]{figure/Comm} 
+  \end{subfigure} \hfill
+  \begin{subfigure}[b]{0.45\textwidth}
+   \includegraphics[width=0.9\maxwidth]{figure/SM_TP} 
+  \end{subfigure} 
+  \end{subfigure} 
+  
+  \begin{subfigure}[b]{0.9\textwidth}
+  \begin{subfigure}[b]{0.45\textwidth}
+   \includegraphics[width=0.9\maxwidth]{figure/JP_LL2} 
+  \end{subfigure} \hfill
+  \begin{subfigure}[b]{0.45\textwidth}
+   \includegraphics[width=0.9\maxwidth]{figure/LL_JP1} 
+  \end{subfigure} 
+  \end{subfigure} 
+  
+  \begin{subfigure}[b]{0.9\textwidth}
+  \begin{subfigure}[b]{0.45\textwidth}
+   \includegraphics[width=0.9\maxwidth]{figure/SP_BB1} 
+  \end{subfigure} \hfill
+  \begin{subfigure}[b]{0.45\textwidth}
+   \includegraphics[width=0.9\maxwidth]{figure/SP_BB2} 
+  \end{subfigure} 
+  \end{subfigure} 
+  \caption{Catch split by age and gear over the whole period. Area of the
+	circles is proportional to the Catch}
   \end{figure}
-
-
-
-

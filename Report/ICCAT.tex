@@ -1,4 +1,4 @@
-\documentclass[a4paper]{article}\usepackage{graphicx, color}
+\documentclass[ 12pt]{article}\usepackage{graphicx, color}
 %% maxwidth is the original width if it is less than linewidth
 %% otherwise use linewidth (to make sure the graphics do not exceed the margin)
 \makeatletter
@@ -119,7 +119,7 @@
 \title{Report for ICCAT-GBYP 04/2013}
 \author[1]{Marie-Pierre Etienne\thanks{marie.etienne@agroparistech.fr}}
 \author[2]{Tom Carruthers }
-\author[2]{Murdoch McAlllister}
+\author[2]{Murdoch McAllister}
 \affil[1]{AgroParisTech}
 \affil[2]{UBC}
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
@@ -136,22 +136,26 @@
 
 \maketitle
 \tableofcontents
-\clearpage
+
 
 \section{Introduction}
+The uncertainty in abundance indices may be important in some fisheries. Furthermore the recruitment model used to represent the population dynamic is a simpler version of a tricky reality.
+Statistical catch at age model allow to take those sources of uncertainty within an age structure population dynamic model.
 
 The work reported in this document aims at 
 \begin{enumerate}
  \item examining the opportunity of using a statistical catch at age for Bluefin tuna stock evaluation,
- \item higlighhting the structure and the assumptions of the chosen statistical model (\iscam developped by S. Martell \cite{Martell12})
+ \item highlighting the structure and the assumptions of the chosen statistical model (\iscam developed by S. Martell \cite{Martell12})
  \item running a simulation study for evaluating the quality of the estimation procedure,
-  \item producing operationnal codes for running a stock evaluation on Bluefin Tuna east stock with a statistical catch at age model,
-  \item comparing the results with the results presented in previous stock assesment
+  \item producing operational codes for running a stock evaluation on Bluefin Tuna east stock with a statistical catch at age model,
+  \item comparing the results with the results presented in previous stock assessment.
   \end{enumerate}
   
-The report is split in five main sections. The first section describes the model proposed in \iscam. The second section described briefly the data used  for this test.
-Section three presents the practical choice made to run \iscam on this dataset. The simulation study is presented in section \ref{sec:simulation}.
-The complete results are developped in the last main section. The discussion sums up the main result and highlights the strength and the weakness of \iscam.
+The report is split in five main sections. The first section describes the model proposed in \iscam. The second section describes briefly the data used  for this test.
+Section three presents the practical choices made to run \iscam on this dataset. 
+The detailed simulation study is presented in section \ref{sec:simulation}.
+The complete results on Bluefin Tuna, eastern stock (BFTE) are developed in the last main section. The discussion sums up the main results and highlights the strengths and the weaknesses of \iscam used for BFTE stock assessment.
+
 All the codes used to produce this work are freely available on \url{https://github.com/MarieEtienne/ICCAT-BFT}
 
 \section{Description of the main aspects of \iscam }
@@ -178,15 +182,16 @@ All the codes used to produce this work are freely available on \url{https://git
 \section{Discussion}
 \label{sec:concl}
 
-The results obtained with \iscam are consistent with the results described in \cite{tuna2012} and obtained using a virtual population analysis.
-
-Furthermore, as \iscam used the stock recruitment relationship in the last phase of estimation, the recruitment may be almost freely estimated as in a VPA approach. 
-
+The results obtained with \iscam are consistent with the results described in \cite{tuna2012} and obtained using a virtual population analysis. Furthermore, as \iscam used the stock recruitment relationship in the last phase of estimation, the recruitment may be almost freely estimated as in a VPA approach. 
 
 Some of the parameters have to be fixed and can't be estimated with the data available for this study.
-\iscam may be more finely tuned using more expertise on the studied stock; this expertise may be included as a prior for example.
-Furthermore, the mortality is a key parameter and has been chosen constant throughout ages, but recent development of \iscam should allow to use a mortality rate varying with age and produce results closer from the previous stock assesment.
-\iscam also proposes some prediction of the evolution of the stock according to fixed TAC policy. This code to use this possibility of \iscam has been developped but has not been presnted here.
+\iscam may be more finely tuned using more expertise on the studied stock; this expertise may be included as a prior for example but also uses to propose more adequate choices. By instance, the catch at age data show strong pattern, this may correspond to a known change in the selectivity and should be included in the model.
+
+On the other hand, the mortality rate is a key parameter and has been chosen constant throughout ages, but recent development of \iscam should allow to use a mortality rate varying with age and produce results closer from the previous stock assessment.
+\iscam also proposes some prediction of the evolution of the stock according to fixed TAC policy. The code using this possibility of \iscam is also available.
+
+Running \iscam on BFTE will require more precise tunning of the parameters. The improvement obtained with a fine tunning will not circumvent the issue of the amount of noise (estimated by \iscam ) in the data. This high level of noise in the data may produce biased estimates on the key parameters and in any case this variability in the recruitment process and in the observed abundance indices make the stock assessment difficult. However this variability can not be omitted and has to be considered. Therefore, using a Bayesian framework, would allow to include prior information and to produce predictive interval which account for both uncertainty described by the model and its variances parameters and  uncertainty on those parameters itself.  Taking all sources of uncertainty into consideration would help to develop decision analysis process under uncertainty and should be strongly recommended.
+
 
 %The following appendix aim at giving some basic information to use the code produced during the analysis presented in this report.
 %\input{appendix.tex}

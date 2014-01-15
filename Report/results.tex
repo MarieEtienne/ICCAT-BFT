@@ -1,6 +1,6 @@
 \subsection{Maximum likelihood approach}
-This section reports the Maximum likelihood estimates obtained using \iscam. Table \ref{table:mleRinit} presents the value and when available compare whith the values reported in 
-\cite{tuna2102} asumming thta the firts year in not in the unfished state.
+This section reports the Maximum likelihood estimates obtained using \iscam. Table \ref{table:mleRinit} presents the value and if available reports the values presented  in 
+\cite{tuna2012}. The presented table assumes that the initial recruitment may be different form the recruitment in unfished condition.
 
 \begin{table}
  \begin{tabular}{p{2.1cm}p{4cm}p{4cm}p{4cm}}
@@ -21,7 +21,7 @@ $(f_{2011})$ &   $0.037\quad[0.022, 0.06]$ &  $0.037\quad[0.024, 0.07]$ \\ \hlin
 & Inflated - $R_{init} = R_0$  & Reported $R_{init}=  R_0$ &   \\ \hline
 $\log{R_0}$ &  $14.89\quad [14.76, 15.17]$   & $14.86\quad [14.69, 15.09]$  \\
 $\log(R_{init})$ & NA  & NA &\\
-$\log{R_{min}$ &  $13.15$ & $13.05$ & \\
+$\log{R_{min}}$ &  $13.15$ & $13.05$ & \\
 $log(\bar{R})$&  $14.35\quad [13.98, 14.96]$  & $14.24\quad[13.87, 14.83]$\\
 $h$  & $0.92\quad [0.75, 0.95]$ & $0.91\quad[0.78, 0.96]$\\ 
 $\rho$ &    $0.4$ & $0.4$	\\ 
@@ -33,17 +33,16 @@ $SSB_{2011}/SSB_{max}$   &  $0.54$   & $0.51$ \\
 $(f_{2011})$ & $0.036\quad[0.019, 0.058]$  &   $0.039\quad[0.025, 0.059]$ \\ \hline\hline
 \end{tabular}
 \caption{Estimated values for the main parameters. The $90\%$ credibility interval specified are obtained within the Bayesian framework}
-\label{[table:mleRinit}
+\label{table:mleRinit}
 \end{table}
 
-
 In \cite{tuna2012} the logarithm of the initial recruitment is reported to vary between $14.5$ and $15.6$ depending on the scenarios considered.
-The logarithm of the minimum recruitment is evaluated to $13.8$. The spawning biomass is reported to range 150 000 tons to 300 000 tons and the 
-current biomass is evaluetd to 0.96 of the maximal spawning biomass.
+The logarithm of the minimum recruitment is evaluated to $13.8$. The spawning biomass is reported to range from 150 000 tons to 300 000 tons and the 
+current biomass is evaluated to 0.96 of the maximal spawning biomass.
 
-\iscam seems to estimate similar recruitment but to produce different spawning biomass. This may arrise from the difference in the naturalmortality.
-The current \iscam version doesn't allow to specify mortality at age and therefore the mortality has been chosen constant. 
-This may explain the difference observed between the two approaches. This development of \iscam is in progress and should be soon avalaible.
+As already mentioned, \iscam seems to estimate similar recruitment but to produce different spawning biomass. This may arise from the difference in the natural mortality rate.
+The current \iscam version doesn't allow to specify mortality rate at age and therefore the mortality parameter has been chosen constant over ages and fixed to an arbitrary value of $0.23$. 
+This may explain the difference observed between the two approaches. This development of \iscam is in progress and should be shortly available.
 
 
 
@@ -61,7 +60,7 @@ This may explain the difference observed between the two approaches. This develo
 \caption{Kobe plot for the two scenarios}
 \end{figure}
 
-Figure \ref{fig:recruits} exhibits important changes in the recruitments with very high recruitment levels in the 1990 and a decrease during the last years. The very last years have been droped dur to well known difficulties to estimate the last recruitments.
+Figure \ref{fig:recruits} exhibits important changes in the recruitments with very high recruitment levels in the 1990's and a decrease during the last years. The very last years have been dropped due to well known difficulties to estimate the last recruitments.
 
 \begin{figure}
  \begin{subfigure}[b]{0.45\textwidth}
@@ -79,12 +78,38 @@ The green line (resp the blue line) corresponds to the reported catch assuming $
 \end{figure}
 
 
+\subsubsection{Abundance indices}
+To diagnose the fit to the data, one may compare the expected abundance indices derived from the results to the observed abundance indices.
+As the value $\tau_I$ is high it is not surprising to denote a lack of fit between the observed abundance indices and their  expected values, as presented on figure \ref{fig:abundance}.
+This behavior may be improved by giving different weight to each index, according to its quality. This option is available in \iscam.
+
+
+
+\begin{figure}[htbp]
+  \includegraphics[width=0.9\textwidth]{figure/inflatedhigh-RinitAbundance} 
+  \caption{Scaled  abundance indices. The observed value are given by the plain lines, the predicted values by the dotted ones. The values have been scaled to stay between 0 and 1.}
+  \label{fig:abundance}
+\end{figure}
+
+\subsubsection{Observed Catch}
+Another diagnostic would be to compare the observed catch and the expected catch. 
+There is a very small differences between the two series. 
+
+\begin{figure}[htbp]
+  \includegraphics[width=0.9\textwidth]{figure/inflatedhigh-RinitCatch} 
+  \caption{Catch series in numbers. The observed value are given by the plain lines, the predicted values by the dotted ones. The values have been scaled to stay between 0 and 1.}
+  \label{fig:catch}
+\end{figure}
+
+
+
+
+
 
 
 \subsection{Retrospective analysis}
-Retrospective analyses have been run on the two dataset corresponding to inflated catch or reported catch, droping 
- droping up to 8 years. Figure \ref{fig:RetroAnalysis}
- presents the evolution of the total biomass. this figure is consitent with the last stock assesment.
+Retrospective analyses have been run on the two dataset corresponding to inflated catch or reported catch, dropping up to 8 years. Figure \ref{fig:RetroAnalysis}
+ presents the evolution of the total biomass. this figure is consistent with the last stock assessment.
  When estimating the stock level using data until 2003, the trend is a constant decrease over the last years. 
  The last years (between 2003 and 2010) explain the recovery of the stocks. 
  The current trend seems to prove an increase of the spawning biomass, whatever scenario is used.
@@ -98,7 +123,7 @@ Retrospective analyses have been run on the two dataset corresponding to inflate
   \includegraphics[width=\maxwidth]{figure/ICCAT-ReportedSBTRetro} 
 	\caption{Reported Catch}
   \end{subfigure}
-\caption{Retrospective analysis, droping 1 to 8 years}
+\caption{Retrospective analysis, dropping 1 to 8 years}
 \label{fig:RetroAnalysis}
 \end{figure}
 
@@ -125,7 +150,7 @@ The convergence of the algorithm has been  visually checked using figure \ref{fi
   \label{fig:mcmcdiag}
  \end{figure}
 
-\paragraph{Stock Statut}
+\paragraph{Stock Status}
 The posterior density for the leading parameters are illustrated in figures \ref{fig:postR0} to \ref{fig:posth},
 the prior have been defined in equation \ref{eq:priorR0} to \ref{eq:priorphi}.
 
@@ -151,10 +176,10 @@ the prior have been defined in equation \ref{eq:priorR0} to \ref{eq:priorphi}.
   \label{fig:postR0}
  \end{figure}
 
- The posterior density on $\R_{init}$ when $R_{init}$ is assumed to be equal to $R_0$ are not presented, since $R_{init}$ is not actually defined in this case. (\iscam produces value of $R_{init}$ sampled from the prior distribution).
+ The posterior density on $R_{init}$ when $R_{init}$ is assumed to be equal to $R_0$ are not presented, since $R_{init}$ is not actually defined in this case. (\iscam produces value of $R_{init}$ sampled from the prior distribution).
  The posterior density of $R_{init}$ is quite broad, the 90$\%$ credibility interval correspond to a number of recruits from 1 million to 10 millions.
- While the corresponding $90\%$ interval for $R_0$ give a range of 2.1million and up to 3.2 millions of recruits at the unfished state.
- Every scenario exhibits a very high level of recruitment between 1990 and 2005. This exceptionnal  level has also been reported in \cite{tuna2012}.
+ While the corresponding $90\%$ interval for $R_0$ gives a range of million and up to 3.2 millions of recruits at the unfished state.
+ Every scenario exhibits a very high level of recruitment between 1990 and 2005. This exceptional  level has also been reported in \cite{tuna2012}.
  
  \begin{figure}[htbp]
  \begin{subfigure}[b]{0.45\textwidth} 
@@ -194,8 +219,7 @@ the prior have been defined in equation \ref{eq:priorR0} to \ref{eq:priorphi}.
  \end{figure}
  
 
-Whatever scenario is used, the posterior distribution on the steepness is vague.  The posterior is very similar to the prior. The difficulty of estimating the steepness is well known. This parameteris also a key parameter in the dynamic of the stock.
-
+Whatever scenario is used, the posterior distribution on the steepness is vague and the posterior is not really different of the prior distribution. The difficulty of estimating the steepness is well known. This parameter is also a key parameter in the dynamic of the stock.
 
  One of the quantity of main interest is the current  stock status. 
  Figure \ref{fig:postKobe} presents the uncertainty for the state of the stock in 2011.
