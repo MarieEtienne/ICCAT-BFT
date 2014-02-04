@@ -91,7 +91,6 @@ legend("topleft", legend=Info$surveyName, col=gear.list, lty=gear.list)
 ng <- ngear[[1]]
 name.list=c("Comm", Info$surveyName)
 age <- sage:nage
-pdf(file=file.path(outdir,"AgeComposition.pdf"), onefile=T, width=12)
 par(mfcol=c(2,2))
 for( i in 1:ng)
   {
@@ -112,13 +111,13 @@ for( i in 1:ng)
        CAAtmp <- CAAtmp[!is.na(CAAtmp[,1]),]
        radius <- sqrt( CAAtmp$Catch/ pi ) 
        radius <- (radius)/max(radius, na.rm=T)
-       with(CAAtmp, 
-            symbols(Year, Age, circles=radius, inches=0.1, fg="white", bg=i, ylab="Age", xlab="Year", main =paste("Gear", name.list[gear.list[i]]))
+       pdf(file.path(outdir, paste(name.list[gear.list[i]],'.pdf', sep='')), width=10, height=8)
+           with(CAAtmp, 
+            symbols(Year, Age, circles=radius, inches=0.2, fg="white", bg=i, ylab="Age", xlab="Year", main =paste("Gear", name.list[gear.list[i]]))
             )
+           dev.off()
      }
   }
-dev.off()
-
 
 
 

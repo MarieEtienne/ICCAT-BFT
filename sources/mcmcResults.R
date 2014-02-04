@@ -105,16 +105,6 @@ p <- lapply(resmcmc, function(d){
 #Credibility interval
 i<-1
 CI <- lapply(resmcmc, function(d){
-li <- names(d)
-cat("+++++++++++++++++++++++++++++", rep[[i]],"+++++++++++++++++++++++++++++++++++++\n")
-  li <- li[c(1:7, 9, 11, 12, 13)]
-  lapply(li,function(ds) {
-    
-    cat(ds, "\n")
-    q <- quantile(d[[ds]], probs=c(0,0.01,0.05,0.5,0.95,0.99,1))
-    print(q)
-    cat("**\n")
-  })
 i<<-i+1
 })
 

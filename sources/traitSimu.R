@@ -38,7 +38,7 @@ nClasses <- 20
 
 library(ggplot2)
 library(xtable)
-plotRes <- function(nameP, sims, logScale=F, excl =0.1, x.lim=NULL)
+plotRes <- function(nameP, sims, logScale=FALSE, excl =0.1, x.lim=NULL)
 {
   prov <- readSimRes(nameP=nameP, sims=sims, logScale=logScale)
   provsim <- readSimRes(nameP=paste('sim',nameP, sep=''), sims=sims, logScale=logScale)
@@ -54,7 +54,7 @@ plotRes <- function(nameP, sims, logScale=F, excl =0.1, x.lim=NULL)
 }
 
 sim.res <- data.frame(ro=readSimRes(nameP="ro",  sims=sims))
-parToRead <- c("ro", "simro", "rinit", "simrinit", "varphi", "tau_I", "tau_R", "MSY", "Fmsy", "Bmsy" )
+parToRead <- c("ro", "simro", "rinit", "simrinit", "varphi", "tau_I", "tau_R", "MSY", "Fmsy", "Bmsy" ,"h")
 lapply(parToRead, function(d) {sim.res[[d]] <<- readSimRes(nameP=d,  sims=sims)})
 
 
@@ -62,11 +62,11 @@ lapply(parToRead, function(d) {sim.res[[d]] <<- readSimRes(nameP=d,  sims=sims)}
 
 
 
-plotRes('rinit', sims=sims, logScale=T, )
+plotRes('rinit', sims=sims, logScale=T)
 
 plotRes(nameP='ro', sims=sims, logScale=T)
 plotRes('h', sims=sims, logScale=F)
-plotRes('tau_R', sims=sims, logScale=F)
+plotRes('tau_R', sims=sims)
 
 sim.res$ro <- log(sim.res$ro)
 sim.res$rinit <- log(sim.res$rinit)
